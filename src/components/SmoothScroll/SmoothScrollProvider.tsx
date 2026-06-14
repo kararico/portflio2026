@@ -11,8 +11,8 @@ import { consumePathnameScrollIntent } from '@/utils/scrollRestoration';
 import { resetScrollToPosition, resetScrollToTop } from '@/utils/scrollReset';
 import {
   bindLenisToScrollTrigger,
-  bindNativeScrollToScrollTrigger,
 } from '@/utils/scroll/bindScrollTrigger';
+import { ensureNativeScrollEnvironment, teardownNativeScrollEnvironment } from '@/utils/scroll/initNativeScroll';
 import { prefersReducedMotion, shouldUseNativeScroll } from '@/utils/scroll/scrollEnvironment';
 
 interface SmoothScrollProviderProps {
@@ -31,9 +31,9 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
     registerGsapPlugins();
 
     if (prefersReducedMotion() || shouldUseNativeScroll()) {
-      const cleanup = bindNativeScrollToScrollTrigger();
+      ensureNativeScrollEnvironment();
       refreshScrollTrigger();
-      return cleanup;
+      return () => teardownNativeScrollEnvironment();
     }
 
     const lenisInstance = new Lenis({

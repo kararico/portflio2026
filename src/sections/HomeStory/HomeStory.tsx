@@ -5,7 +5,8 @@ import About from '@/sections/About/About';
 import Hero from '@/sections/Hero/Hero';
 import { useLenis } from '@/hooks/useLenis';
 import { refreshScrollTrigger, refreshScrollTriggerDelayed } from '@/animations/scrollTriggerRefresh';
-import { registerGsapPlugins } from '@/utils/gsap/registerGsap';
+import { registerGsapPlugins, ScrollTrigger } from '@/utils/gsap/registerGsap';
+import { isTouchDevice } from '@/utils/scroll/scrollEnvironment';
 import { initHomeStoryAnimation } from './homeStoryAnimation';
 import styles from './HomeStory.module.scss';
 
@@ -37,10 +38,20 @@ export default function HomeStory() {
     return () => ctx.revert();
   }, []);
 
-  // Lenis/뷰포트 준비 후 ScrollTrigger 치수 재계산 (실기기 iOS Safari)
+  // Lenis/뷰포트 준비 후 ScrollTrigger 치수 재계산 (실기기 iOS/Android)
   useEffect(() => {
     refreshScrollTriggerDelayed(100);
     refreshScrollTriggerDelayed(400);
+    refreshScrollTriggerDelayed(1000);
+
+    if (!isTouchDevice()) return;
+
+    const onScroll = () => ScrollTrigger.update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
   }, [lenis]);
 
   return (
