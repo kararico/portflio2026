@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack -p 3030",
     "dev:restart": "node scripts/kill-dev.mjs 3030 && next dev --turbopack -p 3030",
     "build": "next build",
+    "build:pages": "node scripts/build-pages.mjs",
     "start": "next start -p 3030",
     "clean": "node scripts/clean-next.mjs",
     "dev:clean": "node scripts/kill-dev.mjs 3030 && node scripts/clean-next.mjs && next dev --turbopack -p 3030",
