@@ -1,14 +1,18 @@
 import type Lenis from 'lenis';
 import { gsap, ScrollTrigger } from '@/utils/gsap/registerGsap';
 import { refreshScrollTrigger, refreshScrollTriggerDelayed } from '@/animations/scrollTriggerRefresh';
-import { isIosLike, isTouchDevice } from './scrollEnvironment';
+import { isTouchDevice } from './scrollEnvironment';
+
+let refreshDebounceId = 0;
+
+function debouncedRefresh(ms = 200): void {
+  window.clearTimeout(refreshDebounceId);
+  refreshDebounceId = window.setTimeout(() => refreshScrollTrigger(), ms);
+}
 
 function scheduleMobileRefreshes(): void {
-  refreshScrollTriggerDelayed(0);
-  refreshScrollTriggerDelayed(50);
-  refreshScrollTriggerDelayed(250);
-  refreshScrollTriggerDelayed(600);
-  refreshScrollTriggerDelayed(1200);
+  refreshScrollTriggerDelayed(100);
+  refreshScrollTriggerDelayed(500);
 
   if (typeof document !== 'undefined' && document.fonts?.ready) {
     void document.fonts.ready.then(() => refreshScrollTrigger(true));
@@ -64,7 +68,8 @@ function bindFirstInteractionRefresh(): () => void {
 
 /** Lenis 없이 window 네이티브 스크롤 ↔ ScrollTrigger */
 export function bindNativeScrollToScrollTrigger(): () => void {
-  if (isIosLike()) {
+  // pin(fixed) 위 터치 드래그 → document scroll 전달 (iOS·Android 공통)
+  if (isTouchDevice()) {
     ScrollTrigger.normalizeScroll(true);
   }
 
@@ -72,14 +77,13 @@ export function bindNativeScrollToScrollTrigger(): () => void {
   window.addEventListener('scroll', onScroll, { passive: true });
   document.addEventListener('scroll', onScroll, { passive: true });
 
-  const onViewportChange = () => refreshScrollTrigger();
+  const onViewportChange = () => debouncedRefresh();
   window.addEventListener('resize', onViewportChange);
   window.addEventListener('orientationchange', onViewportChange);
 
   const vv = window.visualViewport;
   if (vv) {
     vv.addEventListener('resize', onViewportChange);
-    vv.addEventListener('scroll', onViewportChange);
   }
 
   const onPageShow = (event: PageTransitionEvent) => {
@@ -100,7 +104,6 @@ export function bindNativeScrollToScrollTrigger(): () => void {
     window.removeEventListener('pageshow', onPageShow);
     if (vv) {
       vv.removeEventListener('resize', onViewportChange);
-      vv.removeEventListener('scroll', onViewportChange);
     }
     unbindPoll();
     unbindFirstInteraction();

@@ -23,6 +23,16 @@
   will-change: transform;
 }
 
+@include respond-below('tablet') {
+  .introSticky {
+    /* GSAP pin 대신 sticky — fixed pin은 모바일 터치 스크롤 차단 */
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    will-change: auto;
+  }
+}
+
 .topRow {
   position: relative;
   z-index: 4;

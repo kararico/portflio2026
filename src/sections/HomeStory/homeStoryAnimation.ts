@@ -150,19 +150,30 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
     if (titleBack) gsap.set(titleBack, { x: 0, transformOrigin: 'center center' });
     if (titleFront) gsap.set(titleFront, { x: 0, transformOrigin: 'center center' });
 
-    const pinTrigger = ScrollTrigger.create({
-      trigger: heroSection,
-      start: 'top top',
-      end: scrollDistance,
-      pin: heroStage,
-      pinSpacing: true,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
-      onEnter: () => root.setAttribute('data-scene-pinned', 'true'),
-      onEnterBack: () => root.setAttribute('data-scene-pinned', 'true'),
-      onLeave: () => root.removeAttribute('data-scene-pinned'),
-      onLeaveBack: () => root.removeAttribute('data-scene-pinned'),
-    });
+    const pinTrigger = mobile
+      ? ScrollTrigger.create({
+          trigger: heroSection,
+          start: 'top top',
+          end: scrollDistance,
+          invalidateOnRefresh: true,
+          onEnter: () => root.setAttribute('data-scene-pinned', 'true'),
+          onEnterBack: () => root.setAttribute('data-scene-pinned', 'true'),
+          onLeave: () => root.removeAttribute('data-scene-pinned'),
+          onLeaveBack: () => root.removeAttribute('data-scene-pinned'),
+        })
+      : ScrollTrigger.create({
+          trigger: heroSection,
+          start: 'top top',
+          end: scrollDistance,
+          pin: heroStage,
+          pinSpacing: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onEnter: () => root.setAttribute('data-scene-pinned', 'true'),
+          onEnterBack: () => root.setAttribute('data-scene-pinned', 'true'),
+          onLeave: () => root.removeAttribute('data-scene-pinned'),
+          onLeaveBack: () => root.removeAttribute('data-scene-pinned'),
+        });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -271,7 +282,6 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
 
     ScrollTrigger.addEventListener('refreshInit', () => {
       setHeroScrollHeight(root);
-      applyGalleryInitialState();
     });
 
     const profileRevealProgress = getAboutProfileRevealProgress();

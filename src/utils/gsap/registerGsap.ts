@@ -1,7 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ensureNativeScrollEnvironment } from '@/utils/scroll/initNativeScroll';
-import { isTouchDevice } from '@/utils/scroll/scrollEnvironment';
 
 let registered = false;
 
@@ -10,8 +9,7 @@ export function registerGsapPlugins(): void {
 
   gsap.registerPlugin(ScrollTrigger);
   ScrollTrigger.config({
-    // 모바일 주소창 show/hide 시 pin 치수 재계산 (Android Chrome 포함)
-    ignoreMobileResize: !isTouchDevice(),
+    ignoreMobileResize: true,
   });
 
   registered = true;

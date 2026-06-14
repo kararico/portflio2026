@@ -72,6 +72,12 @@ video {
   position: relative;
 }
 
+@media (max-width: 767px) {
+  .pin-spacer {
+    touch-action: pan-y;
+  }
+}
+
 html[data-project-transition='active'] {
   background-color: var(--color-bg);
 }
