@@ -1,0 +1,119 @@
+@use '@/styles/breakpoints' as *;
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.typeLayer {
+  position: absolute;
+  inset: -5% -8% -5% 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.typeOffset {
+  transform: translate(6%, -8%);
+}
+
+.typeParallax {
+  will-change: transform;
+}
+
+.typeWord {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(11rem, 26vw, 21rem);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  color: var(--color-text);
+  opacity: 0.022;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.typeWordSince {
+  font-size: clamp(9rem, 22vw, 17rem);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ── Editorial guide lines ── */
+.guideVertical {
+  position: absolute;
+  top: var(--space-3xl);
+  bottom: var(--space-3xl);
+  right: calc(var(--padding-fluid) + min(16vw, 12rem));
+  width: 1px;
+  background-color: var(--color-border);
+  opacity: 0.28;
+}
+
+.guideHorizontal {
+  position: absolute;
+  top: clamp(8rem, 18vh, 12rem);
+  left: var(--padding-fluid);
+  right: var(--padding-fluid);
+  height: 1px;
+  background-color: var(--color-border);
+  opacity: 0.18;
+}
+
+.guideBaseline {
+  position: absolute;
+  left: var(--padding-fluid);
+  right: calc(var(--padding-fluid) + 28%);
+  bottom: clamp(6rem, 14vh, 10rem);
+  height: 1px;
+  background-color: var(--color-border);
+  opacity: 0.14;
+}
+
+@include respond-below('tablet') {
+  .typeOffset {
+    transform: translate(10%, -4%);
+  }
+
+  .typeWord {
+    font-size: clamp(6.6rem, 16vw, 11.5rem);
+  }
+
+  .typeWordSince {
+    font-size: clamp(5.5rem, 14vw, 9.5rem);
+  }
+
+  .guideVertical {
+    right: var(--padding-fluid);
+    opacity: 0.2;
+  }
+
+  .guideBaseline {
+    right: var(--padding-fluid);
+    opacity: 0.12;
+  }
+}
+
+@include respond-below('mobile') {
+  .typeOffset {
+    transform: translate(14%, -2%);
+  }
+
+  /* Desktop 대비 ~45% 축소 — 가독성 우선 */
+  .typeWord {
+    font-size: clamp(5rem, 14vw, 9.5rem);
+  }
+
+  .typeWordSince {
+    font-size: clamp(4.2rem, 12vw, 8rem);
+  }
+
+  .guideVertical,
+  .guideHorizontal {
+    display: none;
+  }
+}

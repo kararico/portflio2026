@@ -1,0 +1,128 @@
+@use '@/styles/breakpoints' as *;
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-header);
+  height: var(--header-height);
+  pointer-events: none;
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  height: 100%;
+  padding-inline: var(--padding-fluid);
+}
+
+.logoCol,
+.menuCol {
+  pointer-events: auto;
+}
+
+.logo {
+  display: inline-block;
+}
+
+.logoText {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-tight);
+}
+
+.menuCol {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.menuBtn {
+  position: relative;
+  z-index: calc(var(--z-menu) + 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.5rem;
+}
+
+.menuBar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-text);
+  transition: transform var(--transition-base), opacity var(--transition-base);
+}
+
+.menuOpen .menuBar:first-child {
+  transform: translateY(0.45rem) rotate(45deg);
+}
+
+.menuOpen .menuBar:last-child {
+  transform: translateY(-0.45rem) rotate(-45deg);
+}
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-menu);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--transition-base),
+    visibility var(--transition-base);
+}
+
+.menuOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+.menuWrapper {
+  width: 100%;
+  padding-inline: var(--padding-fluid);
+}
+
+.menuList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.menuLink {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, var(--text-4xl));
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  transition: opacity var(--transition-fast);
+
+  span {
+    display: inline-block;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 100% 100%;
+    background-size: 0 1px;
+    background-repeat: no-repeat;
+    transition: background-size var(--transition-underline);
+  }
+
+  &:hover span {
+    background-size: 100% 1px;
+  }
+}
+
+@include respond-below('tablet') {
+  .inner {
+    grid-template-columns: 1fr auto;
+  }
+}

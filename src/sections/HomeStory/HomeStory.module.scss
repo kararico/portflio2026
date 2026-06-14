@@ -1,0 +1,31 @@
+@use '@/styles/breakpoints' as *;
+
+.homeStory {
+  position: relative;
+  --hero-scroll-height: 250vh;
+}
+
+.heroLayer {
+  position: relative;
+  z-index: 1;
+}
+
+.aboutCover {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  background: var(--color-bg);
+  will-change: transform;
+}
+
+@include respond-below('tablet') {
+  .homeStory {
+    --hero-scroll-height: 180vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aboutCover {
+    will-change: auto;
+  }
+}

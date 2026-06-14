@@ -1,0 +1,50 @@
+{
+  "name": "portfolio-2026",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack -p 3030",
+    "dev:restart": "node scripts/kill-dev.mjs 3030 && next dev --turbopack -p 3030",
+    "build": "next build",
+    "start": "next start -p 3030",
+    "clean": "node scripts/clean-next.mjs",
+    "dev:clean": "node scripts/kill-dev.mjs 3030 && node scripts/clean-next.mjs && next dev --turbopack -p 3030",
+    "dev:reset": "npm run dev:clean",
+    "generate:images": "node scripts/generate-placeholders.mjs && node scripts/generate-mockups.mjs",
+    "generate:mockups": "node scripts/generate-mockups.mjs",
+    "generate:hero-photos": "node scripts/generate-hero-photos.mjs",
+    "capture:hero-screenshots": "node scripts/capture-hero-screenshots.mjs",
+    "capture:about-bg": "node scripts/capture-about-bg-variants.mjs",
+    "capture:profile-hover": "node scripts/capture-profile-hover.mjs",
+    "capture:profile-distortion": "node scripts/capture-profile-distortion.mjs",
+    "debug:profile-distortion": "node scripts/debug-profile-distortion.mjs",
+    "generate:displacement-texture": "node scripts/generate-displacement-texture.mjs",
+    "debug:profile-interaction": "node scripts/debug-profile-interaction.mjs",
+    "debug:profile-hover-bug": "node scripts/debug-profile-hover-bug.mjs",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "framer-motion": "^12.15.0",
+    "gsap": "^3.13.0",
+    "lenis": "^1.3.4",
+    "next": "^15.3.3",
+    "ogl": "^1.0.11",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@types/node": "^22.15.21",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "eslint": "^9.27.0",
+    "eslint-config-next": "^15.3.3",
+    "eslint-config-prettier": "^10.1.5",
+    "playwright": "^1.60.0",
+    "prettier": "^3.5.3",
+    "sass": "^1.89.0",
+    "sharp": "^0.35.1",
+    "typescript": "^5.8.3"
+  }
+}

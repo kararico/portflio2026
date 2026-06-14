@@ -1,0 +1,171 @@
+{
+  "capturedAt": "2026-06-13T13:13:03.103Z",
+  "rootCause": "hover 시 frame clip-path를 inset() ↔ polygon()으로 GSAP 보간 — 브라우저가 중간 프레임에서 clip 영역을 0으로 만들어 빈 네모(엑박처럼 보임) 발생",
+  "notCause": {
+    "nextImageRerender": "hover 중 img src 변경 없음 (테스트로 확인)",
+    "overflowAlone": "overflow:hidden 단독으로는 깜빡임 없음"
+  },
+  "fix": "hover clip-path wave 제거 — reveal은 inset→inset만 유지, hover는 rotation/scale/parallax만",
+  "results": [
+    {
+      "mode": "default",
+      "label": "fixed-default",
+      "before": {
+        "imgSrc": "/images/products/Profile-img.png",
+        "imgComplete": true,
+        "imgNaturalWidth": 1536,
+        "frame": {
+          "overflow": "hidden",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "1"
+        },
+        "media": {
+          "overflow": "hidden",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "1"
+        },
+        "img": {
+          "overflow": "clip",
+          "transform": "none",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "0.95"
+        }
+      },
+      "mid": {
+        "imgSrc": "/images/products/Profile-img.png",
+        "imgSrcChanged": false,
+        "frame": {
+          "overflow": "hidden",
+          "transform": "matrix(0.999976, 0.00698126, -0.00698126, 0.999976, 0, 0)",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "1"
+        },
+        "media": {
+          "overflow": "hidden",
+          "transform": "matrix(1.03, 0, 0, 1.03, -0.0035, -0.0131)",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "1"
+        },
+        "img": {
+          "overflow": "clip",
+          "transform": "none",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "0.95"
+        }
+      },
+      "after": {
+        "imgSrc": "/images/products/Profile-img.png",
+        "imgSrcChanged": false,
+        "frame": {
+          "overflow": "hidden",
+          "transform": "matrix(0.999976, 0.00698126, -0.00698126, 0.999976, 0, 0)",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "1"
+        },
+        "media": {
+          "overflow": "hidden",
+          "transform": "matrix(1.03, 0, 0, 1.03, -0.0035, -0.0131)",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "1"
+        },
+        "img": {
+          "overflow": "clip",
+          "transform": "none",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "0.95"
+        }
+      }
+    },
+    {
+      "mode": "scaleOnly",
+      "label": "fixed-scale-only",
+      "before": {
+        "imgSrc": "/images/products/Profile-img.png",
+        "imgComplete": true,
+        "imgNaturalWidth": 1536,
+        "frame": {
+          "overflow": "hidden",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "1"
+        },
+        "media": {
+          "overflow": "hidden",
+          "transform": "matrix(1.03, 0, 0, 1.03, 0, 0)",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "1"
+        },
+        "img": {
+          "overflow": "clip",
+          "transform": "none",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "0.95"
+        }
+      },
+      "mid": {
+        "imgSrc": "/images/products/Profile-img.png",
+        "imgSrcChanged": false,
+        "frame": {
+          "overflow": "hidden",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "1"
+        },
+        "media": {
+          "overflow": "hidden",
+          "transform": "matrix(1.03, 0, 0, 1.03, 0, 0)",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "1"
+        },
+        "img": {
+          "overflow": "clip",
+          "transform": "none",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "0.95"
+        }
+      },
+      "after": {
+        "imgSrc": "/images/products/Profile-img.png",
+        "imgSrcChanged": false,
+        "frame": {
+          "overflow": "hidden",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "1"
+        },
+        "media": {
+          "overflow": "hidden",
+          "transform": "matrix(1.03, 0, 0, 1.03, 0, 0)",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "1"
+        },
+        "img": {
+          "overflow": "clip",
+          "transform": "none",
+          "clipPath": "none",
+          "willChange": "auto",
+          "opacity": "0.95"
+        }
+      }
+    }
+  ]
+}

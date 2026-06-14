@@ -1,0 +1,88 @@
+.frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: #eceae4;
+}
+
+.frameHero {
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  aspect-ratio: unset;
+}
+
+.frameLarge {
+  aspect-ratio: 4 / 5;
+
+  @media (min-width: 768px) {
+    aspect-ratio: 3 / 4;
+  }
+}
+
+.frameWide {
+  aspect-ratio: 16 / 10;
+
+  @media (min-width: 768px) {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.frameTall {
+  aspect-ratio: 3 / 4;
+
+  @media (min-width: 768px) {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+.frameSmall {
+  aspect-ratio: 3 / 4;
+
+  @media (min-width: 768px) {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+.frameNext {
+  aspect-ratio: 100 / 64.22;
+  height: 100%;
+}
+
+.frameSketch {
+  aspect-ratio: 1 / 1;
+  background-color: #f3f1eb;
+  border: 1px solid #ddd9d0;
+}
+
+.inner {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.frameSketch .image {
+  object-fit: contain;
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #eceae4;
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.03) 100%
+  );
+}
+
+.frameSketch .placeholder {
+  background-color: #f3f1eb;
+  border: 1px solid #ddd9d0;
+}

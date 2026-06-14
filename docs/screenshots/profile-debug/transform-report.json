@@ -1,0 +1,140 @@
+{
+  "capturedAt": "2026-06-13T08:33:22.362Z",
+  "presets": {
+    "default": {
+      "parallaxMax": 8,
+      "scale": 1.03,
+      "rotation": 0.4,
+      "wave": "0.25+0.25s"
+    },
+    "enhanced": {
+      "parallaxMax": 18,
+      "scale": 1.06,
+      "rotation": 1.2,
+      "wave": "0.25+0.25s"
+    },
+    "wave80": {
+      "parallaxMax": 8,
+      "scale": 1.03,
+      "rotation": 0.4,
+      "wave": "0.4+0.4s"
+    }
+  },
+  "overflowNote": "frame overflow:hidden — scale/parallax edges intentionally crop; parallax ±18px may clip ~18px at borders",
+  "results": [
+    {
+      "mode": "default",
+      "idle": {
+        "frame": {
+          "translateX": 0,
+          "translateY": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "rotation": 0
+        },
+        "media": {
+          "translateX": 0,
+          "translateY": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "rotation": 0
+        },
+        "overflow": "hidden"
+      },
+      "hover": {
+        "frame": {
+          "translateX": 0,
+          "translateY": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "rotation": 0.4
+        },
+        "media": {
+          "translateX": 5.6,
+          "translateY": -4.82,
+          "scaleX": 1.03,
+          "scaleY": 1.03,
+          "rotation": 0
+        },
+        "overflow": "hidden",
+        "clipPath": "inset(0px 0% 0px 0px)"
+      }
+    },
+    {
+      "mode": "enhanced",
+      "idle": {
+        "frame": {
+          "translateX": 0,
+          "translateY": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "rotation": 1.2
+        },
+        "media": {
+          "translateX": 0,
+          "translateY": 0,
+          "scaleX": 1.06,
+          "scaleY": 1.06,
+          "rotation": 0
+        },
+        "overflow": "hidden"
+      },
+      "hover": {
+        "frame": {
+          "translateX": 0,
+          "translateY": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "rotation": 1.2
+        },
+        "media": {
+          "translateX": 12.59,
+          "translateY": -10.81,
+          "scaleX": 1.06,
+          "scaleY": 1.06,
+          "rotation": 0
+        },
+        "overflow": "hidden",
+        "clipPath": "inset(0px 0% 0px 0px)"
+      }
+    },
+    {
+      "mode": "wave80",
+      "idle": {
+        "frame": {
+          "translateX": 0,
+          "translateY": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "rotation": 0.4
+        },
+        "media": {
+          "translateX": 0,
+          "translateY": 0,
+          "scaleX": 1.03,
+          "scaleY": 1.03,
+          "rotation": 0
+        },
+        "overflow": "hidden"
+      },
+      "hover": {
+        "frame": {
+          "translateX": 0,
+          "translateY": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "rotation": 0.4
+        },
+        "media": {
+          "translateX": 5.6,
+          "translateY": -4.82,
+          "scaleX": 1.03,
+          "scaleY": 1.03,
+          "rotation": 0
+        },
+        "overflow": "hidden",
+        "clipPath": "inset(0px 0% 0px 0px)"
+      }
+    }
+  ]
+}

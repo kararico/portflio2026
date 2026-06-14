@@ -1,0 +1,25 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  pointer-events: none;
+}
+
+/* Septiembre: cream blank 없이 기존 scene 유지 */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  opacity: 0;
+  z-index: 100000;
+}
+
+.sharedImage {
+  position: fixed;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+  will-change: transform, width, height, left, top;
+  z-index: 100001;
+}
