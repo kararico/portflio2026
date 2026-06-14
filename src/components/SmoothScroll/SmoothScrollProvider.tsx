@@ -3,23 +3,23 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
 import { LenisContext } from '@/contexts/LenisContext';
 import { refreshScrollTrigger, refreshScrollTriggerDelayed } from '@/animations/scrollTriggerRefresh';
-import { gsap, registerGsapPlugins, ScrollTrigger } from '@/utils/gsap/registerGsap';
+import { gsap, registerGsapPlugins } from '@/utils/gsap/registerGsap';
 import { consumePathnameScrollIntent } from '@/utils/scrollRestoration';
 import { resetScrollToPosition, resetScrollToTop } from '@/utils/scrollReset';
+import {
+  bindLenisToScrollTrigger,
+  bindNativeScrollToScrollTrigger,
+} from '@/utils/scroll/bindScrollTrigger';
+import { prefersReducedMotion, shouldUseNativeScroll } from '@/utils/scroll/scrollEnvironment';
 
 interface SmoothScrollProviderProps {
   children: ReactNode;
 }
 
-// Lenis 초기화 전에 ScrollTrigger 등록 (Hero useLayoutEffect보다 먼저 실행)
 registerGsapPlugins();
-
-function prefersReducedMotion(): boolean {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
 
 export default function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   const pathname = usePathname();
@@ -30,9 +30,10 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
   useEffect(() => {
     registerGsapPlugins();
 
-    if (prefersReducedMotion()) {
+    if (prefersReducedMotion() || shouldUseNativeScroll()) {
+      const cleanup = bindNativeScrollToScrollTrigger();
       refreshScrollTrigger();
-      return;
+      return cleanup;
     }
 
     const lenisInstance = new Lenis({
@@ -45,7 +46,7 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
     lenisRef.current = lenisInstance;
     setLenis(lenisInstance);
 
-    lenisInstance.on('scroll', ScrollTrigger.update);
+    const unbindScrollTrigger = bindLenisToScrollTrigger(lenisInstance);
 
     const onTick = (time: number) => {
       lenisInstance.raf(time * 1000);
@@ -57,10 +58,9 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
     const onResize = () => refreshScrollTrigger();
     window.addEventListener('resize', onResize);
 
-    refreshScrollTriggerDelayed(50);
-
     return () => {
       window.removeEventListener('resize', onResize);
+      unbindScrollTrigger();
       gsap.ticker.remove(onTick);
       lenisInstance.destroy();
       lenisRef.current = null;
