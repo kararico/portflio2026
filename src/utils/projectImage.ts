@@ -1,27 +1,31 @@
 import type { Project } from '@/types/project';
+import { assetPath } from '@/utils/assetPath';
 
 const IMAGE_BASE = '/images/projects';
 
 export function buildProjectImages(slug: string, detailCount = 3): Project['images'] {
   return {
-    hero: `${IMAGE_BASE}/${slug}/hero.svg`,
-    detail: Array.from(
-      { length: detailCount },
-      (_, i) => `${IMAGE_BASE}/${slug}/detail-0${i + 1}.svg`,
+    hero: assetPath(`${IMAGE_BASE}/${slug}/hero.svg`),
+    detail: Array.from({ length: detailCount }, (_, i) =>
+      assetPath(`${IMAGE_BASE}/${slug}/detail-0${i + 1}.svg`),
     ),
-    mobile: `${IMAGE_BASE}/${slug}/mobile.svg`,
+    mobile: assetPath(`${IMAGE_BASE}/${slug}/mobile.svg`),
   };
 }
 
 /** JPG 우선, 없으면 SVG fallback */
 export function getImageCandidates(src: string): string[] {
+  let paths: string[];
+
   if (src.endsWith('.jpg')) {
-    return [src, src.replace(/\.jpg$/, '.svg')];
+    paths = [src, src.replace(/\.jpg$/, '.svg')];
+  } else if (src.endsWith('.svg')) {
+    paths = [src.replace(/\.svg$/, '.jpg'), src];
+  } else {
+    paths = [src];
   }
-  if (src.endsWith('.svg')) {
-    return [src.replace(/\.svg$/, '.jpg'), src];
-  }
-  return [src];
+
+  return paths.map(assetPath);
 }
 
 export function getProjectHeroSrc(project: Project, isMobile = false): string {

@@ -41,12 +41,14 @@ export const PROFILE_DISTORTION_HOVER_PRESET: ProfileInteractionPreset = {
   parallaxDuration: 0.45,
 };
 
+import { assetPath } from '@/utils/assetPath';
+
 export const PROFILE_DISTORTION_DEFAULTS = {
   intensity: 0.18,
   enterDuration: 0.42,
   leaveDuration: 0.4,
   ease: 'power2.out',
-  displacementMapUrl: '/textures/displacement-soft.png',
+  displacementMapUrl: assetPath('/textures/displacement-soft.png'),
   objectPositionY: 0.18,
   imageOpacity: 0.95,
 } as const;

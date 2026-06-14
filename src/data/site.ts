@@ -1,3 +1,5 @@
+import { assetPath } from '@/utils/assetPath';
+
 export const siteConfig = {
   name: '허정원',
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3030',
@@ -9,8 +11,8 @@ export const siteConfig = {
     indexLabel: 'Selected Works',
     credential: 'Since 2013',
     backgroundImages: [
-      '/images/projects/mlb-korea/hero.jpg',
-      '/images/projects/starbucks-employee-platform/hero.jpg',
+      assetPath('/images/projects/mlb-korea/hero.jpg'),
+      assetPath('/images/projects/starbucks-employee-platform/hero.jpg'),
     ] as const,
     roles: ['Frontend Developer', 'UI Engineer'] as const,
     location: 'Seoul, South Korea',
@@ -28,7 +30,7 @@ export const siteConfig = {
     roleLineParts: ['Web Publisher', '& UI Engineer'] as const,
     selectedLabel: 'Selected Projects',
     viewAllLabel: 'View all projects',
-    portraitImage: '/images/products/Profile-img.png',
+    portraitImage: assetPath('/images/products/Profile-img.png'),
     portraitAlt:
       'Black and white workspace portrait of a frontend developer reviewing a design layout',
     portraitCaption: {
