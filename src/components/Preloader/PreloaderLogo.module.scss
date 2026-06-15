@@ -1,0 +1,54 @@
+.logoSvg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: clamp(220px, 20vw, 420px);
+  height: auto;
+  overflow: visible;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 112px;
+  font-weight: 400;
+  letter-spacing: -0.09em;
+}
+
+.letter {
+  fill: transparent;
+  stroke: #111;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  paint-order: stroke fill;
+  transition:
+    fill 0.45s var(--ease-out-cubic),
+    stroke 0.45s var(--ease-out-cubic);
+}
+
+.letterJ {
+  stroke-dasharray: var(--stroke-length, 1000);
+  stroke-dashoffset: var(--stroke-length, 1000);
+}
+
+.letterW {
+  stroke-dasharray: var(--stroke-length, 1000);
+  stroke-dashoffset: var(--stroke-length, 1000);
+}
+
+.ready .letterJ {
+  animation: drawStroke 0.65s var(--ease-out-cubic) forwards;
+}
+
+.ready .letterW {
+  animation: drawStroke 0.85s var(--ease-out-cubic) 0.55s forwards;
+}
+
+.filled .letter {
+  fill: #111;
+  stroke: #111;
+}
+
+@keyframes drawStroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

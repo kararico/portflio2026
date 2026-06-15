@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Suspense, useRef, useLayoutEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { initAboutAnimation } from '@/animations/about';
+import { initAboutAnimation, bindProfileSectionReveal, bindSelectedProjectsAnimation, bindBackgroundTypeParallax } from '@/animations/about';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
 import { siteConfig } from '@/data/site';
 import { getHeroFeaturedProjects } from '@/data/projects';
@@ -40,10 +40,16 @@ function AboutContent({
     if (!root) return;
 
     registerGsapPlugins();
+    const cleanupReveal = bindProfileSectionReveal(root);
+    const cleanupSelected = bindSelectedProjectsAnimation(root);
+    const cleanupBackground = bindBackgroundTypeParallax(root);
     const ctx = initAboutAnimation(root);
     refreshScrollTrigger();
 
     return () => {
+      cleanupReveal();
+      cleanupSelected();
+      cleanupBackground();
       ctx.revert();
     };
   }, [typeLabelKey, distortionIntensity, forceHover]);
@@ -62,20 +68,24 @@ function AboutContent({
       <div className={`container-fluid ${styles.content}`}>
         <div className={styles.profileRow} data-about-profile-row>
           <div className={styles.profileText}>
-            <header className={styles.profileHeader} data-about-reveal>
-              <span className={styles.sectionLabel}>{about.sectionLabel}</span>
+            <header className={styles.profileHeader}>
+              <span className={styles.sectionLabel} data-about-reveal="title">
+                {about.sectionLabel}
+              </span>
             </header>
 
-            <div className={styles.profileCopy} data-about-reveal>
-              <p className={styles.careerLine}>{about.careerLine}</p>
-              <p className={styles.roleLine} data-profile-role-line>
-                {about.roleLineParts.map((line) => (
-                  <span key={line} className={styles.roleLinePart} data-profile-role-part>
-                    {line}
-                  </span>
+            <div className={styles.profileCopy}>
+              <div className={styles.introProse}>
+                {about.introParagraphs.map((paragraph) => (
+                  <p
+                    key={paragraph.slice(0, 24)}
+                    className={styles.bodyText}
+                    data-about-reveal="description"
+                  >
+                    {paragraph}
+                  </p>
                 ))}
-              </p>
-              <p className={styles.bodyText}>{about.intro}</p>
+              </div>
             </div>
           </div>
 
@@ -83,13 +93,13 @@ function AboutContent({
         </div>
 
         <div className={styles.selectedBlock} data-about-selected>
-          <span className={styles.selectedLabel} data-about-reveal>
+          <span className={styles.selectedLabel} data-about-selected-label>
             {about.selectedLabel}
           </span>
 
           <div className={styles.projectArchive}>
             {featuredProjects.map((project) => (
-              <article key={project.id} className={styles.projectEntry} data-about-reveal>
+              <article key={project.id} className={styles.projectEntry} data-about-project-entry>
                 <Link
                   href={`/work/${project.slug}`}
                   className={styles.projectLink}
@@ -107,7 +117,7 @@ function AboutContent({
             href={`#${works.sectionId}`}
             className={styles.viewAllLink}
             data-cursor-style="small"
-            data-about-reveal
+            data-about-view-all
           >
             {about.viewAllLabel}
           </Link>

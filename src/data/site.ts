@@ -19,24 +19,23 @@ export const siteConfig = {
     clientsLabel: 'Selected Clients',
     clients: ['MLB', 'DISCOVERY', 'STARBUCKS', 'W CONCEPT', 'CASAMIA'] as const,
     scrollLabel: 'Scroll',
-    subtitle: 'portfolio',
   },
   about: {
     sectionLabel: 'Profile',
-    intro:
-      '12년 이상 웹 퍼블리싱 업무를 수행하며 다양한 브랜드 사이트와 디지털 서비스를 구축해왔습니다. 사용자 경험과 접근성을 고려한 마크업, 스타일링, 인터랙션 구현에 집중합니다.',
-    careerLine: '2013 — Present · 12 Years',
-    roleLine: 'Web Publisher & UI Engineer',
-    roleLineParts: ['Web Publisher', '& UI Engineer'] as const,
+    introParagraphs: [
+      '12년 이상 다양한 브랜드 사이트와 디지털 서비스를 구축해왔습니다.',
+      '웹 퍼블리셔로서 디자인과 사용자를 연결하는 역할에 집중하고 있으며, 마크업, 스타일링, 인터랙션 구현을 통해 사용자가 자연스럽게 경험할 수 있는 인터페이스를 만드는 것을 중요하게 생각합니다.',
+      '브랜드의 의도를 정확하게 전달하면서도 접근성과 사용성을 고려한 결과물을 만드는 것이 저의 역할입니다.',
+    ] as const,
     selectedLabel: 'Selected Projects',
     viewAllLabel: 'View all projects',
     portraitImage: assetPath('/images/products/Profile-img.png'),
     portraitAlt:
-      'Black and white workspace portrait of a frontend developer reviewing a design layout',
+      'Black and white workspace portrait of a web publisher reviewing a design layout',
     portraitCaption: {
-      label: 'Seoul',
+      label: 'Incheon',
       year: '2026',
-      line: 'Frontend Developer Workspace',
+      line: 'Digital Experience Workspace',
     },
     background: {
       /** 시안 비교: ?about-type=profile | ?about-type=since2013 */

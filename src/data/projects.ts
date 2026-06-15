@@ -12,8 +12,12 @@ export const projects: Project[] = [
     role: 'Frontend Publishing Lead',
     contribution: '100%',
     description: '국내 MLB 공식몰 프론트엔드 Publishing Lead',
-    thumbnail: '/images/projects/mlb-korea/hero.jpg',
-    images: buildProjectImages('mlb-korea', 4),
+    thumbnail: '/images/products/mlb-img.png',
+    images: {
+      ...buildProjectImages('mlb-korea', 4),
+      hero: '/images/products/mlb-img.png',
+      mobile: '/images/products/mlb-img.png',
+    },
     overview:
       'MLB Korea 공식 온라인 스토어의 프론트엔드 Publishing Lead로 참여하여, 대규모 프로모션 대응 체계와 UI 컴포넌트 표준화를 주도했습니다. 시즌 캠페인·한정판 드롭 등 빈번한 콘텐츠 업데이트 환경에서 운영 효율과 브랜드 일관성을 동시에 확보하는 것이 핵심 과제였습니다.',
     objectives:
@@ -42,8 +46,12 @@ export const projects: Project[] = [
     role: 'Frontend Development',
     contribution: '100%',
     description: 'Discovery Expedition 이커머스 플랫폼 UI 개발',
-    thumbnail: '/images/projects/discovery-expedition/hero.jpg',
-    images: buildProjectImages('discovery-expedition', 3),
+    thumbnail: '/images/products/ds-img.png',
+    images: {
+      ...buildProjectImages('discovery-expedition', 3),
+      hero: '/images/products/ds-img.png',
+      mobile: '/images/products/ds-img.png',
+    },
     overview:
       '아웃door 브랜드 Discovery Expedition의 공식 이커머스 플랫폼 프론트엔드를 담당했습니다. 대용량 상품 카탈로그와 시즌별 룩북 콘텐츠를 효과적으로 전달하면서도, 모바일 퍼스트 쇼핑 경험을 유지하는 UI를 구현했습니다.',
     detailHeroIntro:
@@ -82,14 +90,19 @@ export const projects: Project[] = [
   {
     id: '3',
     slug: 'starbucks-employee-platform',
-    title: '스타벅스 임직원 플랫폼',
+    title: 'Starbucks\nPartner Hub',
+    subtitle: '스타벅스 임직원 플랫폼',
     year: '2023',
     client: 'Starbucks Korea',
     role: 'Frontend Engineer',
     contribution: '80%',
     description: '스타벅스 임직원 전용 내부 플랫폼 프론트엔드',
-    thumbnail: '/images/projects/starbucks-employee-platform/hero.jpg',
-    images: buildProjectImages('starbucks-employee-platform', 3),
+    thumbnail: '/images/products/starbuck-img.png',
+    images: {
+      ...buildProjectImages('starbucks-employee-platform', 3),
+      hero: '/images/products/starbuck-img.png',
+      mobile: '/images/products/starbuck-img.png',
+    },
     overview:
       '스타벅스 코리아 임직원 전용 내부 플랫폼의 프론트엔드 개발에 참여했습니다. 복잡한 권한 체계와 다양한 업무 모듈을 단순하고 일관된 UI로 통합하는 것이 핵심이었습니다.',
     objectives:
@@ -112,14 +125,18 @@ export const projects: Project[] = [
   {
     id: '4',
     slug: 'wconcept-us',
-    title: 'W Concept US',
+    title: 'W Concept\nUS',
     year: '2022',
     client: 'W Concept',
     role: 'Frontend Development',
     contribution: '100%',
     description: 'W Concept US 글로벌 패션 이커머스 UI',
-    thumbnail: '/images/projects/wconcept-us/hero.jpg',
-    images: buildProjectImages('wconcept-us', 4),
+    thumbnail: '/images/products/wc-img.png',
+    images: {
+      ...buildProjectImages('wconcept-us', 4),
+      hero: '/images/products/wc-img.png',
+      mobile: '/images/products/wc-img.png',
+    },
     overview:
       'W Concept의 미국 시장 진출을 위한 글로벌 이커머스 플랫폼 UI를 개발했습니다. 다국어·다통화·글로벌 배송 정책 등 현지화 요구사항을 반영한 프론트엔드 아키텍처를 구축했습니다.',
     objectives:
@@ -148,8 +165,12 @@ export const projects: Project[] = [
     role: 'Frontend Publishing',
     contribution: '100%',
     description: 'Casamia 홈퍼니싱 브랜드 웹사이트 리뉴얼',
-    thumbnail: '/images/projects/casamia/hero.jpg',
-    images: buildProjectImages('casamia', 2),
+    thumbnail: '/images/products/casa-img.png',
+    images: {
+      ...buildProjectImages('casamia', 2),
+      hero: '/images/products/casa-img.png',
+      mobile: '/images/products/casa-img.png',
+    },
     overview:
       '홈퍼니싱 브랜드 Casamia의 공식 웹사이트 리뉴얼 프로젝트에서 프론트엔드 Publishing을 담당했습니다. 제품 카탈로그와 브랜드 스토리를 미니멀한 레이아웃으로 표현하는 데 집중했습니다.',
     objectives:
@@ -170,14 +191,19 @@ export const projects: Project[] = [
   {
     id: '6',
     slug: 'samsung-fire',
-    title: '삼성화재',
+    title: 'Samsung Fire',
+    subtitle: '삼성화재',
     year: '2021',
     client: 'Samsung Fire & Marine Insurance',
     role: 'UI Development',
     contribution: '70%',
     description: '삼성화재 디지털 서비스 UI 개발',
-    thumbnail: '/images/projects/samsung-fire/hero.jpg',
-    images: buildProjectImages('samsung-fire', 2),
+    thumbnail: '/images/products/saumsung-img.png',
+    images: {
+      ...buildProjectImages('samsung-fire', 2),
+      hero: '/images/products/saumsung-img.png',
+      mobile: '/images/products/saumsung-img.png',
+    },
     overview:
       '삼성화재 디지털 채널의 보험 상품 안내·가입 플로우 UI를 개발했습니다. 금융 규제와 접근성 요건을 충족하면서도, 복잡한 보험 정보를 직관적으로 전달하는 인터페이스 설계가 핵심이었습니다.',
     objectives:
@@ -198,14 +224,19 @@ export const projects: Project[] = [
   {
     id: '7',
     slug: 'lifeplanet',
-    title: '라이프플래닛',
+    title: 'Lifeplanet',
+    subtitle: '라이프플래닛',
     year: '2021',
     client: 'Lifeplanet',
     role: 'Frontend Development',
     contribution: '90%',
     description: '라이프플래닛 온라인 보험 플랫폼',
-    thumbnail: '/images/projects/lifeplanet/hero.jpg',
-    images: buildProjectImages('lifeplanet', 2),
+    thumbnail: '/images/products/life-img.png',
+    images: {
+      ...buildProjectImages('lifeplanet', 2),
+      hero: '/images/products/life-img.png',
+      mobile: '/images/products/life-img.png',
+    },
     overview:
       '온라인 보험 플랫폼 라이프플래닛의 프론트엔드 개발을 담당했습니다. 보험료 계산·비교·가입까지의 사용자 여정을 간결한 UI로 설계했습니다.',
     objectives:
@@ -226,14 +257,19 @@ export const projects: Project[] = [
   {
     id: '8',
     slug: 'goodpeople',
-    title: '굿피플',
+    title: 'Goodpeople',
+    subtitle: '굿피플',
     year: '2020',
     client: 'Goodpeople',
     role: 'Frontend Publishing',
     contribution: '100%',
     description: '굿피플 NGO 후원 플랫폼 웹사이트',
-    thumbnail: '/images/projects/goodpeople/hero.jpg',
-    images: buildProjectImages('goodpeople', 2),
+    thumbnail: '/images/products/gp-img.png',
+    images: {
+      ...buildProjectImages('goodpeople', 2),
+      hero: '/images/products/gp-img.png',
+      mobile: '/images/products/gp-img.png',
+    },
     overview:
       'NGO 굿피플의 후원 플랫폼 웹사이트 UI를 개발했습니다. 후원 캠페인 스토리와 신뢰감을 전달하면서, 후원 전환을 자연스럽게 유도하는 UX가 목표였습니다.',
     objectives:

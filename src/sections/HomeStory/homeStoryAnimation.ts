@@ -1,8 +1,4 @@
 import { gsap, registerGsapPlugins, ScrollTrigger } from '@/utils/gsap/registerGsap';
-import {
-  getAboutProfileRevealProgress,
-  notifyAboutProfileRevealFromTimeline,
-} from '@/animations/aboutProfileReveal';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
 import { heroStoryConfig, getGalleryRevealStart, getGalleryRevealEnd } from '@/data/heroStory';
 import {
@@ -284,10 +280,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       setHeroScrollHeight(root);
     });
 
-    const profileRevealProgress = getAboutProfileRevealProgress();
-    let profileRevealTriggered = false;
-
-    const profileRevealSt = ScrollTrigger.create({
+    const galleryActiveSt = ScrollTrigger.create({
       trigger: heroSection,
       start: 'top top',
       end: scrollDistance,
@@ -297,11 +290,6 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
         } else {
           root.removeAttribute('data-gallery-active');
         }
-
-        if (!profileRevealTriggered && self.progress >= profileRevealProgress) {
-          profileRevealTriggered = true;
-          notifyAboutProfileRevealFromTimeline();
-        }
       },
     });
 
@@ -310,9 +298,8 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
         root.setAttribute('data-scene-pinned', 'true');
       }
 
-      if (!profileRevealTriggered && profileRevealSt.progress >= profileRevealProgress) {
-        profileRevealTriggered = true;
-        notifyAboutProfileRevealFromTimeline();
+      if (galleryActiveSt.progress >= phases.centerMove.start) {
+        root.setAttribute('data-gallery-active', 'true');
       }
     });
 

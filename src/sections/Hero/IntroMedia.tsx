@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from '@/utils/gsap/registerGsap';
+import { useEffect, useState } from 'react';
 import { heroStoryConfig } from '@/data/heroStory';
 import { getProjectBySlug } from '@/data/projects';
 import { getImageCandidates } from '@/utils/projectImage';
@@ -60,8 +59,6 @@ function IntroSlideImage({ src, alt }: { src: string; alt: string }) {
 
 export default function IntroMedia() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const prevIndexRef = useRef(0);
-  const rootRef = useRef<HTMLDivElement>(null);
   const reduced =
     typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -76,37 +73,10 @@ export default function IntroMedia() {
     return () => window.clearInterval(id);
   }, [reduced]);
 
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root || reduced) return;
-
-    const prev = root.querySelector<HTMLElement>(`[data-slide-index="${prevIndexRef.current}"]`);
-    const next = root.querySelector<HTMLElement>(`[data-slide-index="${activeIndex}"]`);
-    if (!next) return;
-
-    if (prev && prev !== next) {
-      gsap.to(prev, {
-        opacity: 0,
-        scale: 1,
-        duration: 1.1,
-        ease: 'power2.inOut',
-        overwrite: true,
-      });
-    }
-
-    gsap.fromTo(
-      next,
-      { opacity: 0, scale: 1 },
-      { opacity: 1, scale: 1.02, duration: 1.1, ease: 'power2.inOut', overwrite: true },
-    );
-
-    prevIndexRef.current = activeIndex;
-  }, [activeIndex, reduced]);
-
   if (slides.length === 0) return null;
 
   return (
-    <div className={styles.media} ref={rootRef} data-intro-media>
+    <div className={styles.media} data-intro-media>
       {slides.map((project, index) => (
         <div
           key={`${project.slug}-${index}`}

@@ -8,6 +8,12 @@
   z-index: var(--z-header);
   height: var(--header-height);
   pointer-events: none;
+  color: #111;
+  transition: color var(--transition-base);
+}
+
+.header[data-header-theme='dark'] {
+  color: #fff;
 }
 
 .inner {
@@ -24,14 +30,15 @@
 }
 
 .logo {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
 }
 
-.logoText {
-  font-family: var(--font-display);
-  font-size: var(--text-base);
-  font-weight: var(--weight-regular);
-  letter-spacing: var(--tracking-tight);
+.logoSvg {
+  display: block;
+  height: 2.75rem;
+  width: auto;
 }
 
 .menuCol {
@@ -43,29 +50,71 @@
 .menuBtn {
   position: relative;
   z-index: calc(var(--z-menu) + 1);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.35rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+}
+
+.menuHoverLabel {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-light);
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateX(-0.35rem);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  pointer-events: none;
+}
+
+.menuIcon {
+  position: relative;
+  flex-shrink: 0;
+  width: 1.35rem;
+  height: 1rem;
 }
 
 .menuBar {
-  display: block;
+  position: absolute;
+  left: 0;
+  top: 50%;
   width: 100%;
-  height: 2px;
-  background-color: var(--color-text);
-  transition: transform var(--transition-base), opacity var(--transition-base);
+  height: 1.5px;
+  margin-top: -0.75px;
+  background-color: currentColor;
+  transform-origin: center center;
+  transition: transform 0.3s ease;
 }
 
-.menuOpen .menuBar:first-child {
-  transform: translateY(0.45rem) rotate(45deg);
+.menuBtn:not(.menuBtnOpen) .menuBar:first-child {
+  transform: translateY(-0.28rem);
 }
 
-.menuOpen .menuBar:last-child {
-  transform: translateY(-0.45rem) rotate(-45deg);
+.menuBtn:not(.menuBtnOpen) .menuBar:last-child {
+  transform: translateY(0.28rem);
+}
+
+.menuBtnOpen .menuBar:first-child {
+  transform: translateY(0) rotate(45deg);
+}
+
+.menuBtnOpen .menuBar:last-child {
+  transform: translateY(0) rotate(-45deg);
+}
+
+@media (hover: hover) {
+  .menuBtn:hover .menuHoverLabel {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .menu {
@@ -99,6 +148,29 @@
   gap: var(--space-md);
 }
 
+.menuItem {
+  opacity: 0;
+  transform: translateY(1.35rem);
+  will-change: opacity, transform;
+}
+
+.menuOpen .menuItem {
+  animation: menuItemReveal 0.72s var(--ease-out-cubic) forwards;
+  animation-delay: calc(0.08s + var(--menu-index, 0) * 0.1s);
+}
+
+@keyframes menuItemReveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.35rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .menuLink {
   display: inline-block;
   font-family: var(--font-display);
@@ -124,5 +196,16 @@
 @include respond-below('tablet') {
   .inner {
     grid-template-columns: 1fr auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menuItem {
+    opacity: 1;
+    transform: none;
+  }
+
+  .menuOpen .menuItem {
+    animation: none;
   }
 }

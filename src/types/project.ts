@@ -10,7 +10,10 @@ export interface ProjectImages {
 export interface Project {
   id: string;
   slug: string;
+  /** Works·Detail 메인 제목 (영문 Editorial 톤) — `\n`으로 줄 나눔 가능 */
   title: string;
+  /** Works 보조 설명 (한글 프로젝트명 등) */
+  subtitle?: string;
   year: string;
   client: string;
   role: string;

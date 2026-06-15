@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Gilda_Display, Inter } from 'next/font/google';
 import Header from '@/components/Header/Header';
+import Preloader from '@/components/Preloader/Preloader';
 import CursorProvider from '@/components/Cursor/CursorProvider';
 import SmoothScrollProvider from '@/components/SmoothScroll/SmoothScrollProvider';
 import ProjectTransitionProvider from '@/components/ProjectTransition/ProjectTransitionProvider';
@@ -44,6 +45,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${gildaDisplay.variable} ${inter.variable}`}>
       <body data-cursor-style="default">
+        <Preloader />
         <CursorProvider>
           <SmoothScrollProvider>
             <ProjectTransitionProvider>

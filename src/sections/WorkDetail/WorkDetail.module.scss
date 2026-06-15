@@ -1,4 +1,5 @@
 .detail {
+  --detail-padding-inline: clamp(1.5rem, 4vw, 3.5rem);
   background-color: var(--color-bg);
 }
 
@@ -171,7 +172,7 @@
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   column-gap: clamp(0.75rem, 1.4vw, 1.25rem);
-  padding-inline: clamp(1.5rem, 4vw, 3.5rem);
+  padding-inline: var(--detail-padding-inline);
   padding-top: clamp(3rem, 8vw, 6rem);
   padding-bottom: clamp(2rem, 6vw, 4rem);
   align-items: start;
@@ -273,6 +274,8 @@
   position: relative;
   padding-top: clamp(6rem, 18vw, 18rem);
   padding-bottom: 0;
+  padding-inline: var(--detail-padding-inline);
+  overflow-x: clip;
 }
 
 .nextProjectRow {
@@ -282,14 +285,19 @@
 .nextProjectLink {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: flex-start;
+  gap: clamp(1.5rem, 4.6vw, 4.6rem);
   position: relative;
-  width: calc(100% + var(--padding-fluid) * 2);
-  margin-left: calc(var(--padding-fluid) * -1);
-  padding: 2rem var(--padding-fluid) 3.8rem;
+  width: calc(100% + var(--detail-padding-inline) * 2);
+  margin-inline: calc(var(--detail-padding-inline) * -1);
+  padding: clamp(2rem, 4vw, 3rem) var(--detail-padding-inline) clamp(3rem, 5vw, 3.8rem);
   color: var(--color-text);
   overflow: hidden;
+
+  @media (min-width: 1025px) {
+    padding-right: calc(var(--detail-padding-inline) + 11rem);
+  }
 
   &::before {
     content: '';
@@ -358,13 +366,12 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
-  padding-left: clamp(1.25rem, 4.6vw, 4.6rem);
   flex: 1;
-  min-width: 0;
+  min-width: min(100%, 28rem);
 
   @media (min-width: 768px) and (max-width: 1024px) {
-    width: calc(100% - 19rem);
-    padding-left: 2rem;
+    min-width: 0;
+    flex: 1;
   }
 }
 
@@ -407,15 +414,17 @@
 
   @media (min-width: 1025px) {
     position: absolute;
-    right: var(--padding-fluid);
+    right: 0;
     bottom: 3.4rem;
     height: 100%;
   }
 
   @media (max-width: 1024px) {
-    width: 100%;
+    width: calc(100% + var(--detail-padding-inline) * 2);
+    margin-inline: calc(var(--detail-padding-inline) * -1);
+    padding-inline: var(--detail-padding-inline);
     justify-content: center;
-    padding-top: 4rem;
+    padding-top: clamp(2.5rem, 6vw, 4rem);
   }
 }
 
@@ -455,6 +464,10 @@
 }
 
 @media (max-width: 767px) {
+  .detail {
+    --detail-padding-inline: var(--padding-fluid);
+  }
+
   .hero {
     min-height: auto;
   }
@@ -472,7 +485,7 @@
   .storyCanvas {
     display: flex;
     flex-direction: column;
-    padding-inline: var(--padding-fluid);
+    padding-inline: var(--detail-padding-inline);
   }
 
   .storyRow {
@@ -506,12 +519,12 @@
 
   .nextProjectInfo {
     width: 100%;
-    padding-top: 1.2rem;
-    padding-left: 0;
+    min-width: 0;
+    padding-top: 0;
   }
 
   .nextBtWrapper {
-    padding-top: 2rem;
+    padding-top: clamp(2rem, 5vw, 2.5rem);
     padding-bottom: 4rem;
   }
 }

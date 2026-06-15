@@ -55,9 +55,15 @@ export default function AboutImage({
         </div>
       </div>
       <figcaption className={styles.caption}>
-        <span className={styles.captionLabel}>{portraitCaption.label}</span>
-        <span className={styles.captionYear}>{portraitCaption.year}</span>
-        <span className={styles.captionLine}>{portraitCaption.line}</span>
+        <span className={styles.captionLabel} data-about-reveal="meta">
+          {portraitCaption.label}
+        </span>
+        <span className={styles.captionYear} data-about-reveal="meta">
+          {portraitCaption.year}
+        </span>
+        <span className={styles.captionLine} data-about-reveal="meta">
+          {portraitCaption.line}
+        </span>
       </figcaption>
     </figure>
   );

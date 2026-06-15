@@ -24,9 +24,10 @@ export default function AboutBackground({ typeLabel, typeLabelKey }: AboutBackgr
     <div className={styles.bg} aria-hidden="true" data-about-bg data-about-type={typeLabelKey}>
       <div className={styles.typeLayer}>
         <div className={styles.typeOffset}>
-          <div className={styles.typeParallax} data-about-type-word>
+          <div className={styles.typeParallax}>
             <span
               className={`${styles.typeWord} ${typeLabelKey === 'since2013' ? styles.typeWordSince : ''}`}
+              data-about-type-word
             >
               {typeLabel}
             </span>

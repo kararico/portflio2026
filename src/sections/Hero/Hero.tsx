@@ -19,6 +19,48 @@ export default function Hero() {
   const compositionRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
+    const composition = compositionRef.current;
+    if (!composition) return;
+
+    const imageLayer = composition.querySelector<HTMLElement>('[data-hero-image-layer]');
+    const frontTitle = composition.querySelector<HTMLElement>('[data-hero-title-front]');
+    if (!imageLayer || !frontTitle) return;
+
+    const syncFrontClip = () => {
+      const compRect = composition.getBoundingClientRect();
+      const imgRect = imageLayer.getBoundingClientRect();
+      const top = Math.max(0, imgRect.top - compRect.top);
+      const left = Math.max(0, imgRect.left - compRect.left);
+      const bottom = Math.max(0, compRect.bottom - imgRect.bottom);
+      const right = Math.max(0, compRect.right - imgRect.right);
+      frontTitle.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+    };
+
+    syncFrontClip();
+
+    const ro = new ResizeObserver(syncFrontClip);
+    ro.observe(composition);
+    ro.observe(imageLayer);
+
+    let rafId = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(syncFrontClip);
+    };
+
+    window.addEventListener('resize', syncFrontClip);
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', syncFrontClip);
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(rafId);
+      frontTitle.style.clipPath = '';
+    };
+  }, [lenis]);
+
+  useLayoutEffect(() => {
     const section = sectionRef.current;
     const stage = stageRef.current;
     const composition = compositionRef.current;
@@ -73,12 +115,6 @@ export default function Hero() {
           >
             <span className={styles.titleLine}>{hero.title}</span>
           </div>
-
-          {hero.subtitle ? (
-            <p className={styles.subtitle} data-intro-subtitle>
-              {hero.subtitle}
-            </p>
-          ) : null}
         </div>
 
         <footer className={styles.footer}>

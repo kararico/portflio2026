@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Project } from '@/types/project';
-import { getProjectHeroCandidates } from '@/utils/projectImage';
+import { getProjectVisualCandidates } from '@/utils/projectImage';
 import styles from './ProjectVisual.module.scss';
 
 interface ProjectVisualProps {
@@ -40,7 +40,7 @@ function probeImageSources(sources: string[]): Promise<string | null> {
 
 export default function ProjectVisual({ project, priority = false, isMobile = false }: ProjectVisualProps) {
   const candidates = useMemo(
-    () => getProjectHeroCandidates(project, isMobile),
+    () => getProjectVisualCandidates(project, isMobile),
     [project, isMobile],
   );
   const [resolvedSrc, setResolvedSrc] = useState<string | null>(null);

@@ -129,16 +129,27 @@
   position: relative;
   z-index: 1;
   color: #111;
+  -webkit-text-fill-color: #111;
   pointer-events: none;
 }
 
 .heroImage {
   position: relative;
+  z-index: 2;
   flex-shrink: 0;
   height: var(--hero-image-height);
   width: var(--hero-image-width);
   pointer-events: auto;
   will-change: transform;
+}
+
+/* 이미지 영역만 clip — 배경 위 텍스트는 back 레이어 솔리드 블랙 */
+.heroTitleFront {
+  position: relative;
+  z-index: 3;
+  color: var(--color-bg);
+  mix-blend-mode: difference;
+  pointer-events: none;
 }
 
 .subtitle {
@@ -155,14 +166,6 @@
   letter-spacing: -0.02em;
   text-transform: lowercase;
   color: var(--color-text);
-  mix-blend-mode: multiply;
-  pointer-events: none;
-}
-
-.heroTitleFront {
-  position: relative;
-  z-index: 3;
-  color: rgba(20, 20, 20, 0.28);
   mix-blend-mode: multiply;
   pointer-events: none;
 }
@@ -272,8 +275,8 @@
   }
 
   .heroTitleFront {
-    mix-blend-mode: normal;
-    color: rgba(20, 20, 20, 0.22);
+    mix-blend-mode: difference;
+    color: var(--color-bg);
   }
 }
 

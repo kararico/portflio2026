@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCallback, useState } from 'react';
 import { siteConfig } from '@/data/site';
 import type { Project } from '@/types/project';
+import { hasKoreanText, splitTitleLines } from '@/utils/projectTitle';
 import ProjectVisual from './ProjectVisual';
 import styles from './WorksItem.module.scss';
 
@@ -32,6 +33,7 @@ export default function WorksItem({
   const { metaLabels } = siteConfig.works;
   const indexNumber = String(index + 1).padStart(2, '0');
   const isReversed = index % 2 === 1;
+  const titleLines = splitTitleLines(project.title);
 
   const handleToggleMeta = useCallback(() => {
     if (window.matchMedia('(hover: none), (pointer: coarse)').matches) {
@@ -55,8 +57,23 @@ export default function WorksItem({
 
           <header className={styles.header} ref={headerRef}>
             <h3 className={styles.title} data-reveal-item>
-              {project.title}
+              {titleLines.length > 1
+                ? titleLines.map((line) => (
+                    <span key={line} className={styles.titleLine}>
+                      {line}
+                    </span>
+                  ))
+                : project.title}
             </h3>
+            {project.subtitle ? (
+              <p
+                className={`${styles.subtitle} ${hasKoreanText(project.subtitle) ? styles.subtitleKo : ''}`}
+                lang={hasKoreanText(project.subtitle) ? 'ko' : undefined}
+                data-reveal-item
+              >
+                {project.subtitle}
+              </p>
+            ) : null}
             <p className={styles.role} data-reveal-item>
               {project.role}
             </p>

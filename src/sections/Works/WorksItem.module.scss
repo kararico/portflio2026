@@ -68,6 +68,30 @@
   font-size: clamp(2.5rem, 6vw, var(--text-3xl));
   line-height: var(--leading-tight);
   font-weight: var(--weight-regular);
+  max-width: 100%;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+.titleLine {
+  display: block;
+}
+
+.subtitle {
+  font-size: var(--text-md);
+  font-weight: var(--weight-light);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-normal);
+  max-width: 100%;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+.subtitleKo {
+  word-break: keep-all;
+  overflow-wrap: normal;
 }
 
 .role {

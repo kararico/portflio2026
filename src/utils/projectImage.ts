@@ -21,6 +21,8 @@ export function getImageCandidates(src: string): string[] {
     paths = [src, src.replace(/\.jpg$/, '.svg')];
   } else if (src.endsWith('.svg')) {
     paths = [src.replace(/\.svg$/, '.jpg'), src];
+  } else if (src.endsWith('.png') || src.endsWith('.webp')) {
+    paths = [src];
   } else {
     paths = [src];
   }
@@ -41,6 +43,15 @@ export function getProjectHeroCandidates(project: Project, isMobile = false): st
 
 export function getProjectThumbnail(project: Project): string {
   return project.thumbnail || project.images.hero;
+}
+
+/** Works ProjectVisual — thumbnail 우선, 없으면 hero */
+export function getProjectVisualCandidates(project: Project, isMobile = false): string[] {
+  const primary =
+    isMobile && project.images.mobile
+      ? project.images.mobile
+      : getProjectThumbnail(project);
+  return getImageCandidates(primary);
 }
 
 /** Gallery 섹션용 이미지 목록 (detail 우선, 없으면 hero) */
