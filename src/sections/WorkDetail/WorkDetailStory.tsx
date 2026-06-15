@@ -3,10 +3,8 @@ import {
   getDetailStorySections,
   type DetailStorySection,
 } from '@/utils/detailStorySequence';
-import {
-  getDetailBodyParagraphs,
-  getDetailCredits,
-} from '@/utils/detailStoryContent';
+import { getProjectDetail } from '@/utils/detailStoryContent';
+import { siteConfig } from '@/data/site';
 import {
   slotToImageLayout,
   type EditorialLayoutItem,
@@ -79,30 +77,60 @@ function StoryRow({
   );
 }
 
-function StoryCredits({ project }: { project: Project }) {
-  const lines = getDetailCredits(project);
+function StoryDetailContent({ project }: { project: Project }) {
+  const detail = getProjectDetail(project);
+  const labels = siteConfig.detail;
 
   return (
-    <div className={styles.storyCredits} data-story-text data-detail-reveal>
-      {lines.map((line) => (
-        <p key={line} className={styles.storyCreditLine} data-reveal-item>
-          {line}
+    <div className={styles.storyDetail} data-story-text data-detail-reveal>
+      <section className={styles.detailBlock}>
+        <h2 className={styles.detailLabel} data-reveal-item>
+          {labels.overviewLabel}
+        </h2>
+        <p className={styles.detailProse} data-reveal-item>
+          {detail.overview}
         </p>
-      ))}
-    </div>
-  );
-}
+      </section>
 
-function StoryBody({ project }: { project: Project }) {
-  const paragraphs = getDetailBodyParagraphs(project);
-
-  return (
-    <div className={styles.storyBody} data-story-text data-detail-reveal>
-      {paragraphs.map((paragraph) => (
-        <p key={paragraph.slice(0, 48)} className={styles.storyBodyProse} data-reveal-item>
-          {paragraph}
+      <section className={styles.detailBlock}>
+        <h2 className={styles.detailLabel} data-reveal-item>
+          {labels.roleLabel}
+        </h2>
+        <p className={styles.detailProse} data-reveal-item>
+          {detail.role}
         </p>
-      ))}
+      </section>
+
+      <section className={styles.detailBlock}>
+        <h2 className={styles.detailLabel} data-reveal-item>
+          {labels.contributionLabel}
+        </h2>
+        <ul className={styles.detailList}>
+          {detail.contributions.map((item) => (
+            <li key={item} className={styles.detailListItem} data-reveal-item>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className={styles.detailBlock}>
+        <h2 className={styles.detailLabel} data-reveal-item>
+          {labels.stackLabel}
+        </h2>
+        <p className={styles.detailStack} data-reveal-item>
+          {detail.techStack.join(' · ')}
+        </p>
+      </section>
+
+      <section className={styles.detailBlock}>
+        <h2 className={styles.detailLabel} data-reveal-item>
+          {labels.outcomeLabel}
+        </h2>
+        <p className={styles.detailProse} data-reveal-item>
+          {detail.outcome}
+        </p>
+      </section>
     </div>
   );
 }
@@ -120,10 +148,8 @@ function renderSection(section: DetailStorySection, project: Project, index: num
           imageIndexOffset={index}
         />
       );
-    case 'credits':
-      return <StoryCredits key="credits" project={project} />;
-    case 'body':
-      return <StoryBody key="body" project={project} />;
+    case 'detail':
+      return <StoryDetailContent key="detail" project={project} />;
     default:
       return null;
   }

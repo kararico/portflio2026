@@ -176,6 +176,7 @@
   padding-top: clamp(3rem, 8vw, 6rem);
   padding-bottom: clamp(2rem, 6vw, 4rem);
   align-items: start;
+  background-color: var(--color-bg-elevated);
 }
 
 .storyRow {
@@ -223,7 +224,68 @@
   margin-top: clamp(1rem, 3vh, 2rem);
 }
 
-/* Credits — Septiembre meta block */
+/* Detail — 공통 템플릿 (Overview / Role / Contribution / Stack / Outcome) */
+.storyDetail {
+  grid-column: 2 / 11;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 5vw, 3rem);
+  margin-bottom: clamp(4rem, 10vw, 7rem);
+}
+
+.detailBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.detailLabel {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-light);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-muted);
+}
+
+.detailProse {
+  font-size: clamp(0.95rem, 1.35vw, 1.05rem);
+  line-height: 1.85;
+  color: var(--color-text);
+  text-wrap: pretty;
+}
+
+.detailList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.detailListItem {
+  position: relative;
+  padding-left: 1rem;
+  font-size: clamp(0.95rem, 1.35vw, 1.05rem);
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+
+  &::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--color-muted);
+  }
+}
+
+.detailStack {
+  font-size: clamp(0.95rem, 1.35vw, 1.05rem);
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* Credits — legacy (deprecated) */
 .storyCredits {
   grid-column: 2 / 11;
   margin-bottom: clamp(3rem, 8vw, 5.5rem);
@@ -507,6 +569,7 @@
     margin-top: 0;
   }
 
+  .storyDetail,
   .storyCredits,
   .storyBody {
     grid-column: auto;

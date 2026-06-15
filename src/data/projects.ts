@@ -1,8 +1,11 @@
 import { siteConfig } from '@/data/site';
+import { projectDetailsBySlug } from '@/data/projectDetails';
 import type { Project } from '@/types/project';
 import { buildProjectImages } from '@/utils/projectImage';
 
-export const projects: Project[] = [
+type ProjectSeed = Omit<Project, 'projectDetail'>;
+
+const projectSeeds: ProjectSeed[] = [
   {
     id: '1',
     slug: 'mlb-korea',
@@ -54,22 +57,6 @@ export const projects: Project[] = [
     },
     overview:
       '아웃door 브랜드 Discovery Expedition의 공식 이커머스 플랫폼 프론트엔드를 담당했습니다. 대용량 상품 카탈로그와 시즌별 룩북 콘텐츠를 효과적으로 전달하면서도, 모바일 퍼스트 쇼핑 경험을 유지하는 UI를 구현했습니다.',
-    detailHeroIntro:
-      '이커머스는 단순히 상품을 파는 공간이 아닙니다. 브랜드의 아웃door 정체성과 시즌 스토리를 동시에 전달해야 합니다. Discovery Expedition에서는 이 두 가지를 하나의 경험으로 엮었습니다.',
-    detailCredits: [
-      'Discovery Expedition E-commerce Platform',
-      'Web Publisher & UI Developer · F&F',
-      'Client Discovery Expedition',
-      'Role Web Publisher & UI Developer · Contribution 100%',
-      'Year 2023',
-      'Stack React · JavaScript · SCSS · GSAP',
-    ],
-    detailBody: [
-      '핵심 목표는 실내·실외 어디서든 자연스럽게 브랜드를 경험하는 것이었습니다. 이를 위해 룩북과 카탈로그를 분리하지 않고, 스크롤 하나로 시즌 내러티브를 따라갈 수 있는 구조를 설계했습니다.',
-      '대규모 상품 데이터를 다루면서도 첫 화면의 여백과 타이포그래피 리듬을 유지하는 것이 과제였습니다. 카테고리 진입 전에도 브랜드 무드를 먼저 느끼도록, 이미지·텍스트·여백의 비율을 editorial layout 기준으로 맞췄습니다.',
-      '모바일 퍼스트 쇼핑 경험을 위해 PLP·PDP·룩북 페이지의 인터랙션 패턴을 통일했습니다. GSAP ScrollTrigger 기반 스크롤 모션으로 캠페인 콘텐츠의 몰입감을 높였고, SCSS 모듈·디자인 토큰으로 운영 효율을 확보했습니다.',
-      'Discovery Expedition 프로젝트는 브랜드 아웃door 아이덴티티와 전환율을 동시에 잡는 UI 아키텍처를 정립한 사례입니다. 콘텐츠·커머스·모션이 한 흐름으로 이어지는 경험을 완성했습니다.',
-    ],
     objectives:
       '브랜드 아웃door 아이덴티티를 디지털에 반영하고, 상품 탐색·필터링 UX를 개선하여 전환율을 높이는 것.',
     responsibilities: [
@@ -354,6 +341,11 @@ export const projects: Project[] = [
     stack: ['HTML', 'CSS', 'JavaScript', 'PHP', 'jQuery'],
   },
 ];
+
+export const projects: Project[] = projectSeeds.map((project) => ({
+  ...project,
+  projectDetail: projectDetailsBySlug[project.slug],
+}));
 
 export function getProjectBySlug(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);

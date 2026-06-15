@@ -4,10 +4,9 @@ import { getEditorialStoryLayout, type EditorialStoryRow } from '@/utils/detailE
 export type DetailStorySection =
   | { type: 'hero' }
   | { type: 'row'; row: EditorialStoryRow }
-  | { type: 'credits' }
-  | { type: 'body' };
+  | { type: 'detail' };
 
-/** Hero → 3 image rows → credits → body → duo row (Garden Pizza 순서) */
+/** Hero → 3 image rows → detail content → duo row */
 export function getDetailStorySections(project: Project): DetailStorySection[] {
   const { rows } = getEditorialStoryLayout(project);
 
@@ -16,8 +15,7 @@ export function getDetailStorySections(project: Project): DetailStorySection[] {
     { type: 'row', row: rows[0] },
     { type: 'row', row: rows[1] },
     { type: 'row', row: rows[2] },
-    { type: 'credits' },
-    { type: 'body' },
+    { type: 'detail' },
     { type: 'row', row: rows[3] },
   ];
 }

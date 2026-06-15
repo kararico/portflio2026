@@ -1,3 +1,11 @@
+export interface ProjectDetailContent {
+  overview: string;
+  role: string;
+  contributions: string[];
+  techStack: string[];
+  outcome: string;
+}
+
 export interface ProjectImages {
   /** 대표 이미지 (Works / Detail Hero) */
   hero: string;
@@ -25,12 +33,14 @@ export interface Project {
   overview: string;
   /** CMS: 프로젝트 목표 */
   objectives: string;
-  /** Detail hero 짧은 intro (Septiembre hero 카피) */
+  /** Detail hero 짧은 intro (overview 요약) */
   detailHeroIntro?: string;
-  /** Detail credits 블록 (Septiembre 6줄 meta) */
+  /** @deprecated projectDetail 사용 */
   detailCredits?: string[];
-  /** Detail 본문 단락 (Septiembre 4 paragraphs) */
+  /** @deprecated projectDetail 사용 */
   detailBody?: string[];
+  /** 상세 페이지 공통 템플릿 콘텐츠 */
+  projectDetail: ProjectDetailContent;
   /** CMS: 담당 업무 */
   responsibilities: string[];
   /** CMS: 주요 성과 */

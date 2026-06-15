@@ -1,20 +1,26 @@
 @use './breakpoints' as *;
 
 :root {
-  --color-bg: #fafafa;
-  --color-bg-elevated: #ffffff;
+  /* Paper-toned warm ivory — Septiembre editorial palette */
+  --color-bg: #f5f3ef;
+  --color-bg-elevated: #f8f6f2;
+  --color-bg-alt: #f2efe9;
+  --color-bg-placeholder: #eceae4;
+  --color-bg-image: #f3f1eb;
   --color-text: #111111;
   --color-text-secondary: #333333;
   --color-muted: #666666;
-  --color-border: #e5e5e5;
-  --color-border-strong: #cccccc;
+  --color-border: #e8e4dc;
+  --color-border-strong: #d4cfc4;
   --color-accent: #111111;
   --color-accent-hover: #333333;
+  --color-brand: #7c1515;
+  --color-brand-hover: #8b1e1e;
   --color-inverse-bg: #111111;
-  --color-inverse-text: #fafafa;
+  --color-inverse-text: #f5f3ef;
   --color-overlay: rgba(0, 0, 0, 0.4);
   --color-cursor: #111111;
-  --color-cursor-content: #fafafa;
+  --color-cursor-content: #f5f3ef;
 
   --white-1: var(--color-bg);
   --white-2: var(--color-bg-elevated);

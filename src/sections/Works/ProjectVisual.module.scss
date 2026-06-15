@@ -22,5 +22,10 @@
 .placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(145deg, #ececec 0%, #d4d4d4 50%, #bdbdbd 100%);
+  background: linear-gradient(
+    145deg,
+    var(--color-bg-image) 0%,
+    var(--color-bg-placeholder) 55%,
+    var(--color-border-strong) 100%
+  );
 }

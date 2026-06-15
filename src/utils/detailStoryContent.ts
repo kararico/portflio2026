@@ -1,33 +1,26 @@
-import type { Project } from '@/types/project';
+import type { Project, ProjectDetailContent } from '@/types/project';
+import { projectDetailsBySlug } from '@/data/projectDetails';
 
-/** Septiembre Garden Pizza — credits 블록 (6줄) */
-export function getDetailCredits(project: Project): string[] {
-  if (project.detailCredits?.length) return project.detailCredits;
+export function getProjectDetail(project: Project): ProjectDetailContent {
+  if (project.projectDetail) return project.projectDetail;
 
-  return [
-    `${project.client} · ${project.title}`,
-    `${project.role} · Contribution ${project.contribution}`,
-    `Year ${project.year}`,
-    project.stack.slice(0, 4).join(' · '),
-  ];
+  const fromSlug = projectDetailsBySlug[project.slug];
+  if (fromSlug) return fromSlug;
+
+  return {
+    overview: project.overview,
+    role: project.role,
+    contributions: project.responsibilities,
+    techStack: project.stack,
+    outcome: project.achievements[0] ?? project.objectives,
+  };
 }
 
-/** Septiembre — 본문 4단락 */
-export function getDetailBodyParagraphs(project: Project): string[] {
-  if (project.detailBody?.length) return project.detailBody;
-
-  const paragraphs = [project.overview, project.objectives];
-
-  project.achievements.slice(0, 2).forEach((line) => {
-    paragraphs.push(line);
-  });
-
-  return paragraphs.filter(Boolean);
-}
-
-/** Hero 좌측 짧은 intro (Garden Pizza hero 카피 길이) */
+/** Hero 좌측 짧은 intro */
 export function getDetailHeroIntro(project: Project): string {
   if (project.detailHeroIntro) return project.detailHeroIntro;
-  if (project.overview.length <= 220) return project.overview;
-  return `${project.overview.slice(0, 217).trim()}…`;
+
+  const { overview } = getProjectDetail(project);
+  if (overview.length <= 220) return overview;
+  return `${overview.slice(0, 217).trim()}…`;
 }

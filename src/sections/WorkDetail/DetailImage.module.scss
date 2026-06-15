@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background-color: #eceae4;
+  background-color: var(--color-bg-placeholder);
 }
 
 .frameHero {
@@ -51,8 +51,8 @@
 
 .frameSketch {
   aspect-ratio: 1 / 1;
-  background-color: #f3f1eb;
-  border: 1px solid #ddd9d0;
+  background-color: var(--color-bg-image);
+  border: 1px solid var(--color-border-strong);
 }
 
 .inner {
@@ -73,16 +73,16 @@
 .placeholder {
   width: 100%;
   height: 100%;
-  background-color: #eceae4;
+  background-color: var(--color-bg-placeholder);
   background-image: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.28) 0%,
     rgba(255, 255, 255, 0) 50%,
     rgba(0, 0, 0, 0.03) 100%
   );
 }
 
 .frameSketch .placeholder {
-  background-color: #f3f1eb;
-  border: 1px solid #ddd9d0;
+  background-color: var(--color-bg-image);
+  border: 1px solid var(--color-border-strong);
 }
