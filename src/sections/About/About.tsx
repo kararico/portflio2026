@@ -31,7 +31,7 @@ function AboutContent({
   forceHover?: boolean;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const { about, works } = siteConfig;
+  const { about, works, hero } = siteConfig;
   const featuredProjects = getHeroFeaturedProjects();
   const typeLabel = about.background.typeLabels[typeLabelKey];
 
@@ -90,6 +90,13 @@ function AboutContent({
           </div>
 
           <AboutImage distortionIntensity={distortionIntensity} forceHover={forceHover} />
+        </div>
+
+        <div className={styles.clientsBlock} data-about-clients>
+          <span className={styles.selectedLabel}>{hero.clientsLabel}</span>
+          <p className={styles.clientsList} data-about-reveal="description">
+            {hero.clients.join(' · ')}
+          </p>
         </div>
 
         <div className={styles.selectedBlock} data-about-selected>

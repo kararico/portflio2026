@@ -1,11 +1,11 @@
 /** Septiembre .home-intro scroll phases */
 export const heroStoryConfig = {
   sliderSlugs: [
-    'mlb-korea',
+    'starbucks-siren119',
     'starbucks-employee-platform',
-    'wconcept-us',
+    'mlb-korea',
+    'hyundai-ezwel',
     'discovery-expedition',
-    'casamia',
   ] as const,
   sliderIntervalMs: 3000,
   pinScrollVh: {
@@ -54,12 +54,12 @@ export const heroStoryConfig = {
     x: { desktop: -240, mobile: -112 },
   },
   floatingItems: [
-    { slug: 'discovery-expedition', slot: 'topLeft' as const, aspect: '4 / 3' },
-    { slug: 'wconcept-us', slot: 'topRight' as const, aspect: '3 / 4' },
-    { slug: 'casamia', slot: 'midLeft' as const, aspect: '3 / 4' },
+    { slug: 'starbucks-siren119', slot: 'topLeft' as const, aspect: '4 / 3' },
+    { slug: 'hyundai-ezwel', slot: 'topRight' as const, aspect: '3 / 4' },
+    { slug: 'discovery-expedition', slot: 'midLeft' as const, aspect: '3 / 4' },
     { slug: 'starbucks-employee-platform', slot: 'bottomRight' as const, aspect: '16 / 10' },
     { slug: 'mlb-korea', slot: 'bottomCenter' as const, aspect: '4 / 3' },
-    { slug: 'wconcept-us', slot: 'midRight' as const, aspect: '1 / 1' },
+    { slug: 'hyundai-ezwel', slot: 'midRight' as const, aspect: '1 / 1' },
   ] as const,
 } as const;
 

@@ -25,15 +25,14 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: 'Jungwon Heo — Frontend Developer & UI Engineer',
+    default: `Jungwon Heo — ${siteConfig.position.title}`,
     template: '%s | Jungwon Heo',
   },
-  description:
-    'Frontend Developer & UI Engineer — MLB, Starbucks, W Concept 등 대형 프로젝트 UI 개발 포트폴리오',
+  description: siteConfig.position.seoDescription,
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
-    siteName: '허정원',
+    siteName: siteConfig.name,
   },
 };
 

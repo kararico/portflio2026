@@ -1,6 +1,9 @@
+import { siteConfig } from '@/data/site';
 import styles from './Contact.module.scss';
 
 export default function Contact() {
+  const { contact, name, position } = siteConfig;
+
   return (
     <footer className={styles.footer} id="contact">
       <div className="container-fluid">
@@ -8,38 +11,35 @@ export default function Contact() {
           <div className={styles.col}>
             <span className={styles.label}>Write to</span>
             <a
-              href="mailto:hello@example.com"
+              href={`mailto:${contact.email}`}
               className={styles.emailLink}
               data-cursor-style="small"
             >
-              hello@example.com
+              {contact.email}
             </a>
           </div>
           <div className={styles.col}>
-            <span className={styles.label}>Social</span>
+            <span className={styles.label}>Links</span>
             <ul className={styles.socialList}>
-              <li>
-                <a
-                  href="https://github.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-cursor-style="small"
-                >
-                  GitHub
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-cursor-style="small"
-                >
-                  LinkedIn
-                </a>
-              </li>
+              {contact.links.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-cursor-style="small"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
+        </div>
+
+        <div className={styles.identityRow}>
+          <span className={styles.identityName}>{name}</span>
+          <span className={styles.identityRole}>{position.title}</span>
         </div>
 
         <div className={styles.ctaRow}>
@@ -51,7 +51,7 @@ export default function Contact() {
 
         <div className={styles.bottomRow}>
           <span className={styles.copyright}>
-            &copy; {new Date().getFullYear()} Frontend Developer Portfolio
+            &copy; {new Date().getFullYear()} {name}
           </span>
         </div>
       </div>

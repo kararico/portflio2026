@@ -12,7 +12,7 @@ import styles from './Hero.module.scss';
 
 export default function Hero() {
   const lenis = useLenis();
-  const { hero } = siteConfig;
+  const { hero, position } = siteConfig;
 
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -119,7 +119,7 @@ export default function Hero() {
 
         <footer className={styles.footer}>
           <div className={styles.meta} data-hero-meta>
-            {hero.roles.map((role) => (
+            {position.heroRoles.map((role) => (
               <span key={role} className={styles.metaLine}>
                 {role}
               </span>

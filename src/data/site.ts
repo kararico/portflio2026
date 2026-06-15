@@ -3,6 +3,19 @@ import { assetPath } from '@/utils/assetPath';
 export const siteConfig = {
   name: '허정원',
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3030',
+  position: {
+    title: 'Web Publisher & UI Developer',
+    heroRoles: ['Web Publisher', 'UI Developer'] as const,
+    seoDescription:
+      '12+ Years Experience in Web Publishing, UI Development, Accessibility and Frontend Engineering',
+  },
+  contact: {
+    email: 'jungwon11082015@gmail.com',
+    links: [
+      { label: 'GitHub', href: 'https://github.com/kararico' },
+      { label: 'Portfolio', href: 'https://kararico.github.io' },
+    ] as const,
+  },
   hero: {
     title: 'Jungwon Heo.',
     titleParts: ['Jungwon', 'Heo.'] as const,
@@ -14,18 +27,25 @@ export const siteConfig = {
       assetPath('/images/projects/mlb-korea/hero.jpg'),
       assetPath('/images/projects/starbucks-employee-platform/hero.jpg'),
     ] as const,
-    roles: ['Frontend Developer', 'UI Engineer'] as const,
     location: 'Seoul, South Korea',
     clientsLabel: 'Selected Clients',
-    clients: ['MLB', 'DISCOVERY', 'STARBUCKS', 'W CONCEPT', 'CASAMIA'] as const,
+    clients: [
+      'STARBUCKS',
+      'MLB',
+      'DISCOVERY',
+      'HYUNDAI EZWEL',
+      'CASAMIA',
+      'LG SIGNATURE',
+      'NCSOFT',
+    ] as const,
     scrollLabel: 'Scroll',
   },
   about: {
     sectionLabel: 'Profile',
     introParagraphs: [
-      '12년 이상 다양한 브랜드 사이트와 디지털 서비스를 구축해왔습니다.',
-      '웹 퍼블리셔로서 디자인과 사용자를 연결하는 역할에 집중하고 있으며, 마크업, 스타일링, 인터랙션 구현을 통해 사용자가 자연스럽게 경험할 수 있는 인터페이스를 만드는 것을 중요하게 생각합니다.',
-      '브랜드의 의도를 정확하게 전달하면서도 접근성과 사용성을 고려한 결과물을 만드는 것이 저의 역할입니다.',
+      '12년 이상 스타벅스, F&F, 현대이지웰 등 다양한 브랜드 사이트와 디지털 서비스를 구축해왔습니다.',
+      '웹 퍼블리셔 및 UI 개발자로서 웹표준과 웹접근성을 기반으로 마크업, 스타일링, 인터랙션을 구현합니다. Vue.js, React, Next.js, TypeScript를 활용해 브랜드 의도를 정확히 전달하는 인터페이스를 만듭니다.',
+      '디자인과 사용자를 연결하는 역할에 집중하며, 접근성과 사용성을 고려한 결과물을 만드는 것이 저의 역할입니다.',
     ] as const,
     selectedLabel: 'Selected Projects',
     viewAllLabel: 'View all projects',
@@ -47,10 +67,10 @@ export const siteConfig = {
     },
   },
   featuredProjectSlugs: [
-    'mlb-korea',
-    'discovery-expedition',
+    'starbucks-siren119',
     'starbucks-employee-platform',
-    'wconcept-us',
+    'mlb-korea',
+    'hyundai-ezwel',
   ] as const,
   works: {
     sectionId: 'works',
@@ -77,7 +97,8 @@ export const siteConfig = {
   experience: {
     sectionId: 'experience',
     sectionLabel: 'Experience',
-    sectionDesc: '2013년부터 현재까지 — Frontend Developer & UI Engineer로서의 12년 경력 아카이브.',
+    sectionDesc:
+      '2013년부터 현재까지 — Web Publisher & UI Developer로서의 12년 경력 아카이브.',
     projectsLabel: 'Projects',
     stackLabel: 'Stack',
   },
