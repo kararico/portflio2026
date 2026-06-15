@@ -68,10 +68,7 @@ function bindFirstInteractionRefresh(): () => void {
 
 /** Lenis 없이 window 네이티브 스크롤 ↔ ScrollTrigger */
 export function bindNativeScrollToScrollTrigger(): () => void {
-  // pin(fixed) 위 터치 드래그 → document scroll 전달 (iOS·Android 공통)
-  if (isTouchDevice()) {
-    ScrollTrigger.normalizeScroll(true);
-  }
+  // 모바일은 CSS sticky — normalizeScroll은 pin용이라 터치 스크롤과 충돌함
 
   const onScroll = () => ScrollTrigger.update();
   window.addEventListener('scroll', onScroll, { passive: true });
@@ -84,6 +81,9 @@ export function bindNativeScrollToScrollTrigger(): () => void {
   const vv = window.visualViewport;
   if (vv) {
     vv.addEventListener('resize', onViewportChange);
+    if (isTouchDevice()) {
+      vv.addEventListener('scroll', onViewportChange);
+    }
   }
 
   const onPageShow = (event: PageTransitionEvent) => {
@@ -104,6 +104,9 @@ export function bindNativeScrollToScrollTrigger(): () => void {
     window.removeEventListener('pageshow', onPageShow);
     if (vv) {
       vv.removeEventListener('resize', onViewportChange);
+      if (isTouchDevice()) {
+        vv.removeEventListener('scroll', onViewportChange);
+      }
     }
     unbindPoll();
     unbindFirstInteraction();

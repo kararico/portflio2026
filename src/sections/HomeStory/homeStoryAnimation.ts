@@ -5,6 +5,11 @@ import {
 } from '@/animations/aboutProfileReveal';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
 import { heroStoryConfig, getGalleryRevealStart, getGalleryRevealEnd } from '@/data/heroStory';
+import {
+  getHeroPinScrollVh,
+  getHeroScrollDistanceEnd,
+  isHeroMobileLayout,
+} from '@/utils/scroll/heroScrollDistance';
 
 export interface HomeStoryAnimationRefs {
   root: HTMLElement;
@@ -18,20 +23,15 @@ function prefersReducedMotion(): boolean {
 }
 
 function isMobile(): boolean {
-  return window.matchMedia('(max-width: 767px)').matches;
+  return isHeroMobileLayout();
 }
 
 function getScrollDistance(): string {
-  const vh = isMobile()
-    ? heroStoryConfig.pinScrollVh.mobile
-    : heroStoryConfig.pinScrollVh.desktop;
-  return `+=${vh}%`;
+  return getHeroScrollDistanceEnd();
 }
 
 function setHeroScrollHeight(root: HTMLElement) {
-  const vh = isMobile()
-    ? heroStoryConfig.pinScrollVh.mobile
-    : heroStoryConfig.pinScrollVh.desktop;
+  const vh = getHeroPinScrollVh();
   root.style.setProperty('--hero-scroll-height', `${vh}vh`);
 }
 

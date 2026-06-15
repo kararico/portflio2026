@@ -1,5 +1,6 @@
 import { gsap, ScrollTrigger } from '@/utils/gsap/registerGsap';
 import { heroStoryConfig } from '@/data/heroStory';
+import { getHeroScrollDistanceEnd } from '@/utils/scroll/heroScrollDistance';
 
 export const ABOUT_PROFILE_REVEAL_EVENT = 'about-profile-reveal';
 
@@ -10,9 +11,7 @@ export function isAboutInHomeStory(root: HTMLElement): boolean {
 }
 
 function getHeroPinEnd(): string {
-  const mobile = window.matchMedia('(max-width: 767px)').matches;
-  const vh = mobile ? heroStoryConfig.pinScrollVh.mobile : heroStoryConfig.pinScrollVh.desktop;
-  return `+=${vh}%`;
+  return getHeroScrollDistanceEnd();
 }
 
 /** aboutCover 슬라이드가 절반쯤 올라온 Hero pin progress */
