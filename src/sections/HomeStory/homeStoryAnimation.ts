@@ -1,6 +1,11 @@
 import { gsap, registerGsapPlugins, ScrollTrigger } from '@/utils/gsap/registerGsap';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
-import { heroStoryConfig, getGalleryRevealStart, getGalleryRevealEnd } from '@/data/heroStory';
+import {
+  heroStoryConfig,
+  getPlateConfig,
+  getPlateActivationAt,
+  type HeroPlateId,
+} from '@/data/heroStory';
 import {
   getHeroPinScrollVh,
   getHeroScrollDistanceEnd,
@@ -27,9 +32,22 @@ function setHeroScrollHeight(root: HTMLElement) {
   root.style.setProperty('--hero-scroll-height', `${vh}vh`);
 }
 
+function phaseProgress(progress: number, start: number, end: number): number {
+  if (progress <= start) return 0;
+  if (progress >= end) return 1;
+  return (progress - start) / (end - start);
+}
+
+function lerpValue(from: number, to: number, t: number): number {
+  return from + (to - from) * t;
+}
+
+function easeOutCubic(t: number): number {
+  return 1 - (1 - t) ** 3;
+}
+
 function resolveCenterExitY(
   target: HTMLElement | null,
-  stage: HTMLElement,
   mobile: boolean,
 ): number {
   const fallback = mobile
@@ -43,22 +61,131 @@ function resolveCenterExitY(
   if (!target) return Math.min(fallback, vhOffset);
 
   const targetRect = target.getBoundingClientRect();
-  const stageRect = stage.getBoundingClientRect();
-  const measured = -(targetRect.bottom - stageRect.top + buffer);
+  const measured = -(targetRect.bottom + buffer);
 
   return Math.min(fallback, vhOffset, measured);
 }
 
-/** 카드 최종 슬롯 기준 — viewport 아래에서 올라오도록 y offset 계산 */
-function resolveGalleryFromY(item: HTMLElement, mobile: boolean): number {
-  const minRiseVh = mobile
-    ? heroStoryConfig.galleryReveal.fromYVh.mobile
-    : heroStoryConfig.galleryReveal.fromYVh.desktop;
-  const minRise = window.innerHeight * minRiseVh;
-  const buffer = mobile ? 24 : 32;
-  const rect = item.getBoundingClientRect();
-  const belowViewport = window.innerHeight + buffer - rect.top;
-  return Math.max(belowViewport, minRise);
+interface PlateAnimState {
+  anchor: HTMLElement;
+  image: HTMLElement;
+  plateId: HeroPlateId;
+  scaleFrom: number;
+  entryY: number;
+  activationAt: number;
+  useViewportEntry: boolean;
+}
+
+function usesViewportEntry(plateId: HeroPlateId): boolean {
+  return heroStoryConfig.galleryMotion.viewportEntryPlateIds.includes(
+    plateId as (typeof heroStoryConfig.galleryMotion.viewportEntryPlateIds)[number],
+  );
+}
+
+/** 카드 top이 viewport 하단 밖에서 시작하도록 entryY(px) 계산 */
+function measureViewportEntryY(anchor: HTMLElement, mobile: boolean): number {
+  const { viewportEntryBuffer } = heroStoryConfig.galleryMotion;
+  const buffer = mobile ? viewportEntryBuffer.mobile : viewportEntryBuffer.desktop;
+
+  const savedY = gsap.getProperty(anchor, 'y') as number;
+  const savedVisibility = gsap.getProperty(anchor, 'visibility') as string;
+  gsap.set(anchor, { y: 0, visibility: 'visible' });
+  const rect = anchor.getBoundingClientRect();
+  gsap.set(anchor, { y: savedY, visibility: savedVisibility });
+
+  return Math.round(window.innerHeight + buffer - rect.top);
+}
+
+function remeasurePlateEntryYs(plateStates: PlateAnimState[], mobile: boolean) {
+  plateStates.forEach((state) => {
+    if (!state.useViewportEntry) return;
+    state.entryY = measureViewportEntryY(state.anchor, mobile);
+  });
+}
+
+function getPlateEntrySpan(plateId: HeroPlateId): number {
+  if (usesViewportEntry(plateId)) {
+    return heroStoryConfig.galleryReveal.entrySpanViewport;
+  }
+  return heroStoryConfig.galleryReveal.entrySpan;
+}
+
+function buildPlateStates(anchors: NodeListOf<HTMLElement>, mobile: boolean): PlateAnimState[] {
+  const { galleryMotion } = heroStoryConfig;
+
+  return Array.from(anchors).flatMap((anchor) => {
+    const plateId = anchor.dataset.plateId as HeroPlateId;
+    if (!plateId) return [];
+
+    const image = anchor.querySelector<HTMLElement>('[data-hero-plate-image]');
+    if (!image) return [];
+
+    const plateConfig = getPlateConfig(plateId);
+    const useViewportEntry = usesViewportEntry(plateId);
+    return [
+      {
+        anchor,
+        image,
+        plateId,
+        scaleFrom: plateConfig?.imageScaleFrom ?? galleryMotion.defaultScaleFrom,
+        entryY: useViewportEntry
+          ? measureViewportEntryY(anchor, mobile)
+          : galleryMotion.defaultEntryY,
+        activationAt: getPlateActivationAt(plateId),
+        useViewportEntry,
+      },
+    ];
+  });
+}
+
+function isGalleryTopTriggered(triggerCard: HTMLElement | null): boolean {
+  if (!triggerCard) return false;
+  return triggerCard.getBoundingClientRect().top <= 1;
+}
+
+function applyPlateSequence(
+  plateStates: PlateAnimState[],
+  progress: number,
+  seqStart: number,
+) {
+  const seqEnd = heroStoryConfig.scrollPhases.galleryReveal.end;
+  const { zoomSpan } = heroStoryConfig.galleryReveal;
+  const seqSpan = seqEnd - seqStart;
+
+  plateStates.forEach(({ anchor, image, scaleFrom, entryY, activationAt, plateId }) => {
+    const entrySpan = getPlateEntrySpan(plateId);
+
+    if (progress < seqStart || seqSpan <= 0) {
+      gsap.set(anchor, { y: entryY, visibility: 'hidden' });
+      anchor.removeAttribute('data-plate-active');
+      gsap.set(image, { scale: scaleFrom, transformOrigin: 'center center' });
+      return;
+    }
+
+    const seqT = (progress - seqStart) / seqSpan;
+
+    if (seqT < activationAt) {
+      gsap.set(anchor, { y: entryY, visibility: 'hidden' });
+      anchor.removeAttribute('data-plate-active');
+      gsap.set(image, { scale: scaleFrom, transformOrigin: 'center center' });
+      return;
+    }
+
+    const entryT = Math.min((seqT - activationAt) / entrySpan, 1);
+    const easedEntry = easeOutCubic(entryT);
+
+    gsap.set(anchor, {
+      visibility: 'visible',
+      y: lerpValue(entryY, 0, easedEntry),
+    });
+    anchor.setAttribute('data-plate-active', 'true');
+
+    const zoomT = Math.min((seqT - activationAt) / zoomSpan, 1);
+    gsap.set(image, {
+      scale: lerpValue(scaleFrom, 1, easeOutCubic(zoomT)),
+      transformOrigin: 'center center',
+    });
+  });
 }
 
 export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Context {
@@ -67,60 +194,50 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
   const { root, heroSection, heroStage, aboutCover } = refs;
   const phases = heroStoryConfig.scrollPhases;
   const mobile = isMobile();
+  const scrollLerp = heroStoryConfig.scrollLerp;
 
   return gsap.context(() => {
     setHeroScrollHeight(root);
 
+    const composition = heroSection.querySelector<HTMLElement>('[data-hero-composition]');
     const heroImageLayer = heroSection.querySelector<HTMLElement>('[data-hero-image-layer]');
     const centerStack = heroSection.querySelector<HTMLElement>('[data-hero-center-stack]');
-    const centerMoveTarget = centerStack ?? heroImageLayer;
     const introMedia = heroSection.querySelector<HTMLElement>('[data-intro-media]');
+    const centerMoveTarget = centerStack ?? heroImageLayer;
+    const galleryTriggerCard = heroImageLayer ?? introMedia ?? centerMoveTarget;
     const titleBack = heroSection.querySelector<HTMLElement>('[data-hero-title]');
     const titleFront = heroSection.querySelector<HTMLElement>('[data-hero-title-front]');
     const subtitle = heroSection.querySelector<HTMLElement>('[data-intro-subtitle]');
     const metaItems = heroSection.querySelectorAll<HTMLElement>('[data-hero-meta]');
-    const floatItems = heroSection.querySelectorAll<HTMLElement>('[data-hero-float]');
-    const galleryBackdrop = heroSection.querySelector<HTMLElement>('[data-gallery-backdrop]');
+    const plates = heroSection.querySelectorAll<HTMLElement>('[data-hero-float]');
+    const plateStates = buildPlateStates(plates, mobile);
+    remeasurePlateEntryYs(plateStates, mobile);
+    plateStates.forEach(({ anchor, image, scaleFrom, entryY }) => {
+      gsap.set(anchor, { y: entryY, visibility: 'hidden' });
+      gsap.set(image, { scale: scaleFrom, transformOrigin: 'center center' });
+    });
 
-    const centerMoveDuration = phases.centerMove.end - phases.centerMove.start;
     const centerMoveScale = mobile
       ? heroStoryConfig.centerMove.scale.mobile
       : heroStoryConfig.centerMove.scale.desktop;
-    const getCenterExitY = () =>
-      resolveCenterExitY(centerMoveTarget, heroStage, mobile);
     const titleDriftX = mobile
       ? heroStoryConfig.titleDrift.x.mobile
       : heroStoryConfig.titleDrift.x.desktop;
+    const compositionDriftY = mobile
+      ? heroStoryConfig.compositionDrift.y.mobile
+      : heroStoryConfig.compositionDrift.y.desktop;
+    const getCenterExitY = () => resolveCenterExitY(centerMoveTarget, mobile);
 
-    const applyGalleryInitialState = () => {
-      floatItems.forEach((item) => {
-        const isBottomCenter = item.dataset.float === 'bottomCenter';
-        const fromY = isBottomCenter
-          ? Math.max(
-              resolveGalleryFromY(item, mobile),
-              window.innerHeight *
-                (mobile
-                  ? heroStoryConfig.galleryReveal.bottomCenterFromYVh.mobile
-                  : heroStoryConfig.galleryReveal.bottomCenterFromYVh.desktop),
-            )
-          : resolveGalleryFromY(item, mobile);
-
-        gsap.set(item, {
-          opacity: 1,
-          y: fromY,
-          xPercent: isBottomCenter ? -50 : 0,
-        });
-      });
-    };
-
-    applyGalleryInitialState();
+    let gallerySequenceStartProgress: number | null = null;
 
     const scrollDistance = getScrollDistance();
 
     gsap.set(aboutCover, { y: '100vh' });
-    if (galleryBackdrop) gsap.set(galleryBackdrop, { opacity: 0 });
     if (centerMoveTarget) {
       gsap.set(centerMoveTarget, { y: 0, scale: 1, opacity: 1, transformOrigin: 'center center' });
+    }
+    if (composition) {
+      gsap.set(composition, { y: 0 });
     }
     if (subtitle) {
       gsap.set(subtitle, { y: 0, opacity: 1 });
@@ -128,6 +245,70 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
     if (introMedia) gsap.set(introMedia, { transformOrigin: 'center center' });
     if (titleBack) gsap.set(titleBack, { x: 0, transformOrigin: 'center center' });
     if (titleFront) gsap.set(titleFront, { x: 0, transformOrigin: 'center center' });
+
+    let targetProgress = 0;
+    let currentProgress = 0;
+
+    const applyScrollProgress = (progress: number) => {
+      const metaT = phaseProgress(progress, phases.metaFade.start, phases.metaFade.end);
+      metaItems.forEach((el) => {
+        gsap.set(el, { opacity: 1 - metaT, y: lerpValue(0, -18, metaT) });
+      });
+
+      const centerT = phaseProgress(progress, phases.centerMove.start, phases.centerMove.end);
+      const exitY = getCenterExitY();
+      if (centerMoveTarget) {
+        gsap.set(centerMoveTarget, {
+          y: lerpValue(0, exitY, easeOutCubic(centerT)),
+          scale: lerpValue(1, centerMoveScale, centerT),
+        });
+      }
+      if (subtitle) {
+        gsap.set(subtitle, { y: lerpValue(0, exitY, easeOutCubic(centerT)) });
+      }
+
+      const titleT = phaseProgress(progress, phases.titleBack.start, phases.titleBack.end);
+      if (titleBack) {
+        gsap.set(titleBack, {
+          x: lerpValue(0, titleDriftX, titleT),
+          opacity: lerpValue(1, 0.58, titleT),
+        });
+      }
+      if (titleFront) {
+        gsap.set(titleFront, {
+          x: lerpValue(0, titleDriftX, titleT),
+          opacity: lerpValue(1, 0.08, titleT),
+        });
+      }
+
+      const driftT = phaseProgress(
+        progress,
+        phases.compositionDrift.start,
+        phases.compositionDrift.end,
+      );
+      if (composition) {
+        gsap.set(composition, { y: lerpValue(0, compositionDriftY, easeOutCubic(driftT)) });
+      }
+
+      const aboutT = phaseProgress(progress, phases.aboutCover.start, phases.aboutCover.end);
+      gsap.set(aboutCover, { y: `${lerpValue(100, 0, aboutT)}vh` });
+
+      const galleryTriggered = isGalleryTopTriggered(galleryTriggerCard);
+
+      if (!galleryTriggered) {
+        gallerySequenceStartProgress = null;
+        applyPlateSequence(plateStates, progress, phases.galleryReveal.end + 1);
+        root.removeAttribute('data-gallery-active');
+      } else {
+        if (gallerySequenceStartProgress === null) {
+          gallerySequenceStartProgress = progress;
+        }
+        applyPlateSequence(plateStates, progress, gallerySequenceStartProgress);
+        root.setAttribute('data-gallery-active', 'true');
+      }
+    };
+
+    applyScrollProgress(0);
 
     const pinTrigger = mobile
       ? ScrollTrigger.create({
@@ -154,137 +335,44 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
           onLeaveBack: () => root.removeAttribute('data-scene-pinned'),
         });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: heroSection,
-        start: 'top top',
-        end: scrollDistance,
-        scrub: true,
-        invalidateOnRefresh: true,
-      },
-    });
-
-    if (metaItems.length) {
-      tl.to(
-        metaItems,
-        {
-          opacity: 0,
-          y: -18,
-          ease: 'none',
-          stagger: 0.015,
-          duration: phases.metaFade.end - phases.metaFade.start,
-        },
-        phases.metaFade.start,
-      );
-    }
-
-    if (centerMoveTarget) {
-      tl.to(
-        centerMoveTarget,
-        {
-          y: () => getCenterExitY(),
-          scale: centerMoveScale,
-          ease: 'none',
-          duration: centerMoveDuration,
-        },
-        phases.centerMove.start,
-      );
-    }
-
-    if (subtitle) {
-      tl.to(
-        subtitle,
-        {
-          y: () => getCenterExitY(),
-          ease: 'none',
-          duration: centerMoveDuration,
-        },
-        phases.centerMove.start,
-      );
-    }
-
-    if (titleBack) {
-      tl.to(
-        titleBack,
-        {
-          x: titleDriftX,
-          opacity: 0.52,
-          ease: 'none',
-          duration: phases.titleBack.end - phases.titleBack.start,
-        },
-        phases.titleBack.start,
-      );
-    }
-
-    if (titleFront) {
-      tl.to(
-        titleFront,
-        {
-          x: titleDriftX,
-          opacity: 0.06,
-          ease: 'none',
-          duration: phases.titleBack.end - phases.titleBack.start,
-        },
-        phases.titleBack.start,
-      );
-    }
-
-    const galleryRevealStart = getGalleryRevealStart();
-    const galleryRevealDuration = getGalleryRevealEnd() - galleryRevealStart;
-
-    floatItems.forEach((item) => {
-      const isBottomCenter = item.dataset.float === 'bottomCenter';
-
-      tl.to(
-        item,
-        {
-          y: 0,
-          xPercent: isBottomCenter ? -50 : 0,
-          ease: 'none',
-          duration: galleryRevealDuration,
-        },
-        galleryRevealStart,
-      );
-    });
-
-    tl.fromTo(
-      aboutCover,
-      { y: '100vh' },
-      {
-        y: 0,
-        ease: 'none',
-        duration: phases.aboutCover.end - phases.aboutCover.start,
-      },
-      phases.aboutCover.start,
-    );
-
-    ScrollTrigger.addEventListener('refreshInit', () => {
-      setHeroScrollHeight(root);
-    });
-
-    const galleryActiveSt = ScrollTrigger.create({
+    ScrollTrigger.create({
       trigger: heroSection,
       start: 'top top',
       end: scrollDistance,
+      invalidateOnRefresh: true,
       onUpdate: (self) => {
-        if (self.progress >= phases.centerMove.start) {
-          root.setAttribute('data-gallery-active', 'true');
-        } else {
-          root.removeAttribute('data-gallery-active');
-        }
+        targetProgress = self.progress;
       },
+    });
+
+    const onTick = () => {
+      const delta = targetProgress - currentProgress;
+      if (Math.abs(delta) < 0.00003) return;
+
+      currentProgress += delta * scrollLerp;
+      applyScrollProgress(currentProgress);
+    };
+
+    gsap.ticker.add(onTick);
+
+    ScrollTrigger.addEventListener('refreshInit', () => {
+      setHeroScrollHeight(root);
+      remeasurePlateEntryYs(plateStates, mobile);
+      gallerySequenceStartProgress = null;
+      currentProgress = targetProgress;
+      applyScrollProgress(currentProgress);
     });
 
     requestAnimationFrame(() => {
       if (pinTrigger.isActive) {
         root.setAttribute('data-scene-pinned', 'true');
       }
-
-      if (galleryActiveSt.progress >= phases.centerMove.start) {
-        root.setAttribute('data-gallery-active', 'true');
-      }
     });
 
     refreshScrollTrigger();
+
+    return () => {
+      gsap.ticker.remove(onTick);
+    };
   }, root);
 }

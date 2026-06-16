@@ -6,7 +6,7 @@ import { useLenis } from '@/hooks/useLenis';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
 import { registerGsapPlugins } from '@/utils/gsap/registerGsap';
 import { initHeroIntroAnimation } from './HeroAnimation';
-import IntroGallery from './IntroGallery';
+import { EditorialPlatesBehind, EditorialPlatesBetween, EditorialPlatesFront } from './IntroGallery';
 import IntroMedia from './IntroMedia';
 import styles from './Hero.module.scss';
 
@@ -100,6 +100,8 @@ export default function Hero() {
             ref={heroStageRef}
             data-hero-composition
           >
+            <EditorialPlatesBehind />
+
             <h1
               className={`${styles.heroTitle} ${styles.heroTitleBack}`}
               data-hero-title
@@ -116,6 +118,8 @@ export default function Hero() {
               </div>
             </div>
 
+            <EditorialPlatesBetween />
+
             <div
               className={`${styles.heroTitle} ${styles.heroTitleFront}`}
               aria-hidden="true"
@@ -123,6 +127,8 @@ export default function Hero() {
             >
               <span className={styles.titleLine}>{hero.title}</span>
             </div>
+
+            <EditorialPlatesFront />
           </div>
         </div>
 
@@ -141,10 +147,6 @@ export default function Hero() {
             <span className={styles.scrollArrow}>↓</span>
           </div>
         </footer>
-
-        <div className={styles.introGallery} data-intro-gallery-wrap>
-          <IntroGallery />
-        </div>
       </div>
     </section>
   );

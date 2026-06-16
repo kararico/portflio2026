@@ -4,20 +4,32 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import styles from './PreloaderLogo.module.scss';
 
 const STROKE_DRAW_TOTAL = 1500;
+const VIEWBOX_WIDTH = 320;
+const LETTER_KERN = 10;
 
 export default function PreloaderLogo() {
+  const groupRef = useRef<SVGGElement>(null);
   const jRef = useRef<SVGTextElement>(null);
   const wRef = useRef<SVGTextElement>(null);
   const [isReady, setIsReady] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
 
   useLayoutEffect(() => {
+    const groupEl = groupRef.current;
     const jEl = jRef.current;
     const wEl = wRef.current;
-    if (!jEl || !wEl) return;
+    if (!groupEl || !jEl || !wEl) return;
 
+    jEl.setAttribute('x', '0');
     const jWidth = jEl.getComputedTextLength();
-    wEl.setAttribute('x', String(68 + jWidth - 10));
+    wEl.setAttribute('x', String(jWidth - LETTER_KERN));
+
+    const jBox = jEl.getBBox();
+    const wBox = wEl.getBBox();
+    const left = Math.min(jBox.x, wBox.x);
+    const right = Math.max(jBox.x + jBox.width, wBox.x + wBox.width);
+    const centerX = left + (right - left) / 2;
+    groupEl.setAttribute('transform', `translate(${VIEWBOX_WIDTH / 2 - centerX}, 0)`);
 
     const jLen = jEl.getComputedTextLength() * 2.85;
     const wLen = wEl.getComputedTextLength() * 2.85;
@@ -39,12 +51,14 @@ export default function PreloaderLogo() {
       aria-hidden="true"
       focusable="false"
     >
-      <text ref={jRef} x="68" y="116" className={`${styles.letter} ${styles.letterJ}`}>
-        j
-      </text>
-      <text ref={wRef} x="118" y="116" className={`${styles.letter} ${styles.letterW}`}>
-        w
-      </text>
+      <g ref={groupRef}>
+        <text ref={jRef} x="0" y="116" className={`${styles.letter} ${styles.letterJ}`}>
+          j
+        </text>
+        <text ref={wRef} x="0" y="116" className={`${styles.letter} ${styles.letterW}`}>
+          w
+        </text>
+      </g>
     </svg>
   );
 }

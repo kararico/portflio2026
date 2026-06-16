@@ -2,7 +2,7 @@
 
 .homeIntro {
   position: relative;
-  height: var(--hero-scroll-height, 250vh);
+  height: var(--hero-scroll-height, 360vh);
   z-index: 1;
 }
 
@@ -19,7 +19,7 @@
     calc(var(--header-height) + var(--space-lg))
     var(--padding-fluid)
     var(--space-2xl);
-  overflow: hidden;
+  overflow: visible;
   will-change: transform;
 }
 
@@ -93,8 +93,8 @@
 }
 
 .composition {
-  --hero-image-height: clamp(18rem, 65vh, 44rem);
-  --hero-image-width: calc(var(--hero-image-height) * 0.75);
+  --hero-image-width: clamp(10rem, 20vw, 22rem);
+  --hero-image-height: calc(var(--hero-image-width) * 5 / 4);
 
   position: relative;
   flex: 1;
@@ -105,6 +105,7 @@
   min-height: 0;
   min-width: 0;
   width: 100%;
+  overflow: visible;
 }
 
 .credentialSlot {
@@ -125,8 +126,15 @@
   min-height: 0;
   min-width: 0;
   width: 100%;
+  overflow: visible;
   will-change: transform;
   isolation: isolate;
+
+  [data-intro-gallery] {
+    grid-area: 1 / 1;
+    align-self: stretch;
+    justify-self: stretch;
+  }
 }
 
 .heroTitle {
@@ -136,9 +144,9 @@
   min-width: 0;
   max-width: 100%;
   font-family: var(--font-display);
-  font-size: clamp(4.5rem, 17.5vw, var(--text-hero));
-  line-height: 0.84;
-  letter-spacing: -0.035em;
+  font-size: clamp(5rem, 19vw, var(--text-hero));
+  line-height: 0.82;
+  letter-spacing: -0.04em;
   text-align: center;
   white-space: nowrap;
   user-select: none;
@@ -161,8 +169,9 @@
   position: relative;
   z-index: 2;
   flex-shrink: 0;
-  height: var(--hero-image-height);
   width: var(--hero-image-width);
+  aspect-ratio: 4 / 5;
+  height: auto;
   pointer-events: auto;
   will-change: transform;
 }
@@ -239,20 +248,9 @@
   line-height: 1;
 }
 
-.introGallery {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
-}
-
-:global([data-home-story][data-gallery-active]) .introGallery {
-  pointer-events: auto;
-}
-
 @include respond-below('tablet') {
   .homeIntro {
-    height: var(--hero-scroll-height, 180vh);
+    height: var(--hero-scroll-height, 220vh);
   }
 
   .introSticky {
@@ -279,12 +277,8 @@
     flex: 1 1 0;
     min-height: 0;
     overflow: hidden;
-    --hero-image-height: clamp(
-      9rem,
-      calc(100svh - var(--hero-layout-chrome)),
-      16rem
-    );
-    --hero-image-width: calc(var(--hero-image-height) * 0.75);
+    --hero-image-width: clamp(7rem, 27vw, 11rem);
+    --hero-image-height: calc(var(--hero-image-width) * 5 / 4);
   }
 
   .credentialSlot {
@@ -350,11 +344,8 @@
   }
 
   .composition {
-    --hero-image-height: clamp(
-      8.5rem,
-      calc(100svh - var(--hero-layout-chrome)),
-      14.5rem
-    );
+    --hero-image-width: clamp(6.5rem, 25vw, 9rem);
+    --hero-image-height: calc(var(--hero-image-width) * 5 / 4);
     gap: var(--space-xs);
   }
 

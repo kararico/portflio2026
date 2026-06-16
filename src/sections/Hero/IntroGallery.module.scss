@@ -1,74 +1,50 @@
 @use '@/styles/breakpoints' as *;
 
-.scene {
+/**
+ * Septiembre .intro-gallery / .project-item-wrapper 패턴
+ * - galleryWrapper: absolute full viewport
+ * - projectItem: absolute full viewport (좌표 컨텍스트)
+ * - plateAnchor: top/right + --img-w / --img-ratio
+ */
+
+.galleryWrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100svh;
+  pointer-events: none;
+  overflow: visible;
+  /* 헤더 바로 아래에서 카드 시작 — 레퍼런스 상단 밀도 */
+  transform: translateY(-12vh);
+}
+
+.projectItem {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
+  overflow: visible;
 }
 
-.backdrop {
+.plateAnchor {
   position: absolute;
-  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
   background: transparent;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.item {
-  position: absolute;
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  opacity: 0;
+  text-decoration: none;
+  color: inherit;
   cursor: none;
+  pointer-events: none;
   will-change: transform;
-  pointer-events: auto;
+}
 
-  &[data-float='topLeft'] {
-    top: 14%;
-    left: clamp(1rem, 5vw, 4rem);
-    width: clamp(7rem, 13vw, 11rem);
-  }
-
-  &[data-float='topRight'] {
-    top: 10%;
-    right: clamp(1rem, 6vw, 5rem);
-    width: clamp(6.5rem, 11vw, 9.5rem);
-  }
-
-  &[data-float='midLeft'] {
-    top: 42%;
-    left: clamp(0.5rem, 3vw, 2.5rem);
-    width: clamp(6rem, 10vw, 8.5rem);
-  }
-
-  &[data-float='midRight'] {
-    top: 38%;
-    right: clamp(0.5rem, 4vw, 3rem);
-    width: clamp(5.5rem, 8vw, 7rem);
-  }
-
-  &[data-float='bottomRight'] {
-    bottom: 18%;
-    right: clamp(1rem, 8vw, 6rem);
-    width: clamp(8rem, 14vw, 12rem);
-  }
-
-  &[data-float='bottomCenter'] {
-    bottom: 12%;
-    left: 50%;
-    width: clamp(7rem, 12vw, 10rem);
-  }
+.mediaBox {
+  width: var(--img-w);
+  height: calc(var(--img-w) * var(--img-ratio));
+  overflow: hidden;
 }
 
 .image {
@@ -78,35 +54,88 @@
   object-position: center;
   display: block;
   pointer-events: none;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.layerBehind {
+  z-index: 0;
+}
+
+.layerBetween {
+  z-index: 2;
+}
+
+.layerFront {
+  z-index: 4;
+}
+
+/* 슬롯별 object-position */
+.projectItem[data-plate-id='1'] .image {
+  object-position: center 40%;
+}
+
+.projectItem[data-plate-id='2'] .image {
+  object-position: center 35%;
+}
+
+.projectItem[data-plate-id='3'] .image {
+  object-position: 55% 25%;
+}
+
+.projectItem[data-plate-id='4'] .image {
+  object-position: 42% 30%;
+}
+
+.projectItem[data-plate-id='5'] .image {
+  object-position: 65% 42%;
+}
+
+:global([data-home-story][data-gallery-active]) .plateAnchor[data-plate-active='true'] {
+  pointer-events: auto;
 }
 
 @include respond-below('tablet') {
-  .item {
-    &[data-float='midRight'],
-    &[data-float='bottomCenter'] {
-      display: none;
-    }
+  .projectItem[data-plate-id='2'],
+  .projectItem[data-plate-id='3'] {
+    display: none;
+  }
+
+  .projectItem[data-plate-id='1'] .plateAnchor {
+    top: 2% !important;
+    right: 64% !important;
+    --img-w: 22vw;
+    --img-ratio: 0.65;
+  }
+
+  .projectItem[data-plate-id='4'] .plateAnchor {
+    top: 32% !important;
+    right: 70% !important;
+    --img-w: 18vw;
+    --img-ratio: 1.2;
+  }
+
+  .projectItem[data-plate-id='5'] .plateAnchor {
+    top: 40% !important;
+    right: var(--padding-fluid) !important;
+    --img-w: 30vw;
+    --img-ratio: 0.65;
   }
 }
 
 @include respond-below('mobile') {
-  .item {
-    &[data-float='midLeft'] {
-      display: none;
-    }
+  .projectItem[data-plate-id='4'] {
+    display: none;
+  }
 
-    &[data-float='topLeft'] {
-      width: clamp(5.5rem, 22vw, 7rem);
-      top: 16%;
-    }
+  .projectItem[data-plate-id='1'] .plateAnchor {
+    top: 9% !important;
+    right: 58% !important;
+    --img-w: 28vw;
+  }
 
-    &[data-float='topRight'] {
-      width: clamp(5rem, 20vw, 6.5rem);
-    }
-
-    &[data-float='bottomRight'] {
-      width: clamp(6.5rem, 28vw, 8rem);
-      bottom: 22%;
-    }
+  .projectItem[data-plate-id='5'] .plateAnchor {
+    top: 46% !important;
+    --img-w: 34vw;
   }
 }

@@ -2,7 +2,7 @@
 
 .homeStory {
   position: relative;
-  --hero-scroll-height: 250vh;
+  --hero-scroll-height: 360vh;
 }
 
 .heroLayer {
@@ -20,6 +20,6 @@
 
 @include respond-below('tablet') {
   .homeStory {
-    --hero-scroll-height: 180vh;
+    --hero-scroll-height: 220vh;
   }
 }
