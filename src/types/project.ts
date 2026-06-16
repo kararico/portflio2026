@@ -39,6 +39,8 @@ export interface Project {
   year: string;
   client: string;
   role: string;
+  /** Work Detail Hero — Client / Platform 메타 */
+  platform?: string;
   contribution: string;
   description: string;
   /** Home floating thumbnail — /images/products/* */

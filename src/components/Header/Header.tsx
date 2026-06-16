@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState, type CSSProperties } from 'react';
+import { siteConfig } from '@/data/site';
 import { useMobileHeaderReveal } from '@/hooks/useMobileHeaderReveal';
 import HeaderLogo from './HeaderLogo';
 import styles from './Header.module.scss';
@@ -37,12 +38,31 @@ export default function Header({ theme = 'light' }: HeaderProps) {
     }
   }, [isWorkDetail]);
 
+  useEffect(() => {
+    const root = document.documentElement;
+
+    if (!menuOpen) {
+      root.removeAttribute('data-mobile-menu-open');
+      document.body.style.overflow = '';
+      return;
+    }
+
+    root.setAttribute('data-mobile-menu-open', 'true');
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      root.removeAttribute('data-mobile-menu-open');
+      document.body.style.overflow = '';
+    };
+  }, [menuOpen]);
+
   return (
     <header
       className={`${styles.header} ${headerVisible ? '' : styles.headerHidden}`}
       id="header"
       data-header-theme={theme}
       data-header-visible={headerVisible ? 'true' : 'false'}
+      data-menu-open={menuOpen ? 'true' : 'false'}
     >
       <div className={styles.inner}>
         {!isWorkDetail ? (
@@ -77,24 +97,45 @@ export default function Header({ theme = 'light' }: HeaderProps) {
 
             <nav className={`${styles.menu} ${menuOpen ? styles.menuOpen : ''}`} aria-hidden={!menuOpen}>
               <div className={styles.menuWrapper}>
-                <ul className={styles.menuList}>
-                  {NAV_ITEMS.map((item, index) => (
-                    <li
-                      key={item.href}
-                      className={styles.menuItem}
-                      style={{ '--menu-index': index } as CSSProperties}
-                    >
-                      <Link
-                        href={item.href}
-                        className={styles.menuLink}
-                        onClick={handleNavClick}
-                        data-cursor-style="small"
+                <div className={styles.menuPanel}>
+                  <ul className={styles.menuList}>
+                    {NAV_ITEMS.map((item, index) => (
+                      <li
+                        key={item.href}
+                        className={styles.menuItem}
+                        style={{ '--menu-index': index } as CSSProperties}
                       >
-                        <span>{item.label}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                        <Link
+                          href={item.href}
+                          className={styles.menuLink}
+                          onClick={handleNavClick}
+                          data-cursor-style="small"
+                        >
+                          <span>{item.label}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className={styles.menuVisual} aria-hidden="true">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={siteConfig.about.portraitImage}
+                      alt=""
+                      className={styles.menuPortrait}
+                      decoding="async"
+                    />
+                  </div>
+
+                  <div className={styles.menuMeta} aria-hidden="true">
+                    {siteConfig.position.heroRoles.map((role) => (
+                      <span key={role} className={styles.menuMetaLine}>
+                        {role}
+                      </span>
+                    ))}
+                    <span className={styles.menuMetaLine}>{siteConfig.hero.location}</span>
+                  </div>
+                </div>
               </div>
             </nav>
           </div>

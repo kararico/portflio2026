@@ -84,77 +84,87 @@ function StoryDetailContent({ project }: { project: Project }) {
 
   return (
     <div className={styles.storyDetail} data-story-text data-detail-reveal>
-      <section className={`${styles.detailBlock} ${styles.detailLead}`}>
-        <h2 className={styles.detailLabel} data-reveal-item>
-          {labels.overviewLabel}
-        </h2>
-        <p className={styles.detailLeadProse} data-reveal-item>
-          {detail.overview}
-        </p>
-      </section>
-
-      <div className={styles.detailMetaGrid}>
-        <section className={styles.detailBlock}>
-          <h2 className={styles.detailLabel} data-reveal-item>
-            {labels.roleLabel}
+      <div className={styles.detailChapterBody}>
+        <header className={styles.detailChapterHeader}>
+          <h2 className={styles.detailChapterTitle} data-reveal-item>
+            Case Study
           </h2>
-          <p className={styles.detailRole} data-reveal-item>
-            {detail.role}
+        </header>
+
+        <section className={`${styles.detailBlock} ${styles.detailLead}`}>
+          <h3 className={styles.detailLabel} data-reveal-item>
+            {labels.overviewLabel}
+          </h3>
+          <p className={styles.detailLeadProse} data-reveal-item>
+            {detail.overview}
           </p>
         </section>
 
+        <div className={styles.detailMetaGrid}>
+          <section className={styles.detailBlock}>
+            <h3 className={styles.detailLabel} data-reveal-item>
+              {labels.roleLabel}
+            </h3>
+            <p className={styles.detailRole} data-reveal-item>
+              {detail.role}
+            </p>
+          </section>
+
+          <section className={styles.detailBlock}>
+            <h3 className={styles.detailLabel} data-reveal-item>
+              {labels.stackLabel}
+            </h3>
+            <ul className={styles.detailStackList}>
+              {detail.techStack.map((tech) => (
+                <li key={tech} className={styles.detailStackTag} data-reveal-item>
+                  {tech}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
         <section className={styles.detailBlock}>
-          <h2 className={styles.detailLabel} data-reveal-item>
-            {labels.stackLabel}
-          </h2>
-          <ul className={styles.detailStackList}>
-            {detail.techStack.map((tech) => (
-              <li key={tech} className={styles.detailStackTag} data-reveal-item>
-                {tech}
+          <h3 className={styles.detailLabel} data-reveal-item>
+            {labels.contributionLabel}
+          </h3>
+          <ul className={styles.contributionGrid}>
+            {detail.contributions.map((item) => (
+              <li key={item} className={styles.contributionCard} data-reveal-item>
+                {item}
               </li>
             ))}
           </ul>
         </section>
+
+        <section className={`${styles.detailBlock} ${styles.detailOutcome}`}>
+          <h3 className={styles.detailLabel} data-reveal-item>
+            {labels.outcomeLabel}
+          </h3>
+          <blockquote className={styles.outcomeStatement} data-reveal-item>
+            {detail.outcome}
+          </blockquote>
+        </section>
+
+        {keyFeatures.length > 0 ? (
+          <section className={styles.detailBlock}>
+            <h3 className={styles.detailLabel} data-reveal-item>
+              {labels.keyFeaturesLabel}
+            </h3>
+            <ul className={styles.featureList}>
+              {keyFeatures.map((feature) => (
+                <li key={feature} className={styles.featureItem} data-reveal-item>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        <div className={styles.galleryDivider} data-reveal-item>
+          <span className={styles.detailLabel}>{labels.galleryLabel}</span>
+        </div>
       </div>
-
-      <section className={styles.detailBlock}>
-        <h2 className={styles.detailLabel} data-reveal-item>
-          {labels.contributionLabel}
-        </h2>
-        <ul className={styles.contributionGrid}>
-          {detail.contributions.map((item) => (
-            <li key={item} className={styles.contributionCard} data-reveal-item>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className={`${styles.detailBlock} ${styles.detailOutcome}`}>
-        <h2 className={styles.detailLabel} data-reveal-item>
-          {labels.outcomeLabel}
-        </h2>
-        <blockquote className={styles.outcomeStatement} data-reveal-item>
-          {detail.outcome}
-        </blockquote>
-      </section>
-
-      {keyFeatures.length > 0 ? (
-        <section className={styles.detailBlock}>
-          <h2 className={styles.detailLabel} data-reveal-item>
-            {labels.keyFeaturesLabel}
-          </h2>
-          <ul className={styles.featureList}>
-            {keyFeatures.map((feature) => (
-              <li key={feature} className={styles.featureItem} data-reveal-item>
-                {feature}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-
-      <div className={styles.storyClosing} aria-hidden="true" />
     </div>
   );
 }

@@ -33,3 +33,31 @@ export function getDetailHeroIntro(project: Project): string {
   if (overview.length <= 220) return overview;
   return `${overview.slice(0, 217).trim()}…`;
 }
+
+export interface DetailHeroMetaItem {
+  label: string;
+  value: string;
+}
+
+/** Hero 하단 메타 스트립 — Client / Role / Period / Platform / Tech Stack */
+export function getDetailHeroMetaItems(
+  project: Project,
+  labels: {
+    clientLabel: string;
+    roleLabel: string;
+    periodLabel: string;
+    platformLabel: string;
+    stackLabel: string;
+  },
+): DetailHeroMetaItem[] {
+  const detail = getProjectDetail(project);
+  const techStack = detail.techStack.join(', ');
+
+  return [
+    { label: labels.clientLabel, value: project.client },
+    { label: labels.roleLabel, value: detail.role },
+    { label: labels.periodLabel, value: project.year },
+    { label: labels.platformLabel, value: project.platform ?? 'Web Platform' },
+    { label: labels.stackLabel, value: techStack },
+  ];
+}

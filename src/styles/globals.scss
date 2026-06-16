@@ -34,6 +34,14 @@ html[data-preloader-active] #main-transition {
   visibility: hidden;
 }
 
+html[data-mobile-menu-open] {
+  overflow: hidden;
+}
+
+html[data-mobile-menu-open] #main-transition {
+  visibility: hidden;
+}
+
 ::selection {
   background-color: var(--color-brand);
   color: #ffffff;

@@ -4,7 +4,10 @@ import type { MouseEvent } from 'react';
 import type { Project } from '@/types/project';
 import { siteConfig } from '@/data/site';
 import { useProjectTransition } from '@/components/ProjectTransition/ProjectTransitionProvider';
-import { getDetailHeroIntro } from '@/utils/detailStoryContent';
+import {
+  getDetailHeroIntro,
+  getDetailHeroMetaItems,
+} from '@/utils/detailStoryContent';
 import { getProjectDetailHeroPrimarySrc } from '@/utils/projectImage';
 import { hasKoreanText, splitTitleLines } from '@/utils/projectTitle';
 import DetailImage from './DetailImage';
@@ -19,6 +22,7 @@ export default function WorkDetailHero({ project }: WorkDetailHeroProps) {
   const { backLabel } = siteConfig.detail;
   const { scrollLabel } = siteConfig.hero;
   const heroPrimarySrc = getProjectDetailHeroPrimarySrc(project);
+  const metaItems = getDetailHeroMetaItems(project, siteConfig.detail);
 
   const handleBack = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -51,23 +55,30 @@ export default function WorkDetailHero({ project }: WorkDetailHeroProps) {
               ))}
             </h1>
 
-            <div className={styles.heroMeta} data-detail-hero-reveal data-reveal-item>
-              {project.subtitle ? (
-                <p
-                  className={styles.heroMetaSubtitle}
-                  lang={hasKoreanText(project.subtitle) ? 'ko' : undefined}
-                >
-                  {project.subtitle}
-                </p>
-              ) : null}
-              <p className={styles.heroMetaRole}>{project.role}</p>
-              <span className={styles.heroMetaYear}>{project.year}</span>
-            </div>
+            {project.subtitle ? (
+              <p
+                className={styles.heroMetaSubtitle}
+                data-detail-hero-reveal
+                data-reveal-item
+                lang={hasKoreanText(project.subtitle) ? 'ko' : undefined}
+              >
+                {project.subtitle}
+              </p>
+            ) : null}
 
             <p className={styles.heroIntro} data-detail-hero-reveal data-reveal-item>
               {getDetailHeroIntro(project)}
             </p>
           </div>
+
+          <dl className={styles.heroMetaStrip} data-detail-hero-reveal>
+            {metaItems.map((item) => (
+              <div key={item.label} className={styles.heroMetaRow} data-reveal-item>
+                <dt className={styles.heroMetaTerm}>{item.label}</dt>
+                <dd className={styles.heroMetaValue}>{item.value}</dd>
+              </div>
+            ))}
+          </dl>
 
           <span className={styles.scrollHint} data-detail-hero-reveal aria-hidden="true">
             {scrollLabel}
