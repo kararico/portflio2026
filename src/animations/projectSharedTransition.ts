@@ -15,8 +15,9 @@ export function readThumbnailRect(sourceEl: HTMLElement): { rect: SourceRect; im
   if (!img?.src) return null;
 
   const bounds = img.getBoundingClientRect();
+  const dataSrc = img.getAttribute('data-thumbnail-src');
   return {
-    imageSrc: img.currentSrc || img.src,
+    imageSrc: dataSrc || img.currentSrc || img.src,
     rect: {
       left: bounds.left,
       top: bounds.top,
@@ -113,7 +114,7 @@ export function resetPageTransitionVisibility(): void {
   revealTransitionMain();
 }
 
-export function applyOverlayImageRect(el: HTMLElement, rect: SourceRect): void {
+export function applyOverlayImageRect(el: HTMLElement, rect: SourceRect, objectPosition = 'center'): void {
   gsap.set(el, {
     position: 'fixed',
     left: rect.left,
@@ -123,7 +124,7 @@ export function applyOverlayImageRect(el: HTMLElement, rect: SourceRect): void {
     margin: 0,
     opacity: 1,
     objectFit: 'cover',
-    objectPosition: 'center',
+    objectPosition,
     zIndex: 100001,
   });
 }

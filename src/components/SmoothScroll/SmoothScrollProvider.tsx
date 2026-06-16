@@ -13,7 +13,7 @@ import {
   bindLenisToScrollTrigger,
 } from '@/utils/scroll/bindScrollTrigger';
 import { ensureNativeScrollEnvironment, teardownNativeScrollEnvironment } from '@/utils/scroll/initNativeScroll';
-import { prefersReducedMotion, shouldUseNativeScroll } from '@/utils/scroll/scrollEnvironment';
+import { shouldUseNativeScroll } from '@/utils/scroll/scrollEnvironment';
 
 interface SmoothScrollProviderProps {
   children: ReactNode;
@@ -30,7 +30,7 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
   useEffect(() => {
     registerGsapPlugins();
 
-    if (prefersReducedMotion() || shouldUseNativeScroll()) {
+    if (shouldUseNativeScroll()) {
       ensureNativeScrollEnvironment();
       refreshScrollTrigger();
       return () => teardownNativeScrollEnvironment();

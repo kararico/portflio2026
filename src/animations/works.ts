@@ -20,10 +20,6 @@ export interface WorksAnimationRefs {
   items: WorksItemRefs[];
 }
 
-function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
 function isTouchDevice(): boolean {
   return window.matchMedia('(hover: none), (pointer: coarse)').matches;
 }
@@ -32,7 +28,7 @@ export function initWorksHover(
   item: WorksItemRefs,
   enabled: boolean,
 ): (() => void) | undefined {
-  if (!enabled || prefersReducedMotion()) return undefined;
+  if (!enabled) return undefined;
 
   const { visual, imageInner, meta } = item;
   const scaleTween = gsap.quickTo(imageInner, 'scale', { duration: 0.6, ease: 'power3.out' });
@@ -76,14 +72,7 @@ export function initWorksAnimations(refs: WorksAnimationRefs): {
   const hoverCleanups: Array<() => void> = [];
 
   const ctx = gsap.context(() => {
-    const reduced = prefersReducedMotion();
     const touch = isTouchDevice();
-
-    if (reduced) {
-      gsap.set([header, ...items.flatMap((i) => i.revealTargets)], { opacity: 1, y: 0 });
-      items.forEach((item) => gsap.set(item.meta, { opacity: 1, y: 0 }));
-      return;
-    }
 
     gsap.from(header, {
       opacity: 0,

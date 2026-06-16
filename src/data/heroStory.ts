@@ -59,7 +59,7 @@ export const heroStoryConfig = {
     { slug: 'discovery-expedition', slot: 'midLeft' as const, aspect: '3 / 4' },
     { slug: 'starbucks-employee-platform', slot: 'bottomRight' as const, aspect: '16 / 10' },
     { slug: 'mlb-korea', slot: 'bottomCenter' as const, aspect: '4 / 3' },
-    { slug: 'hyundai-ezwel', slot: 'midRight' as const, aspect: '1 / 1' },
+    { slug: 'wconcept-us', slot: 'midRight' as const, aspect: '1 / 1' },
   ] as const,
 } as const;
 

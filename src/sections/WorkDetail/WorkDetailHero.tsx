@@ -5,6 +5,8 @@ import type { Project } from '@/types/project';
 import { siteConfig } from '@/data/site';
 import { useProjectTransition } from '@/components/ProjectTransition/ProjectTransitionProvider';
 import { getDetailHeroIntro } from '@/utils/detailStoryContent';
+import { getProjectDetailHeroPrimarySrc } from '@/utils/projectImage';
+import { hasKoreanText, splitTitleLines } from '@/utils/projectTitle';
 import DetailImage from './DetailImage';
 import styles from './WorkDetail.module.scss';
 
@@ -16,6 +18,7 @@ export default function WorkDetailHero({ project }: WorkDetailHeroProps) {
   const { closeProject, isTransitioning } = useProjectTransition();
   const { backLabel } = siteConfig.detail;
   const { scrollLabel } = siteConfig.hero;
+  const heroPrimarySrc = getProjectDetailHeroPrimarySrc(project);
 
   const handleBack = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -41,8 +44,25 @@ export default function WorkDetailHero({ project }: WorkDetailHeroProps) {
         <div className={styles.heroLeft}>
           <div className={styles.heroCopy}>
             <h1 className={styles.title} data-detail-hero-reveal data-reveal-item>
-              {project.title}
+              {splitTitleLines(project.title).map((line) => (
+                <span key={line} className={styles.titleLine}>
+                  {line}
+                </span>
+              ))}
             </h1>
+
+            <div className={styles.heroMeta} data-detail-hero-reveal data-reveal-item>
+              {project.subtitle ? (
+                <p
+                  className={styles.heroMetaSubtitle}
+                  lang={hasKoreanText(project.subtitle) ? 'ko' : undefined}
+                >
+                  {project.subtitle}
+                </p>
+              ) : null}
+              <p className={styles.heroMetaRole}>{project.role}</p>
+              <span className={styles.heroMetaYear}>{project.year}</span>
+            </div>
 
             <p className={styles.heroIntro} data-detail-hero-reveal data-reveal-item>
               {getDetailHeroIntro(project)}
@@ -56,9 +76,10 @@ export default function WorkDetailHero({ project }: WorkDetailHeroProps) {
 
         <div className={styles.heroRight} data-cursor-style="view">
           <DetailImage
-            src={project.images.hero}
+            src={heroPrimarySrc}
             alt={`${project.title} — hero visual`}
             slug={project.slug}
+            project={project}
             priority
             variant="hero"
           />

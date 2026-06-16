@@ -12,10 +12,6 @@ const REVEAL_Y = 48;
 const REVEAL_START = 'top 90%';
 const NEXT_REVEAL_Y = 48;
 
-function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
 function isTouchDevice(): boolean {
   return window.matchMedia('(hover: none), (pointer: coarse)').matches;
 }
@@ -66,26 +62,11 @@ export function initWorkDetailAnimation(
   registerGsapPlugins();
 
   return gsap.context(() => {
-    const reduced = prefersReducedMotion();
     const touch = isTouchDevice();
 
     const storyImages = root.querySelectorAll<HTMLElement>('[data-story-image]');
     const storyTexts = root.querySelectorAll<HTMLElement>('[data-story-text]');
     const revealBlocks = root.querySelectorAll<HTMLElement>('[data-detail-reveal]');
-
-    if (reduced) {
-      gsap.set([...storyImages, ...storyTexts, ...revealBlocks], {
-        opacity: 1,
-        y: 0,
-        clearProps: 'transform',
-      });
-      gsap.set(root.querySelectorAll('[data-detail-next-media], [data-detail-next-info]'), {
-        opacity: 1,
-        y: 0,
-        clearProps: 'transform',
-      });
-      return;
-    }
 
     storyImages.forEach((item, index) => {
       const media = item.querySelector<HTMLElement>('[data-detail-media-inner]');

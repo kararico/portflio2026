@@ -13,6 +13,12 @@ import {
 } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { getProjectBySlug } from '@/data/projects';
+import {
+  getImageCandidates,
+  getProjectDetailHeroPrimarySrc,
+  getProjectHeroObjectPosition,
+  getProjectThumbnail,
+} from '@/utils/projectImage';
 import { useLenis } from '@/hooks/useLenis';
 import { refreshScrollTrigger, refreshScrollTriggerDelayed } from '@/animations/scrollTriggerRefresh';
 import {
@@ -90,6 +96,7 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const [overlayImageSrc, setOverlayImageSrc] = useState<string | null>(null);
   const [overlayRect, setOverlayRect] = useState<SourceRect | null>(null);
+  const [overlayObjectPosition, setOverlayObjectPosition] = useState('center');
   const [overlayReady, setOverlayReady] = useState(false);
 
   const finishTransition = useCallback(() => {
@@ -221,14 +228,6 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
     (slug: string, sourceEl: HTMLElement) => {
       if (runningRef.current) return;
 
-      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduced) {
-        markPathnameScrollTop();
-        router.push(`/work/${slug}`, { scroll: false });
-        resetScrollToTop(lenis);
-        return;
-      }
-
       const captured = readThumbnailRect(sourceEl);
       if (!captured) {
         markPathnameScrollTop();
@@ -238,7 +237,14 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
       }
 
       const project = getProjectBySlug(slug);
-      const heroSrc = project?.images.hero;
+      const thumbnailSrc = project ? getProjectThumbnail(project) : null;
+      const detailHeroSrc = project ? getProjectDetailHeroPrimarySrc(project) : null;
+      setOverlayObjectPosition(project ? getProjectHeroObjectPosition(project) : 'center');
+
+      // rect는 클릭 DOM, src는 slug 기준 thumbnail 데이터 (DOM img와 분리)
+      const overlaySrc = thumbnailSrc
+        ? getImageCandidates(thumbnailSrc)[0]
+        : captured.imageSrc || null;
 
       saveHomeScrollSnapshot({
         scrollY: lenis?.scroll ?? window.scrollY,
@@ -254,8 +260,8 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
       lenis?.stop();
 
       setActiveSlug(slug);
-      const overlaySrc = captured.imageSrc || heroSrc || null;
       if (overlaySrc) preloadImage(overlaySrc);
+      if (detailHeroSrc && detailHeroSrc !== overlaySrc) preloadImage(detailHeroSrc);
       setOverlayImageSrc(overlaySrc);
       setOverlayRect(captured.rect);
       setOverlayReady(false);
@@ -270,16 +276,6 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
     (slug: string) => {
       void slug;
       if (runningRef.current) return;
-
-      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      if (reduced) {
-        markPathnameScrollTop();
-        clearHomeScrollSnapshot();
-        router.push('/', { scroll: false });
-        resetScrollToTop(lenis);
-        return;
-      }
 
       runningRef.current = true;
       directionRef.current = 'back';
@@ -326,6 +322,7 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
           imageRef={imageRef}
           imageSrc={overlayImageSrc}
           rect={overlayRect}
+          objectPosition={overlayObjectPosition}
           onReady={handleOverlayReady}
         />
       ) : null}

@@ -1,13 +1,14 @@
-.works {
-  position: relative;
-  padding-top: var(--space-3xl);
+@use '@/styles/breakpoints' as *;
+
+.works {  position: relative;
+  padding-top: var(--space-2xl);
   background-color: var(--color-bg);
 }
 
 .sectionHeader {
-  padding-bottom: var(--space-2xl);
+  padding-bottom: var(--space-xl);
   border-bottom: 1px solid var(--color-border);
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
 }
 
 .indexLabel {
@@ -22,4 +23,16 @@
 .archive {
   display: flex;
   flex-direction: column;
+}
+
+@include respond-below('tablet') {
+  .works {
+    padding-top: var(--block-gap);
+    padding-bottom: var(--block-gap);
+  }
+
+  .sectionHeader {
+    padding-bottom: var(--block-gap);
+    margin-bottom: var(--card-gap);
+  }
 }

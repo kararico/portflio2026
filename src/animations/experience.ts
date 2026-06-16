@@ -3,23 +3,12 @@ import { registerGsapPlugins } from '@/utils/gsap/registerGsap';
 import { textReveal } from '@/animations/textReveal';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
 
-function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
 export function initExperienceAnimation(root: HTMLElement): gsap.Context {
   registerGsapPlugins();
 
   return gsap.context(() => {
-    const reduced = prefersReducedMotion();
     const header = root.querySelector('[data-experience-header]');
     const items = root.querySelectorAll('[data-timeline-item]');
-
-    if (reduced) {
-      const targets = root.querySelectorAll('[data-reveal-item]');
-      gsap.set(targets, { opacity: 1, y: 0 });
-      return;
-    }
 
     if (header) {
       const headerTargets = header.querySelectorAll('[data-reveal-item]');

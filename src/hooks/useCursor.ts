@@ -7,7 +7,6 @@ import { CURSOR_STATES } from '@/utils/cursorStates';
 const FALLBACK: CursorContextValue = {
   state: CURSOR_STATES.DEFAULT,
   isActive: false,
-  reducedMotion: false,
 };
 
 export function useCursor(): CursorContextValue {

@@ -18,11 +18,6 @@ interface UsePreloaderOptions {
   enabled?: boolean;
 }
 
-function prefersReducedMotion(): boolean {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
 function resolveProgress(elapsed: number): number {
   if (elapsed <= 0) return 0;
   if (elapsed >= LOAD_DURATION) return 100;
@@ -87,12 +82,6 @@ export function usePreloader({ enabled = true }: UsePreloaderOptions = {}) {
 
   useEffect(() => {
     if (!enabled) {
-      setIsComplete(true);
-      return undefined;
-    }
-
-    if (prefersReducedMotion()) {
-      setProgress(100);
       setIsComplete(true);
       return undefined;
     }

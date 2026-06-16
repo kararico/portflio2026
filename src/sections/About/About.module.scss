@@ -173,29 +173,40 @@
 
 @include respond-below('tablet') {
   .about {
-    padding-block: var(--space-3xl);
+    padding-block: var(--section-gap) var(--block-gap);
+  }
+
+  .sectionHeader {
+    margin-bottom: var(--block-gap);
   }
 
   .profileRow {
-    margin-bottom: var(--space-3xl);
-    padding-bottom: var(--space-3xl);
+    gap: var(--block-gap);
+    margin-bottom: var(--block-gap);
+    padding-bottom: var(--block-gap);
+  }
+
+  .profileText {
+    gap: var(--block-gap);
+  }
+
+  .selectedBlock {
+    gap: var(--block-gap);
+  }
+
+  .clientsBlock {
+    margin-bottom: var(--block-gap);
+  }
+
+  .projectArchive {
+    gap: var(--block-gap);
   }
 
   .introProse {
-    gap: clamp(1.25rem, 4vw, 1.65rem);
+    gap: clamp(1rem, 3vw, 1.35rem);
   }
 
   .bodyText {
     line-height: 1.8;
-  }
-
-  .projectArchive {
-    gap: var(--space-3xl);
-  }
-}
-
-@include respond-below('mobile') {
-  .projectArchive {
-    gap: var(--space-2xl);
   }
 }

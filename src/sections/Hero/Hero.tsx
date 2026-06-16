@@ -16,10 +16,10 @@ export default function Hero() {
 
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const compositionRef = useRef<HTMLDivElement>(null);
+  const heroStageRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
-    const composition = compositionRef.current;
+    const composition = heroStageRef.current;
     if (!composition) return;
 
     const imageLayer = composition.querySelector<HTMLElement>('[data-hero-image-layer]');
@@ -63,7 +63,7 @@ export default function Hero() {
   useLayoutEffect(() => {
     const section = sectionRef.current;
     const stage = stageRef.current;
-    const composition = compositionRef.current;
+    const composition = heroStageRef.current;
     if (!section || !stage || !composition) return;
 
     registerGsapPlugins();
@@ -88,32 +88,41 @@ export default function Hero() {
           </div>
         </header>
 
-        <div className={styles.composition} ref={compositionRef} data-hero-composition>
-          <h1
-            className={`${styles.heroTitle} ${styles.heroTitleBack}`}
-            data-hero-title
-            data-hero-title-back
-          >
-            <span className={styles.titleLine} data-reveal-line>
-              {hero.title}
-            </span>
-          </h1>
-
-          <div className={styles.centerStack} data-hero-center-stack>
+        <div className={styles.composition}>
+          <div className={styles.credentialSlot}>
             <span className={styles.credential} data-hero-meta data-hero-credential>
               {hero.credential}
             </span>
-            <div className={styles.heroImage} data-hero-image-layer>
-              <IntroMedia />
-            </div>
           </div>
 
           <div
-            className={`${styles.heroTitle} ${styles.heroTitleFront}`}
-            aria-hidden="true"
-            data-hero-title-front
+            className={styles.heroStage}
+            ref={heroStageRef}
+            data-hero-composition
           >
-            <span className={styles.titleLine}>{hero.title}</span>
+            <h1
+              className={`${styles.heroTitle} ${styles.heroTitleBack}`}
+              data-hero-title
+              data-hero-title-back
+            >
+              <span className={styles.titleLine} data-reveal-line>
+                {hero.title}
+              </span>
+            </h1>
+
+            <div className={styles.centerStack} data-hero-center-stack>
+              <div className={styles.heroImage} data-hero-image-layer>
+                <IntroMedia />
+              </div>
+            </div>
+
+            <div
+              className={`${styles.heroTitle} ${styles.heroTitleFront}`}
+              aria-hidden="true"
+              data-hero-title-front
+            >
+              <span className={styles.titleLine}>{hero.title}</span>
+            </div>
           </div>
         </div>
 

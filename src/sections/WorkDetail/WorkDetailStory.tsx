@@ -3,7 +3,7 @@ import {
   getDetailStorySections,
   type DetailStorySection,
 } from '@/utils/detailStorySequence';
-import { getProjectDetail } from '@/utils/detailStoryContent';
+import { getProjectDetail, getProjectKeyFeatures } from '@/utils/detailStoryContent';
 import { siteConfig } from '@/data/site';
 import {
   slotToImageLayout,
@@ -79,58 +79,82 @@ function StoryRow({
 
 function StoryDetailContent({ project }: { project: Project }) {
   const detail = getProjectDetail(project);
+  const keyFeatures = getProjectKeyFeatures(project);
   const labels = siteConfig.detail;
 
   return (
     <div className={styles.storyDetail} data-story-text data-detail-reveal>
-      <section className={styles.detailBlock}>
+      <section className={`${styles.detailBlock} ${styles.detailLead}`}>
         <h2 className={styles.detailLabel} data-reveal-item>
           {labels.overviewLabel}
         </h2>
-        <p className={styles.detailProse} data-reveal-item>
+        <p className={styles.detailLeadProse} data-reveal-item>
           {detail.overview}
         </p>
       </section>
 
-      <section className={styles.detailBlock}>
-        <h2 className={styles.detailLabel} data-reveal-item>
-          {labels.roleLabel}
-        </h2>
-        <p className={styles.detailProse} data-reveal-item>
-          {detail.role}
-        </p>
-      </section>
+      <div className={styles.detailMetaGrid}>
+        <section className={styles.detailBlock}>
+          <h2 className={styles.detailLabel} data-reveal-item>
+            {labels.roleLabel}
+          </h2>
+          <p className={styles.detailRole} data-reveal-item>
+            {detail.role}
+          </p>
+        </section>
+
+        <section className={styles.detailBlock}>
+          <h2 className={styles.detailLabel} data-reveal-item>
+            {labels.stackLabel}
+          </h2>
+          <ul className={styles.detailStackList}>
+            {detail.techStack.map((tech) => (
+              <li key={tech} className={styles.detailStackTag} data-reveal-item>
+                {tech}
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
 
       <section className={styles.detailBlock}>
         <h2 className={styles.detailLabel} data-reveal-item>
           {labels.contributionLabel}
         </h2>
-        <ul className={styles.detailList}>
+        <ul className={styles.contributionGrid}>
           {detail.contributions.map((item) => (
-            <li key={item} className={styles.detailListItem} data-reveal-item>
+            <li key={item} className={styles.contributionCard} data-reveal-item>
               {item}
             </li>
           ))}
         </ul>
       </section>
 
-      <section className={styles.detailBlock}>
-        <h2 className={styles.detailLabel} data-reveal-item>
-          {labels.stackLabel}
-        </h2>
-        <p className={styles.detailStack} data-reveal-item>
-          {detail.techStack.join(' · ')}
-        </p>
-      </section>
-
-      <section className={styles.detailBlock}>
+      <section className={`${styles.detailBlock} ${styles.detailOutcome}`}>
         <h2 className={styles.detailLabel} data-reveal-item>
           {labels.outcomeLabel}
         </h2>
-        <p className={styles.detailProse} data-reveal-item>
+        <blockquote className={styles.outcomeStatement} data-reveal-item>
           {detail.outcome}
-        </p>
+        </blockquote>
       </section>
+
+      {keyFeatures.length > 0 ? (
+        <section className={styles.detailBlock}>
+          <h2 className={styles.detailLabel} data-reveal-item>
+            {labels.keyFeaturesLabel}
+          </h2>
+          <ul className={styles.featureList}>
+            {keyFeatures.map((feature) => (
+              <li key={feature} className={styles.featureItem} data-reveal-item>
+                {feature}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      <div className={styles.storyClosing} aria-hidden="true" />
     </div>
   );
 }

@@ -1,105 +1,247 @@
 @use '@/styles/breakpoints' as *;
 
 .footer {
+  --footer-muted: rgba(245, 243, 239, 0.55);
+  --footer-border: rgba(255, 255, 255, 0.12);
+
   position: relative;
-  padding-block: var(--space-3xl) var(--space-xl);
+  padding-block: var(--space-3xl) var(--space-2xl);
   background-color: var(--color-inverse-bg);
   color: var(--color-inverse-text);
 }
 
-.row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-xl);
-  padding-bottom: var(--space-3xl);
+.topGrid {
+  padding-bottom: var(--space-2xl);
+  border-bottom: 1px solid var(--footer-border);
+}
 
-  @include respond-below('tablet') {
-    grid-template-columns: 1fr;
-    gap: var(--space-lg);
-  }
+.sectionLabel {
+  display: block;
+  margin-bottom: var(--space-md);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-light);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--footer-muted);
+}
+
+.ctaBlock {
+  max-width: 40rem;
+}
+
+.ctaLead {
+  margin-bottom: var(--space-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-light);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--footer-muted);
+}
+
+.ctaHeadline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 7vw, var(--text-3xl));
+  line-height: var(--leading-tight);
+  font-weight: var(--weight-regular);
+  letter-spacing: -0.02em;
+}
+
+.ctaHeadlineLine {
+  display: block;
+  white-space: nowrap;
+}
+
+.ctaHeadlineAccent {
+  font-style: italic;
+  opacity: 0.72;
+}
+
+.ctaDesc {
+  max-width: 28rem;
+  margin-top: var(--space-md);
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--footer-muted);
+  text-wrap: pretty;
+}
+
+.contactBlock {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xl);
+  padding-block: var(--space-2xl);
+  border-bottom: 1px solid var(--footer-border);
+}
+
+.contactCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-width: 0;
 }
 
 .label {
-  display: block;
-  margin-bottom: var(--space-sm);
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   font-weight: var(--weight-light);
   text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: var(--color-muted);
+  letter-spacing: var(--tracking-wider);
+  color: var(--footer-muted);
 }
 
 .emailLink {
+  display: inline-block;
   font-family: var(--font-display);
-  font-size: var(--text-xl);
-  line-height: var(--leading-tight);
+  font-size: clamp(1.25rem, 3vw, var(--text-lg));
+  line-height: var(--leading-snug);
+  word-break: break-all;
   transition: opacity var(--transition-fast);
 
-  &:hover {
-    opacity: 0.7;
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.65;
+    }
   }
 }
 
-.socialList {
+.valueText {
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--color-inverse-text);
+}
+
+.linkList {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
 
   a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.75rem;
     font-size: var(--text-md);
+    line-height: var(--leading-relaxed);
     transition: opacity var(--transition-fast);
 
-    &:hover {
-      opacity: 0.7;
+    @media (hover: hover) {
+      &:hover {
+        opacity: 0.65;
+      }
     }
   }
 }
 
-.identityRow {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-  padding-bottom: var(--space-xl);
+.signature {
+  padding-block: var(--space-xl);
 }
 
-.identityName {
+.signatureName {
   font-family: var(--font-display);
-  font-size: var(--text-lg);
+  font-size: clamp(1.5rem, 4vw, var(--text-lg));
   line-height: var(--leading-tight);
-}
-
-.identityRole {
-  font-size: var(--text-sm);
-  font-weight: var(--weight-light);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: var(--color-muted);
-}
-
-.ctaRow {
-  padding-block: var(--space-3xl);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.ctaText {
-  font-family: var(--font-display);
-  font-size: clamp(4rem, 15vw, var(--text-4xl));
-  line-height: var(--leading-tight);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25em;
-}
-
-.ctaAccent {
-  font-style: italic;
-  opacity: 0.5;
 }
 
 .bottomRow {
-  padding-top: var(--space-lg);
+  display: flex;
+  justify-content: flex-start;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--footer-border);
 }
 
 .copyright {
   font-size: var(--text-xs);
-  color: var(--color-muted);
+  letter-spacing: var(--tracking-wide);
+  color: var(--footer-muted);
+}
+
+@media (min-width: 1024px) {
+  .topGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: var(--space-2xl);
+    align-items: end;
+  }
+
+  .ctaBlock {
+    max-width: none;
+  }
+
+  .ctaHeadline {
+    font-size: clamp(3rem, 4.5vw, var(--text-3xl));
+    max-width: 12ch;
+  }
+
+  .ctaDesc {
+    max-width: 20rem;
+    margin-top: 0;
+    margin-left: auto;
+    text-align: right;
+  }
+
+  .contactBlock {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-lg);
+    padding-block: var(--space-2xl);
+  }
+
+  .contactCol {
+    gap: var(--space-md);
+  }
+
+  .emailLink {
+    font-size: clamp(1.125rem, 1.5vw, var(--text-lg));
+    word-break: normal;
+  }
+
+  .bottomRow {
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+@include respond-below('tablet') {
+  .footer {
+    padding-block: var(--section-gap)
+      calc(var(--block-gap) + env(safe-area-inset-bottom, 0px) + 3.5rem);
+  }
+
+  .topGrid {
+    padding-bottom: var(--block-gap);
+  }
+
+  .ctaHeadline {
+    font-size: clamp(2rem, 9vw, 2.75rem);
+    max-width: none;
+  }
+
+  .ctaHeadlineLine {
+    white-space: normal;
+  }
+
+  .ctaDesc {
+    font-size: var(--text-base);
+    line-height: 1.75;
+  }
+
+  .contactBlock {
+    grid-template-columns: 1fr;
+    gap: var(--block-gap);
+    padding-block: var(--block-gap);
+  }
+
+  .contactCol {
+    gap: var(--card-gap);
+  }
+
+  .linkList {
+    gap: 0.35rem;
+  }
+
+  .signature {
+    padding-block: var(--block-gap);
+  }
+
+  .bottomRow {
+    padding-top: var(--card-gap);
+  }
 }

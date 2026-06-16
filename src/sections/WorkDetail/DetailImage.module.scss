@@ -12,6 +12,11 @@
   aspect-ratio: unset;
 }
 
+.frameHero .image {
+  object-fit: cover;
+  object-position: var(--hero-position, center);
+}
+
 .frameLarge {
   aspect-ratio: 4 / 5;
 

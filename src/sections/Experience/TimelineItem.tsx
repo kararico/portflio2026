@@ -26,7 +26,10 @@ export default function TimelineItem({ entry, index }: TimelineItemProps) {
         </span>
       </div>
 
-      <div className={styles.contentCol}>
+      <div
+        className={styles.contentCol}
+        data-few-projects={entry.projects.length <= 3 ? 'true' : undefined}
+      >
         <header className={styles.header}>
           <h3 className={styles.company} data-reveal-item>
             {entry.company}
@@ -59,8 +62,8 @@ export default function TimelineItem({ entry, index }: TimelineItemProps) {
           </ul>
         </div>
 
-        {entry.stack && entry.stack.length > 0 && (
-          <div className={styles.block}>
+        {entry.stack && entry.stack.length > 0 ? (
+          <div className={`${styles.block} ${styles.stackBlock}`}>
             <span className={styles.blockLabel} data-reveal-item>
               {stackLabel}
             </span>
@@ -72,7 +75,7 @@ export default function TimelineItem({ entry, index }: TimelineItemProps) {
               ))}
             </ul>
           </div>
-        )}
+        ) : null}
       </div>
     </article>
   );

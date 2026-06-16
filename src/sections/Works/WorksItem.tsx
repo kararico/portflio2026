@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useState } from 'react';
+import { useCallback, useId, useMemo, useState } from 'react';
 import { siteConfig } from '@/data/site';
 import type { Project } from '@/types/project';
 import { hasKoreanText, splitTitleLines } from '@/utils/projectTitle';
@@ -30,15 +30,26 @@ export default function WorksItem({
   visualRef,
 }: WorksItemProps) {
   const [metaOpen, setMetaOpen] = useState(false);
-  const { metaLabels } = siteConfig.works;
+  const panelId = useId();
+  const { metaLabels, mobileInfoLabels } = siteConfig.works;
   const indexNumber = String(index + 1).padStart(2, '0');
   const isReversed = index % 2 === 1;
   const titleLines = splitTitleLines(project.title);
 
+  const keyWorkItems = useMemo(() => {
+    const fromDetail = project.projectDetail?.contributions;
+    if (fromDetail?.length) return fromDetail.slice(0, 5);
+    return project.responsibilities.slice(0, 5);
+  }, [project]);
+
+  const techStackItems = useMemo(() => {
+    const fromDetail = project.projectDetail?.techStack;
+    if (fromDetail?.length) return fromDetail;
+    return project.stack;
+  }, [project]);
+
   const handleToggleMeta = useCallback(() => {
-    if (window.matchMedia('(hover: none), (pointer: coarse)').matches) {
-      setMetaOpen((prev) => !prev);
-    }
+    setMetaOpen((prev) => !prev);
   }, []);
 
   return (
@@ -51,7 +62,6 @@ export default function WorksItem({
       <div className={styles.inner}>
         <div className={styles.textCol}>
           <div className={styles.index} ref={indexRef} data-reveal-item data-cursor-style="drag">
-            <span className={styles.indexLabel}>{siteConfig.works.indexLabel}</span>
             <span className={styles.indexNumber}>{indexNumber}</span>
           </div>
 
@@ -82,38 +92,77 @@ export default function WorksItem({
             </span>
           </header>
 
-          <dl
-            className={`${styles.meta} ${metaOpen ? styles.metaOpen : ''}`}
-            ref={metaRef}
-            data-works-meta
-          >
-            <div className={styles.metaRow}>
-              <dt>{metaLabels.client}</dt>
-              <dd>{project.client}</dd>
-            </div>
-            <div className={styles.metaRow}>
-              <dt>{metaLabels.year}</dt>
-              <dd>{project.year}</dd>
-            </div>
-            <div className={styles.metaRow}>
-              <dt>{metaLabels.role}</dt>
-              <dd>{project.role}</dd>
-            </div>
-            <div className={styles.metaRow}>
-              <dt>{metaLabels.contribution}</dt>
-              <dd>{project.contribution}</dd>
-            </div>
-          </dl>
+          <div className={styles.projectInfo}>
+            <button
+              type="button"
+              className={`${styles.infoToggle} ${metaOpen ? styles.infoToggleOpen : ''}`}
+              onClick={handleToggleMeta}
+              aria-expanded={metaOpen}
+              aria-controls={panelId}
+              data-cursor-style="default"
+            >
+              <span className={styles.infoToggleLabel}>{mobileInfoLabels.toggle}</span>
+              <span className={styles.infoToggleIcon} aria-hidden="true">
+                {metaOpen ? '−' : '+'}
+              </span>
+            </button>
 
-          <button
-            type="button"
-            className={styles.metaToggle}
-            onClick={handleToggleMeta}
-            aria-expanded={metaOpen}
-            data-cursor-style="default"
-          >
-            {metaOpen ? 'Hide details' : 'View details'}
-          </button>
+            <div
+              id={panelId}
+              className={`${styles.infoPanel} ${metaOpen ? styles.infoPanelOpen : ''}`}
+            >
+              <div className={styles.infoPanelInner}>
+                <dl
+                  className={styles.meta}
+                  ref={metaRef}
+                  data-works-meta
+                >
+                  <div className={styles.metaRow}>
+                    <dt>{metaLabels.client}</dt>
+                    <dd>{project.client}</dd>
+                  </div>
+                  <div className={`${styles.metaRow} ${styles.metaRowYear}`}>
+                    <dt>{metaLabels.year}</dt>
+                    <dd>{project.year}</dd>
+                  </div>
+                  <div className={styles.metaRow}>
+                    <dt>{metaLabels.role}</dt>
+                    <dd>{project.role}</dd>
+                  </div>
+                  <div className={styles.metaRow}>
+                    <dt>{metaLabels.contribution}</dt>
+                    <dd>{project.contribution}</dd>
+                  </div>
+
+                  {keyWorkItems.length > 0 ? (
+                    <div className={`${styles.metaBlock} ${styles.metaBlockMobile}`}>
+                      <dt className={styles.metaBlockLabel}>{mobileInfoLabels.keyWork}</dt>
+                      <dd>
+                        <ul className={styles.metaList}>
+                          {keyWorkItems.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                      </dd>
+                    </div>
+                  ) : null}
+
+                  {techStackItems.length > 0 ? (
+                    <div className={`${styles.metaBlock} ${styles.metaBlockMobile}`}>
+                      <dt className={styles.metaBlockLabel}>{mobileInfoLabels.techStack}</dt>
+                      <dd>
+                        <ul className={styles.stackList}>
+                          {techStackItems.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                      </dd>
+                    </div>
+                  ) : null}
+                </dl>
+              </div>
+            </div>
+          </div>
         </div>
 
         <Link

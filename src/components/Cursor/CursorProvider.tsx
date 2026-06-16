@@ -25,11 +25,6 @@ function isCoarsePointer(): boolean {
   return window.matchMedia('(hover: none), (pointer: coarse)').matches;
 }
 
-function prefersReducedMotion(): boolean {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
 interface CursorProviderProps {
   children: React.ReactNode;
 }
@@ -44,7 +39,6 @@ export default function CursorProvider({ children }: CursorProviderProps) {
 
   const [state, setState] = useState<CursorState>(CURSOR_STATES.DEFAULT);
   const [isActive, setIsActive] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
 
   const applyState = useCallback((next: CursorState) => {
     const normalized = normalizeCursorState(next);
@@ -57,9 +51,7 @@ export default function CursorProvider({ children }: CursorProviderProps) {
     if (typeof window === 'undefined') return;
 
     const coarse = isCoarsePointer();
-    const reduced = prefersReducedMotion();
     setIsActive(!coarse);
-    setReducedMotion(reduced);
     document.body.classList.toggle('cursor-custom', !coarse);
 
     return () => {
@@ -85,29 +77,16 @@ export default function CursorProvider({ children }: CursorProviderProps) {
 
     gsap.set(cursor, { xPercent: -50, yPercent: -50, opacity: 0 });
 
-    const xSetter = reducedMotion
-      ? gsap.quickSetter(cursor, 'x', 'px')
-      : gsap.quickTo(cursor, 'x', { duration: 0.45, ease: 'power3.out' });
-    const ySetter = reducedMotion
-      ? gsap.quickSetter(cursor, 'y', 'px')
-      : gsap.quickTo(cursor, 'y', { duration: 0.45, ease: 'power3.out' });
-
-    const moveCursor = (clientX: number, clientY: number) => {
-      if (reducedMotion) {
-        xSetter(clientX);
-        ySetter(clientY);
-      } else {
-        (xSetter as gsap.QuickToFunc)(clientX);
-        (ySetter as gsap.QuickToFunc)(clientY);
-      }
-    };
+    const xSetter = gsap.quickTo(cursor, 'x', { duration: 0.45, ease: 'power3.out' });
+    const ySetter = gsap.quickTo(cursor, 'y', { duration: 0.45, ease: 'power3.out' });
 
     const onMouseMove = (event: MouseEvent) => {
-      moveCursor(event.clientX, event.clientY);
+      xSetter(event.clientX);
+      ySetter(event.clientY);
 
       if (!hasMovedRef.current) {
         hasMovedRef.current = true;
-        gsap.to(cursor, { opacity: 1, duration: reducedMotion ? 0 : 0.25, ease: 'power2.out' });
+        gsap.to(cursor, { opacity: 1, duration: 0.25, ease: 'power2.out' });
       }
     };
 
@@ -121,7 +100,7 @@ export default function CursorProvider({ children }: CursorProviderProps) {
 
     const onMouseLeave = () => {
       hasMovedRef.current = false;
-      gsap.to(cursor, { opacity: 0, duration: reducedMotion ? 0 : 0.2, ease: 'power2.out' });
+      gsap.to(cursor, { opacity: 0, duration: 0.2, ease: 'power2.out' });
     };
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
@@ -133,7 +112,7 @@ export default function CursorProvider({ children }: CursorProviderProps) {
       document.removeEventListener('mouseover', onMouseOver);
       document.documentElement.removeEventListener('mouseleave', onMouseLeave);
     };
-  }, [isActive, reducedMotion, applyState]);
+  }, [isActive, applyState]);
 
   useLayoutEffect(() => {
     if (!isActive || typeof window === 'undefined') return;
@@ -144,12 +123,6 @@ export default function CursorProvider({ children }: CursorProviderProps) {
 
     const expanded = isExpandedCursorState(state);
     const size = expanded ? 80 : 8;
-
-    if (reducedMotion) {
-      gsap.set(inner, { width: size, height: size, opacity: expanded ? 1 : 0.85 });
-      if (label) gsap.set(label, { opacity: expanded ? 1 : 0 });
-      return;
-    }
 
     gsap.to(inner, {
       width: size,
@@ -166,11 +139,11 @@ export default function CursorProvider({ children }: CursorProviderProps) {
         ease: 'power2.out',
       });
     }
-  }, [state, isActive, reducedMotion]);
+  }, [state, isActive]);
 
   const value = useMemo(
-    () => ({ state, isActive, reducedMotion }),
-    [state, isActive, reducedMotion],
+    () => ({ state, isActive }),
+    [state, isActive],
   );
 
   return (

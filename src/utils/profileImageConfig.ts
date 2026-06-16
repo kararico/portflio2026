@@ -72,7 +72,6 @@ export function resolveProfileDistortionIntensity(param: string | null): number 
 
 export function canUseProfileDistortion(forceHover = false): boolean {
   if (typeof window === 'undefined') return false;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
   if (forceHover) return true;
   if (!window.matchMedia('(hover: hover)').matches) return false;
   if (window.matchMedia('(pointer: coarse)').matches) return false;

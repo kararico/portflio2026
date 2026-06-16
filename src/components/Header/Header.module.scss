@@ -12,6 +12,19 @@
   transition: color var(--transition-base);
 }
 
+@include respond-below('tablet') {
+  .header {
+    transition:
+      transform 0.35s var(--ease-out-cubic),
+      color var(--transition-base);
+    will-change: transform;
+  }
+
+  .headerHidden {
+    transform: translateY(-100%);
+  }
+}
+
 .header[data-header-theme='dark'] {
   color: #fff;
 }
@@ -20,8 +33,25 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
+  width: 100%;
   height: 100%;
   padding-inline: var(--padding-fluid);
+}
+
+/* Desktop — viewport 기준, 섹션 container와 분리 */
+@media (min-width: 1024px) {
+  .inner {
+    max-width: none;
+    margin-inline: 0;
+  }
+}
+
+/* Mobile / Tablet — container-fluid와 동일한 시작선 */
+@media (max-width: 1023px) {
+  .inner {
+    max-width: var(--max-width);
+    margin-inline: auto;
+  }
 }
 
 .logoCol,
@@ -196,16 +226,5 @@
 @include respond-below('tablet') {
   .inner {
     grid-template-columns: 1fr auto;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .menuItem {
-    opacity: 1;
-    transform: none;
-  }
-
-  .menuOpen .menuItem {
-    animation: none;
   }
 }

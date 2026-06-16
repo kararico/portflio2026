@@ -59,7 +59,6 @@ async function probeHover(page, mode) {
     mode: document.querySelector('#about')?.getAttribute('data-profile-interaction'),
     force: document.querySelector('#about')?.getAttribute('data-profile-force-hover'),
     frameMode: document.querySelector('[data-about-image-frame]')?.getAttribute('data-interaction-mode'),
-    reduced: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     hoverMq: window.matchMedia('(hover: hover)').matches,
   }));
   console.log('listenerCheck', listenerCheck);

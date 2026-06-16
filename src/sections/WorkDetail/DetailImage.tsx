@@ -1,8 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { useCallback, useEffect, useState } from 'react';
-import { getImageCandidates } from '@/utils/projectImage';
+import { useCallback, useEffect, useState, type CSSProperties } from 'react';
+import type { Project } from '@/types/project';
+import {
+  getImageCandidates,
+  getProjectDetailHeroCandidates,
+  getProjectDetailHeroPrimarySrc,
+  getProjectHeroObjectPosition,
+  getVisualMainHeroPath,
+} from '@/utils/projectImage';
 import type { EditorialImageLayout } from '@/utils/detailEditorialLayout';
 import styles from './DetailImage.module.scss';
 
@@ -13,6 +20,7 @@ interface DetailImageProps {
   priority?: boolean;
   variant?: 'hero' | 'editorial';
   layout?: EditorialImageLayout;
+  project?: Project;
 }
 
 const BLUR_DATA_URL =
@@ -87,10 +95,25 @@ function imageSizes(variant: DetailImageProps['variant'], layout: EditorialImage
   }
 }
 
-function resolveInitialSrc(src: string, priority: boolean, variant: DetailImageProps['variant']) {
-  const candidates = getImageCandidates(src);
-  if (priority && variant === 'hero' && candidates.length > 0) {
-    return candidates[candidates.length - 1];
+function resolveCandidates(
+  src: string,
+  variant: DetailImageProps['variant'],
+  project?: Project,
+): string[] {
+  if (variant === 'hero' && project) {
+    return getProjectDetailHeroCandidates(project);
+  }
+  return getImageCandidates(src);
+}
+
+function resolveInitialSrc(
+  src: string,
+  priority: boolean,
+  variant: DetailImageProps['variant'],
+  project?: Project,
+): string | null {
+  if (priority && variant === 'hero' && project) {
+    return getProjectDetailHeroPrimarySrc(project);
   }
   return null;
 }
@@ -102,16 +125,25 @@ export default function DetailImage({
   priority = false,
   variant = 'editorial',
   layout = 'large',
+  project,
 }: DetailImageProps) {
   const [resolvedSrc, setResolvedSrc] = useState<string | null>(() =>
-    resolveInitialSrc(src, priority, variant),
+    resolveInitialSrc(src, priority, variant, project),
   );
 
   useEffect(() => {
     let cancelled = false;
-    const candidates = getImageCandidates(src);
+    const candidates = resolveCandidates(src, variant, project);
 
-    if (priority && variant === 'hero') {
+    if (priority && variant === 'hero' && project) {
+      const visualMain = getVisualMainHeroPath(project.slug);
+      if (visualMain) {
+        setResolvedSrc(visualMain);
+        return () => {
+          cancelled = true;
+        };
+      }
+
       probeImageSources(candidates).then((resolved) => {
         if (!cancelled && resolved) setResolvedSrc(resolved);
       });
@@ -128,17 +160,23 @@ export default function DetailImage({
     return () => {
       cancelled = true;
     };
-  }, [src, priority, variant]);
+  }, [src, priority, variant, project]);
 
   const handleError = useCallback(() => {
     setResolvedSrc(null);
   }, []);
+
+  const frameStyle: CSSProperties | undefined =
+    variant === 'hero' && project
+      ? ({ '--hero-position': getProjectHeroObjectPosition(project) } as CSSProperties)
+      : undefined;
 
   return (
     <div
       className={frameClassName(variant, layout)}
       data-project-slug={slug}
       data-shared-hero-target={variant === 'hero' ? 'true' : undefined}
+      style={frameStyle}
     >
       <div
         className={styles.inner}

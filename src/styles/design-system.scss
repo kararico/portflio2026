@@ -68,6 +68,8 @@
   --space-3xl: 8rem;
   --space-4xl: 10rem;
 
+  --mobile-gutter: 1.5rem; /* 24px — unified mobile start line */
+  --tablet-gutter: var(--space-lg);
   --padding-fluid: var(--space-xl);
   --padding-inner: var(--space-sm);
   --header-height: var(--space-2xl);
@@ -133,22 +135,25 @@ html {
   }
 }
 
+@include respond-below('desktop') {
+  :root {
+    --padding-fluid: var(--tablet-gutter);
+    --text-hero: 15rem;
+    --text-4xl: 6rem;
+    --text-3xl: 5rem;
+  }
+}
+
 @include respond-below('tablet') {
   :root {
-    --padding-fluid: var(--space-lg);
+    --padding-fluid: var(--mobile-gutter);
+    --section-gap: 5rem;
+    --block-gap: 2rem;
+    --card-gap: 1.25rem;
     --text-hero: 7.8rem;
     --text-4xl: 5.6rem;
     --text-3xl: 4.8rem;
     --text-xl: 1.65rem;
-  }
-}
-
-@include respond-below('desktop') {
-  :root {
-    --padding-fluid: 2.5rem;
-    --text-hero: 15rem;
-    --text-4xl: 6rem;
-    --text-3xl: 5rem;
   }
 }
 

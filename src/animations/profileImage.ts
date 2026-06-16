@@ -111,7 +111,6 @@ interface ProfileImageRevealOptions {
 /** Profile image reveal은 about.ts에서 처리 */
 export function initProfileImageReveal(
   root: HTMLElement,
-  reduced: boolean,
   _mode?: ProfileInteractionMode,
   _options?: ProfileImageRevealOptions,
 ): () => void {

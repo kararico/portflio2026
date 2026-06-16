@@ -11,10 +11,6 @@ const REVEAL_Y = 36;
 const META_REVEAL_Y = 32;
 const IMAGE_SCALE_FROM = 1.03;
 
-function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
 function resolveMode(root: HTMLElement): ProfileInteractionMode {
   const mode = root.dataset.profileInteraction;
   if (mode === 'enhanced' || mode === 'scaleOnly') return mode;
@@ -113,12 +109,6 @@ function playProfileRevealSequence(root: HTMLElement): gsap.core.Timeline {
 
 /** Profile row viewport 진입 reveal — gsap.context 밖에서 등록 (Hero cover transform 구간 대응) */
 export function bindProfileSectionReveal(root: HTMLElement): () => void {
-  if (prefersReducedMotion()) {
-    gsap.set(root.querySelectorAll('[data-about-reveal]'), { opacity: 1, y: 0 });
-    gsap.set(root.querySelector('[data-about-image-media]'), { scale: 1 });
-    return () => undefined;
-  }
-
   registerGsapPlugins();
 
   const profileRow = root.querySelector('[data-about-profile-row]');
@@ -184,14 +174,6 @@ export function bindProfileSectionReveal(root: HTMLElement): () => void {
 
 /** Selected Projects — viewport 진입 즉시 순차 등장 */
 export function bindSelectedProjectsAnimation(root: HTMLElement): () => void {
-  if (prefersReducedMotion()) {
-    gsap.set(root.querySelectorAll('[data-about-selected-label], [data-about-project-entry], [data-about-view-all]'), {
-      opacity: 1,
-      x: 0,
-    });
-    return () => undefined;
-  }
-
   registerGsapPlugins();
 
   const selectedBlock = root.querySelector('[data-about-selected]');
@@ -282,12 +264,6 @@ export function bindSelectedProjectsAnimation(root: HTMLElement): () => void {
 
 /** 배경 PROFILE 타이포 — 스크롤 패럴랙스 */
 export function bindBackgroundTypeParallax(root: HTMLElement): () => void {
-  if (prefersReducedMotion()) {
-    const typeWord = root.querySelector('[data-about-type-word]');
-    if (typeWord) gsap.set(typeWord, { x: 0, opacity: 0.08 });
-    return () => undefined;
-  }
-
   registerGsapPlugins();
 
   const typeWord = root.querySelector('[data-about-type-word]');
@@ -321,10 +297,9 @@ export function initAboutAnimation(root: HTMLElement): gsap.Context {
   registerGsapPlugins();
 
   return gsap.context((self) => {
-    const reduced = prefersReducedMotion();
     const mode = resolveMode(root);
 
-    self.add(initProfileImageReveal(root, reduced, mode, { manual: true }));
+    self.add(initProfileImageReveal(root, mode, { manual: true }));
     refreshScrollTrigger();
   }, root);
 }

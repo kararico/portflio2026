@@ -15,6 +15,13 @@ export const projectDetailsBySlug: Record<string, ProjectDetailContent> = {
     techStack: ['HTML', 'SCSS', 'JavaScript', 'GSAP', 'jQuery'],
     outcome:
       '실제 임직원이 사용하는 업무 플랫폼으로 운영되었으며, 다양한 모바일 환경에서 안정적으로 동작할 수 있도록 구현했습니다.',
+    keyFeatures: [
+      '모바일 최적화',
+      'GSAP 인터랙션',
+      '바텀시트 UI',
+      'iOS Safari 대응',
+      '접근성 개선',
+    ],
   },
   'starbucks-employee-platform': {
     overview: '스타벅스 임직원을 위한 통합 업무 플랫폼 구축 프로젝트입니다.',
@@ -29,6 +36,13 @@ export const projectDetailsBySlug: Record<string, ProjectDetailContent> = {
     techStack: ['React', 'Next.js', 'TypeScript', 'SCSS'],
     outcome:
       '운영 효율성과 사용성을 고려한 UI 구조를 구축하고, 유지보수하기 쉬운 컴포넌트 단위로 정리하는 데 기여했습니다.',
+    keyFeatures: [
+      'React UI 개발',
+      'Next.js 퍼블리싱',
+      '컴포넌트 설계',
+      '반응형 UI',
+      '운영 효율화',
+    ],
   },
   'mlb-korea': {
     overview: 'F&F MLB 브랜드 사이트 운영 및 UI 고도화 프로젝트입니다.',
@@ -43,10 +57,17 @@ export const projectDetailsBySlug: Record<string, ProjectDetailContent> = {
     techStack: ['HTML', 'SCSS', 'JavaScript', 'Git'],
     outcome:
       '브랜드 아이덴티티를 유지하면서 시즌 캠페인과 프로모션 페이지를 지속적으로 제작·운영할 수 있는 환경을 구축했습니다.',
+    keyFeatures: [
+      '프로모션 템플릿',
+      '브랜드 메인 운영',
+      '이벤트 랜딩',
+      'UI 컴포넌트 표준화',
+      '퍼블리싱 리드',
+    ],
   },
   'hyundai-ezwel': {
     overview:
-      '기업 복지몰 구축 및 운영 프로젝트로, 프로젝트 리더 역할을 수행하며 구축부터 운영까지 전반적인 업무를 담당했습니다.',
+      '현대이지웰 복지 플랫폼의 UI 개발을 담당했습니다. 다양한 복지 서비스와 제휴 콘텐츠를 하나의 플랫폼에서 탐색·이용할 수 있도록, 웹표준과 사용성을 고려한 인터페이스를 구현했습니다.',
     role: 'PL · Web Publisher',
     contributions: [
       '프로젝트 일정 관리',
@@ -58,6 +79,13 @@ export const projectDetailsBySlug: Record<string, ProjectDetailContent> = {
     techStack: ['HTML', 'SCSS', 'JavaScript', 'Vue'],
     outcome:
       '프로젝트 리더로서 일정과 품질을 관리하며 서비스를 안정적으로 구축하고 운영했습니다.',
+    keyFeatures: [
+      '복지 서비스 UI',
+      '카테고리 구조 표준화',
+      '반응형 레이아웃',
+      '웹표준 마크업',
+      '운영 대응 체계',
+    ],
   },
   'discovery-expedition': {
     overview:
@@ -73,6 +101,13 @@ export const projectDetailsBySlug: Record<string, ProjectDetailContent> = {
     techStack: ['React', 'JavaScript', 'SCSS', 'GSAP', 'Webpack'],
     outcome:
       '룩북과 상품 카탈로그를 하나의 탐색 흐름으로 연결하는 UI를 구현하고, 페이지 유형별 인터랙션 패턴을 통일했습니다.',
+    keyFeatures: [
+      '룩북·카탈로그 UI',
+      'GSAP 스크롤 모션',
+      '모바일 퍼스트',
+      'SCSS 모듈 체계',
+      '반응형 인터랙션',
+    ],
   },
   'wconcept-us': {
     overview:
@@ -88,6 +123,13 @@ export const projectDetailsBySlug: Record<string, ProjectDetailContent> = {
     techStack: ['React', 'Next.js', 'TypeScript', 'Styled Components'],
     outcome:
       '영문·국문 동시 운영이 가능한 UI 구조를 구축하고, 글로벌 쇼핑 플로우에 맞는 화면 단위로 정리했습니다.',
+    keyFeatures: [
+      '글로벌 i18n',
+      'Checkout UX',
+      '테마 시스템',
+      '반응형 레이아웃',
+      '성능 최적화',
+    ],
   },
   casamia: {
     overview:
@@ -103,6 +145,13 @@ export const projectDetailsBySlug: Record<string, ProjectDetailContent> = {
     techStack: ['HTML', 'CSS', 'JavaScript', 'jQuery', 'SCSS'],
     outcome:
       '운영팀이 콘텐츠를 업데이트하기 쉬운 마크업 구조로 정리하고, 모바일·데스크톱에서 동일한 브랜드 톤을 유지하도록 구현했습니다.',
+    keyFeatures: [
+      '브랜드 스토리텔링',
+      '반응형 그리드',
+      'Swiper 인터랙션',
+      '시맨틱 마크업',
+      '운영 친화 구조',
+    ],
   },
   'samsung-fire': {
     overview:
@@ -118,6 +167,13 @@ export const projectDetailsBySlug: Record<string, ProjectDetailContent> = {
     techStack: ['React', 'JavaScript', 'SCSS', 'Redux'],
     outcome:
       '복잡한 보험 정보를 단계별로 전달하는 가입 플로우 UI를 구현하고, 금융권 심사 기준에 맞는 패턴을 화면 단위로 정리했습니다.',
+    keyFeatures: [
+      '가입 플로우 UX',
+      '금융 UI 가이드',
+      '접근성 대응',
+      '폼 컴포넌트',
+      '단계별 정보 전달',
+    ],
   },
   lifeplanet: {
     overview:
@@ -133,6 +189,13 @@ export const projectDetailsBySlug: Record<string, ProjectDetailContent> = {
     techStack: ['React', 'TypeScript', 'SCSS', 'REST API'],
     outcome:
       '보험 상품 비교와 가입 과정을 단계별 UI로 정리하고, 모바일 환경에서도 동일한 가입 흐름을 유지하도록 구현했습니다.',
+    keyFeatures: [
+      '보험료 계산 UX',
+      'TypeScript 전환',
+      '모바일 가입 흐름',
+      'API 연동 UI',
+      '반응형 레이아웃',
+    ],
   },
   goodpeople: {
     overview:
@@ -148,5 +211,12 @@ export const projectDetailsBySlug: Record<string, ProjectDetailContent> = {
     techStack: ['HTML', 'CSS', 'JavaScript', 'PHP', 'jQuery'],
     outcome:
       '후원 전환을 위한 CTA와 폼 UI를 페이지별로 정리하고, CMS 템플릿 구조로 운영팀이 캠페인을 갱신할 수 있도록 구현했습니다.',
+    keyFeatures: [
+      '후원 전환 UX',
+      '캠페인 스토리텔링',
+      'CMS 템플릿',
+      '모바일 성능',
+      '폼 UX',
+    ],
   },
 };

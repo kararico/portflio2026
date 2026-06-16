@@ -1,5 +1,5 @@
 import { bindNativeScrollToScrollTrigger } from './bindScrollTrigger';
-import { isTouchDevice, prefersReducedMotion } from './scrollEnvironment';
+import { isTouchDevice } from './scrollEnvironment';
 
 let cleanup: (() => void) | null = null;
 
@@ -7,7 +7,7 @@ let cleanup: (() => void) | null = null;
 export function ensureNativeScrollEnvironment(): void {
   if (typeof window === 'undefined') return;
   if (cleanup) return;
-  if (!isTouchDevice() && !prefersReducedMotion()) return;
+  if (!isTouchDevice()) return;
 
   cleanup = bindNativeScrollToScrollTrigger();
 }

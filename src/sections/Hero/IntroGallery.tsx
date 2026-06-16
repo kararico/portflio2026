@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { heroStoryConfig } from '@/data/heroStory';
 import { getProjectBySlug } from '@/data/projects';
-import { getImageCandidates } from '@/utils/projectImage';
+import { getImageCandidates, getProjectThumbnail } from '@/utils/projectImage';
 import { useProjectTransition } from '@/components/ProjectTransition/ProjectTransitionProvider';
 import styles from './IntroGallery.module.scss';
 
@@ -48,18 +48,20 @@ function usePreloadedSrc(src: string): string | null {
   return resolvedSrc;
 }
 
-function GalleryImage({ src }: { src: string }) {
+function GalleryImage({ src, slug }: { src: string; slug: string }) {
   const resolvedSrc = usePreloadedSrc(src);
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
+      key={slug}
       src={resolvedSrc ?? getImageCandidates(src)[0]}
       alt=""
       className={styles.image}
       decoding="async"
       loading="eager"
       style={{ opacity: resolvedSrc ? 1 : 0 }}
+      data-thumbnail-src={getImageCandidates(src)[0]}
     />
   );
 }
@@ -79,7 +81,7 @@ export default function IntroGallery() {
     heroStoryConfig.floatingItems.forEach((item) => {
       const project = getProjectBySlug(item.slug);
       if (!project) return;
-      getImageCandidates(project.thumbnail).forEach((candidate) => {
+      getImageCandidates(getProjectThumbnail(project)).forEach((candidate) => {
         const img = new window.Image();
         img.src = candidate;
       });
@@ -112,7 +114,7 @@ export default function IntroGallery() {
               openProject(project.slug, event.currentTarget);
             }}
           >
-            <GalleryImage src={project.thumbnail} />
+            <GalleryImage src={getProjectThumbnail(project)} slug={project.slug} />
           </figure>
         ))}
       </div>

@@ -8,6 +8,7 @@ interface ProjectTransitionOverlayProps {
   imageRef: RefObject<HTMLImageElement | null>;
   imageSrc: string;
   rect: SourceRect;
+  objectPosition?: string;
   onReady?: () => void;
 }
 
@@ -15,31 +16,34 @@ export default function ProjectTransitionOverlay({
   imageRef,
   imageSrc,
   rect,
+  objectPosition = 'center',
   onReady,
 }: ProjectTransitionOverlayProps) {
-  const rectAppliedRef = useRef(false);
   const onReadyRef = useRef(onReady);
   onReadyRef.current = onReady;
 
   useLayoutEffect(() => {
     const el = imageRef.current;
-    if (!el || rectAppliedRef.current) return;
+    if (!el) return;
 
-    rectAppliedRef.current = true;
-    applyOverlayImageRect(el, rect);
+    el.src = imageSrc;
+    applyOverlayImageRect(el, rect, objectPosition);
 
     const notify = () => onReadyRef.current?.();
+
     if (el.complete && el.naturalWidth > 0) {
       notify();
-    } else {
-      el.onload = notify;
-      el.onerror = notify;
+      return;
     }
 
+    el.onload = notify;
+    el.onerror = notify;
+
     return () => {
-      rectAppliedRef.current = false;
+      el.onload = null;
+      el.onerror = null;
     };
-  }, [imageRef, rect]);
+  }, [imageRef, imageSrc, rect, objectPosition]);
 
   return (
     <div className={styles.overlay} data-project-transition-overlay aria-hidden="true">

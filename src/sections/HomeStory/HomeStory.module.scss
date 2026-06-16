@@ -23,9 +23,3 @@
     --hero-scroll-height: 180vh;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .aboutCover {
-    will-change: auto;
-  }
-}

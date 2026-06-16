@@ -13,7 +13,16 @@ export function getProjectDetail(project: Project): ProjectDetailContent {
     contributions: project.responsibilities,
     techStack: project.stack,
     outcome: project.achievements[0] ?? project.objectives,
+    keyFeatures: project.achievements.slice(0, 4),
   };
+}
+
+export function getProjectKeyFeatures(project: Project): string[] {
+  const detail = getProjectDetail(project);
+  if (detail.keyFeatures && detail.keyFeatures.length > 0) {
+    return detail.keyFeatures;
+  }
+  return project.achievements.slice(0, 4);
 }
 
 /** Hero 좌측 짧은 intro */

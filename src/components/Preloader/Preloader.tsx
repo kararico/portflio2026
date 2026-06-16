@@ -1,6 +1,7 @@
 'use client';
 
 import type { TransitionEvent } from 'react';
+import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import PreloaderLogo from './PreloaderLogo';
 import { formatPreloaderProgress, usePreloader } from '@/hooks/usePreloader';
@@ -10,6 +11,17 @@ export default function Preloader() {
   const pathname = usePathname();
   const isHome = pathname === '/';
   const { progress, isExiting, isVisible, finishExit } = usePreloader({ enabled: isHome });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (!isVisible) {
+      root.removeAttribute('data-preloader-active');
+      return;
+    }
+
+    root.setAttribute('data-preloader-active', 'true');
+    return () => root.removeAttribute('data-preloader-active');
+  }, [isVisible]);
 
   if (!isVisible) return null;
 

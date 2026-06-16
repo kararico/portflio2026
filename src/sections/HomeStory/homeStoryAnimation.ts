@@ -14,10 +14,6 @@ export interface HomeStoryAnimationRefs {
   aboutCover: HTMLElement;
 }
 
-function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
 function isMobile(): boolean {
   return isHeroMobileLayout();
 }
@@ -99,11 +95,6 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
     const applyGalleryInitialState = () => {
       floatItems.forEach((item) => {
         const isBottomCenter = item.dataset.float === 'bottomCenter';
-        gsap.set(item, { y: 0, xPercent: isBottomCenter ? -50 : 0, opacity: 0 });
-      });
-
-      floatItems.forEach((item) => {
-        const isBottomCenter = item.dataset.float === 'bottomCenter';
         const fromY = isBottomCenter
           ? Math.max(
               resolveGalleryFromY(item, mobile),
@@ -115,24 +106,16 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
           : resolveGalleryFromY(item, mobile);
 
         gsap.set(item, {
-          opacity: 0,
+          opacity: 1,
           y: fromY,
           xPercent: isBottomCenter ? -50 : 0,
         });
       });
     };
 
-    if (prefersReducedMotion()) {
-      gsap.set(aboutCover, { y: 0, clearProps: 'transform' });
-      gsap.set(floatItems, { opacity: 1, y: 0, xPercent: 0, clearProps: 'transform' });
-      if (centerMoveTarget) gsap.set(centerMoveTarget, { y: 0, scale: 1, clearProps: 'transform' });
-      if (galleryBackdrop) gsap.set(galleryBackdrop, { opacity: 1 });
-      return;
-    }
+    applyGalleryInitialState();
 
     const scrollDistance = getScrollDistance();
-
-    applyGalleryInitialState();
 
     gsap.set(aboutCover, { y: '100vh' });
     if (galleryBackdrop) gsap.set(galleryBackdrop, { opacity: 0 });
@@ -255,7 +238,6 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       tl.to(
         item,
         {
-          opacity: 1,
           y: 0,
           xPercent: isBottomCenter ? -50 : 0,
           ease: 'none',

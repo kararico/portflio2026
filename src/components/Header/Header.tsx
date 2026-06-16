@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState, type CSSProperties } from 'react';
+import { useMobileHeaderReveal } from '@/hooks/useMobileHeaderReveal';
 import HeaderLogo from './HeaderLogo';
 import styles from './Header.module.scss';
 
@@ -24,6 +25,7 @@ export default function Header({ theme = 'light' }: HeaderProps) {
   const pathname = usePathname();
   const isWorkDetail = pathname.startsWith('/work/');
   const [menuOpen, setMenuOpen] = useState(false);
+  const headerVisible = useMobileHeaderReveal(!menuOpen);
 
   const handleNavClick = () => {
     setMenuOpen(false);
@@ -37,9 +39,10 @@ export default function Header({ theme = 'light' }: HeaderProps) {
 
   return (
     <header
-      className={styles.header}
+      className={`${styles.header} ${headerVisible ? '' : styles.headerHidden}`}
       id="header"
       data-header-theme={theme}
+      data-header-visible={headerVisible ? 'true' : 'false'}
     >
       <div className={styles.inner}>
         {!isWorkDetail ? (

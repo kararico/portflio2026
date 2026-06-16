@@ -2,14 +2,30 @@ import { siteConfig } from '@/data/site';
 import styles from './Contact.module.scss';
 
 export default function Contact() {
-  const { contact, name, position } = siteConfig;
+  const { contact, name, position, hero, footer } = siteConfig;
+  const year = new Date().getFullYear();
 
   return (
     <footer className={styles.footer} id="contact">
       <div className="container-fluid">
-        <div className={styles.row}>
-          <div className={styles.col}>
-            <span className={styles.label}>Write to</span>
+        <div className={styles.topGrid}>
+          <header className={styles.ctaBlock}>
+            <span className={styles.sectionLabel}>{footer.sectionLabel}</span>
+            <p className={styles.ctaLead}>{footer.lead}</p>
+            <h2 className={styles.ctaHeadline}>
+              <span className={styles.ctaHeadlineLine}>{footer.headlineLines[0]}</span>
+              <span className={`${styles.ctaHeadlineLine} ${styles.ctaHeadlineAccent}`}>
+                {footer.headlineLines[1]}
+              </span>
+            </h2>
+          </header>
+
+          <p className={styles.ctaDesc}>{footer.description}</p>
+        </div>
+
+        <div className={styles.contactBlock}>
+          <div className={styles.contactCol}>
+            <span className={styles.label}>{footer.emailLabel}</span>
             <a
               href={`mailto:${contact.email}`}
               className={styles.emailLink}
@@ -18,9 +34,10 @@ export default function Contact() {
               {contact.email}
             </a>
           </div>
-          <div className={styles.col}>
-            <span className={styles.label}>Links</span>
-            <ul className={styles.socialList}>
+
+          <div className={styles.contactCol}>
+            <span className={styles.label}>{footer.linksLabel}</span>
+            <ul className={styles.linkList}>
               {contact.links.map((link) => (
                 <li key={link.href}>
                   <a
@@ -35,23 +52,25 @@ export default function Contact() {
               ))}
             </ul>
           </div>
+
+          <div className={styles.contactCol}>
+            <span className={styles.label}>{footer.locationLabel}</span>
+            <p className={styles.valueText}>{hero.location}</p>
+          </div>
+
+          <div className={styles.contactCol}>
+            <span className={styles.label}>{footer.roleLabel}</span>
+            <p className={styles.valueText}>{position.title}</p>
+          </div>
         </div>
 
-        <div className={styles.identityRow}>
-          <span className={styles.identityName}>{name}</span>
-          <span className={styles.identityRole}>{position.title}</span>
-        </div>
-
-        <div className={styles.ctaRow}>
-          <p className={styles.ctaText}>
-            <span>Let&apos;s</span>
-            <span className={styles.ctaAccent}>talk</span>
-          </p>
+        <div className={styles.signature}>
+          <span className={styles.signatureName}>{name}</span>
         </div>
 
         <div className={styles.bottomRow}>
           <span className={styles.copyright}>
-            &copy; {new Date().getFullYear()} {name}
+            &copy; {year} {footer.copyrightName}
           </span>
         </div>
       </div>

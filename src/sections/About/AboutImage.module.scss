@@ -83,26 +83,16 @@
 
 @include respond-below('tablet') {
   .figure {
-    margin-top: var(--space-2xl);
+    margin-top: var(--block-gap);
   }
 
   .frame {
-    max-height: clamp(28rem, 72vw, 34rem);
+    max-height: clamp(22rem, 62vw, 28rem);
   }
 }
 
 @include respond-below('mobile') {
-  .figure {
-    margin-top: var(--space-3xl);
-  }
-
   .frame {
-    max-height: clamp(24rem, 85vw, 30rem);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .media {
-    will-change: auto;
+    max-height: clamp(20rem, 72vw, 26rem);
   }
 }

@@ -1,9 +1,11 @@
-.frame {
-  position: relative;
+@use '@/styles/breakpoints' as *;
+
+.frame {  position: relative;
   width: 100%;
-  aspect-ratio: var(--img-ratio-landscape);
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   background-color: var(--color-border);
+  min-height: clamp(14rem, 38vw, 28rem);
 }
 
 .inner {
@@ -28,4 +30,10 @@
     var(--color-bg-placeholder) 55%,
     var(--color-border-strong) 100%
   );
+}
+
+@include respond-below('tablet') {
+  .frame {
+    min-height: clamp(10rem, 48vw, 16rem);
+  }
 }

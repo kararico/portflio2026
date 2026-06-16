@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { heroStoryConfig } from '@/data/heroStory';
 import { getProjectBySlug } from '@/data/projects';
-import { getImageCandidates } from '@/utils/projectImage';
+import { getImageCandidates, getProjectHomeHero } from '@/utils/projectImage';
 import styles from './IntroMedia.module.scss';
 
 const slides = heroStoryConfig.sliderSlugs
@@ -59,19 +59,25 @@ function IntroSlideImage({ src, alt }: { src: string; alt: string }) {
 
 export default function IntroMedia() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const reduced =
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
-    if (reduced || slides.length <= 1) return;
+    slides.forEach((project) => {
+      getImageCandidates(getProjectHomeHero(project)).forEach((candidate) => {
+        const img = new window.Image();
+        img.src = candidate;
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
 
     const id = window.setInterval(() => {
       setActiveIndex((i) => (i + 1) % slides.length);
     }, heroStoryConfig.sliderIntervalMs);
 
     return () => window.clearInterval(id);
-  }, [reduced]);
+  }, []);
 
   if (slides.length === 0) return null;
 
@@ -85,7 +91,7 @@ export default function IntroMedia() {
           data-active={index === activeIndex ? 'true' : 'false'}
           aria-hidden={index !== activeIndex}
         >
-          <IntroSlideImage src={project.thumbnail} alt={project.title} />
+          <IntroSlideImage src={getProjectHomeHero(project)} alt={project.title} />
         </div>
       ))}
     </div>

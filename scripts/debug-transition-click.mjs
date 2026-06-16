@@ -14,8 +14,6 @@ for (let i = 0; i < 25; i += 1) {
   await page.waitForTimeout(100);
 }
 
-const reduced = await page.evaluate(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-console.log('reduced motion:', reduced);
 
 const result = await page.evaluate(() => {
   const el = document.querySelector('[data-intro-gallery] [data-gallery-item][data-project-slug="mlb-korea"]');

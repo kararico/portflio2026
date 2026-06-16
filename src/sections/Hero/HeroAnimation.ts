@@ -7,10 +7,6 @@ export interface HeroIntroRefs {
   composition: HTMLElement;
 }
 
-function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
 /** Load-time intro — composition (typography + image) enters as one unit */
 export function initHeroIntroAnimation(refs: HeroIntroRefs): gsap.Context {
   const { section, stage, composition } = refs;
@@ -19,15 +15,6 @@ export function initHeroIntroAnimation(refs: HeroIntroRefs): gsap.Context {
     const metaItems = stage.querySelectorAll('[data-hero-meta]');
     const titleLines = composition.querySelectorAll('[data-reveal-line]');
     const titleFront = composition.querySelector('[data-hero-title-front]');
-
-    if (prefersReducedMotion()) {
-      gsap.set([composition, ...metaItems], {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-      });
-      return;
-    }
 
     gsap.set(composition, { opacity: 0, y: 32 });
     if (titleFront instanceof HTMLElement) {
