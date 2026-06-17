@@ -20,7 +20,6 @@ interface WorkDetailHeroProps {
 export default function WorkDetailHero({ project }: WorkDetailHeroProps) {
   const { closeProject, isTransitioning } = useProjectTransition();
   const { backLabel } = siteConfig.detail;
-  const { scrollLabel } = siteConfig.hero;
   const heroPrimarySrc = getProjectDetailHeroPrimarySrc(project);
   const metaItems = getDetailHeroMetaItems(project, siteConfig.detail);
 
@@ -79,10 +78,6 @@ export default function WorkDetailHero({ project }: WorkDetailHeroProps) {
               </div>
             ))}
           </dl>
-
-          <span className={styles.scrollHint} data-detail-hero-reveal aria-hidden="true">
-            {scrollLabel}
-          </span>
         </div>
 
         <div className={styles.heroRight} data-cursor-style="view">

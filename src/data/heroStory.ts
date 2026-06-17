@@ -1,13 +1,7 @@
 /** Septiembre .home-intro — 단일 Editorial Composition */
 export const heroStoryConfig = {
-  sliderSlugs: [
-    'starbucks-siren119',
-    'starbucks-employee-platform',
-    'mlb-korea',
-    'hyundai-ezwel',
-    'discovery-expedition',
-  ] as const,
-  sliderIntervalMs: 3000,
+  /** Home Hero 중앙 카드 — 시안 기준 MLB 고정 */
+  centerMediaSlug: 'mlb-korea' as const,
   pinScrollVh: {
     desktop: 360,
     mobile: 220,
@@ -66,10 +60,11 @@ export const heroStoryConfig = {
    * | id | 위치   | pt     | pr              | img-w  | ratio | slug        |
    * |----|--------|--------|-----------------|--------|-------|-------------|
    * | 1  | 좌상단 | 1%     | 78%             | 18vw   | 0.60  | starbucks   |
-   * | 2  | 중앙   | 8%     | 44%             | 19vw   | 1.47  | mlb-korea   |
+   * | 2  | 중앙   | 8%     | 44%             | 26vw   | 1.47  | mlb-korea   |
    * | 3  | 우상단 | 1%     | 10%             | 14vw   | 1.01  | hyundai     |
    * | 4  | 좌하단 | 36%    | 81%             | 14vw   | 1.48  | discovery   |
    * | 5  | 우하단 | 44%    | padding-fluid   | 24vw   | 0.61  | starbucks-ep|
+   * IntroMedia(centerMediaSlug) — 타이틀 clip-path 기준 레이어
    * galleryWrapper: translateY(-12vh) — 헤더 바로 아래 밀도
    */
   editorialPlates: [
@@ -93,7 +88,7 @@ export const heroStoryConfig = {
       layout: {
         pt: '8%',
         pr: '44%',
-        imgW: '19vw',
+        imgW: '26vw',
         imgRatio: 1.47,
       },
     },

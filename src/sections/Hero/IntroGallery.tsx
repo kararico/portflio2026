@@ -9,7 +9,12 @@ import {
   type EditorialPlateLayout,
 } from '@/data/heroStory';
 import { getProjectBySlug } from '@/data/projects';
-import { getImageCandidates, getProjectThumbnail } from '@/utils/projectImage';
+import type { Project } from '@/types/project';
+import {
+  getImageCandidates,
+  getProjectHomeHero,
+  getProjectThumbnail,
+} from '@/utils/projectImage';
 import { useProjectTransition } from '@/components/ProjectTransition/ProjectTransitionProvider';
 import styles from './IntroGallery.module.scss';
 
@@ -52,6 +57,13 @@ function usePreloadedSrc(src: string): string | null {
   }, [src]);
 
   return resolvedSrc;
+}
+
+function getPlateImageSrc(project: Project): string {
+  if (project.slug === heroStoryConfig.centerMediaSlug) {
+    return getProjectHomeHero(project);
+  }
+  return getProjectThumbnail(project);
 }
 
 function PlateImage({ src, slug }: { src: string; slug: string }) {
@@ -136,7 +148,7 @@ function EditorialPlates({ layer }: EditorialPlatesProps) {
             }}
           >
             <div className={styles.mediaBox} data-hero-plate-media>
-              <PlateImage src={getProjectThumbnail(project)} slug={project.slug} />
+              <PlateImage src={getPlateImageSrc(project)} slug={project.slug} />
             </div>
           </div>
         </div>
@@ -150,7 +162,7 @@ function useEditorialPreload() {
     heroStoryConfig.editorialPlates.forEach((item) => {
       const project = getProjectBySlug(item.slug);
       if (!project) return;
-      getImageCandidates(getProjectThumbnail(project)).forEach((candidate) => {
+      getImageCandidates(getPlateImageSrc(project)).forEach((candidate) => {
         const img = new window.Image();
         img.src = candidate;
       });

@@ -1,99 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { heroStoryConfig } from '@/data/heroStory';
 import { getProjectBySlug } from '@/data/projects';
-import { getImageCandidates, getProjectHomeHero } from '@/utils/projectImage';
+import { getProjectHomeHero, resolveImageSrc } from '@/utils/projectImage';
 import styles from './IntroMedia.module.scss';
 
-const slides = heroStoryConfig.sliderSlugs
-  .map((slug) => getProjectBySlug(slug))
-  .filter((p): p is NonNullable<typeof p> => Boolean(p));
-
-function probeImageSources(sources: string[]): Promise<string | null> {
-  return new Promise((resolve) => {
-    let index = 0;
-
-    const tryNext = () => {
-      if (index >= sources.length) {
-        resolve(null);
-        return;
-      }
-
-      const probe = new window.Image();
-      probe.onload = () => resolve(sources[index]);
-      probe.onerror = () => {
-        index += 1;
-        tryNext();
-      };
-      probe.src = sources[index];
-    };
-
-    tryNext();
-  });
-}
-
-function IntroSlideImage({ src, alt }: { src: string; alt: string }) {
-  const [resolvedSrc, setResolvedSrc] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setResolvedSrc(null);
-
-    probeImageSources(getImageCandidates(src)).then((resolved) => {
-      if (!cancelled) setResolvedSrc(resolved);
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [src]);
-
-  if (!resolvedSrc) return null;
-
-  return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={resolvedSrc} alt={alt} className={styles.image} decoding="async" />
-  );
-}
-
 export default function IntroMedia() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const project = getProjectBySlug(heroStoryConfig.centerMediaSlug);
+  if (!project) return null;
 
-  useEffect(() => {
-    slides.forEach((project) => {
-      getImageCandidates(getProjectHomeHero(project)).forEach((candidate) => {
-        const img = new window.Image();
-        img.src = candidate;
-      });
-    });
-  }, []);
-
-  useEffect(() => {
-    if (slides.length <= 1) return;
-
-    const id = window.setInterval(() => {
-      setActiveIndex((i) => (i + 1) % slides.length);
-    }, heroStoryConfig.sliderIntervalMs);
-
-    return () => window.clearInterval(id);
-  }, []);
-
-  if (slides.length === 0) return null;
+  const src = resolveImageSrc(getProjectHomeHero(project));
 
   return (
     <div className={styles.media} data-intro-media>
-      {slides.map((project, index) => (
-        <div
-          key={`${project.slug}-${index}`}
-          className={styles.slide}
-          data-slide-index={index}
-          data-active={index === activeIndex ? 'true' : 'false'}
-          aria-hidden={index !== activeIndex}
-        >
-          <IntroSlideImage src={getProjectHomeHero(project)} alt={project.title} />
-        </div>
-      ))}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={project.title}
+        className={styles.image}
+        decoding="async"
+        loading="eager"
+      />
     </div>
   );
 }

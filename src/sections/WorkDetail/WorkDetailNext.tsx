@@ -42,11 +42,12 @@ export default function WorkDetailNext({ nextProject }: WorkDetailNextProps) {
         >
           <div className={styles.nextProjectImg} data-detail-next-media>
             <DetailImage
-              src={nextProject.thumbnail || nextProject.images.hero}
+              src={nextProject.thumbnail}
               alt={`Next project — ${nextProject.title}`}
               slug={nextProject.slug}
               variant="editorial"
               layout="next"
+              viewable={false}
             />
           </div>
 

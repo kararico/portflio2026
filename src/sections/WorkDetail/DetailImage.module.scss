@@ -12,6 +12,10 @@
   aspect-ratio: unset;
 }
 
+.frame[data-detail-image-frame='true'] {
+  cursor: zoom-in;
+}
+
 .frameHero .image {
   object-fit: cover;
   object-position: var(--hero-position, center);

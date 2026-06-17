@@ -4,10 +4,10 @@ export const siteConfig = {
   name: '허정원',
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3030',
   position: {
-    title: 'Web Publisher & UI Developer',
-    heroRoles: ['Web Publisher', 'UI Developer'] as const,
+    title: 'Web Publisher & UI Engineer',
+    heroRoles: ['Web Publisher', 'UI Engineer'] as const,
     seoDescription:
-      '12+ Years Experience in Web Publishing, UI Development, Accessibility and Frontend Engineering',
+      '12+ Years Experience in Web Publishing, UI Engineering, Accessibility and Large-scale Service Operations',
   },
   contact: {
     email: 'jungwon11082015@gmail.com',
@@ -24,8 +24,8 @@ export const siteConfig = {
     indexLabel: 'Selected Works',
     credential: 'Since 2013',
     backgroundImages: [
-      assetPath('/images/projects/mlb-korea/hero.jpg'),
-      assetPath('/images/projects/starbucks-employee-platform/hero.jpg'),
+      assetPath('/images/products/home-main/mlb-main-bg.png'),
+      assetPath('/images/products/home-main/st-main-bg.png'),
     ] as const,
     location: 'Seoul, South Korea',
     clientsLabel: 'Selected Clients',
@@ -50,9 +50,9 @@ export const siteConfig = {
   about: {
     sectionLabel: 'Profile',
     introParagraphs: [
-      '12년 이상 스타벅스, F&F, 현대이지웰 등 다양한 브랜드 사이트와 디지털 서비스를 구축해왔습니다.',
-      '웹 퍼블리셔 및 UI 개발자로서 웹표준과 웹접근성을 기반으로 마크업, 스타일링, 인터랙션을 구현합니다. Vue.js, React, Next.js, TypeScript를 활용해 브랜드 의도를 정확히 전달하는 인터페이스를 만듭니다.',
-      '디자인과 사용자를 연결하는 역할에 집중하며, 접근성과 사용성을 고려한 결과물을 만드는 것이 저의 역할입니다.',
+      '12년 이상 Web Publisher & UI Engineer로 활동하며, 스타벅스 임직원 플랫폼·현대이지웰 복지 플랫폼·W Concept US 영문 커머스·신세계까사 브랜드 사이트 등 서비스 구축에서는 메인 페이지와 핵심 사용자 경험 영역을 직접 설계·구현했습니다. F&F MLB Korea·Discovery Expedition 등 운영·고도화 프로젝트에서는 Publishing Lead로 메인·프로모션·핵심 커머스 UI를 담당했습니다.',
+      '프로젝트에서는 메인 페이지와 핵심 사용자 경험 영역을 주로 담당했습니다. Starbucks Partner Hub의 공통 UI 구조와 업무 핵심 모듈, Siren119의 모바일 업무 화면, MLB Korea 메인·프로모션 영역 등 서비스의 첫인상과 핵심 플로우에 해당하는 UI를 직접 구축·리드했습니다.',
+      '디자인·기획·개발·운영과 화면 단위 산출물(마크업 구조, 컴포넌트 명세, QA 기준)을 기준으로 협업합니다. 구축 단계에서는 메인·핵심 화면 우선으로 UI 구조를 잡고, 운영 단계에서는 템플릿·컴포넌트 표준으로 반복 제작과 품질을 맞춥니다.',
     ] as const,
     selectedLabel: 'Selected Projects',
     viewAllLabel: 'View all projects',
@@ -79,6 +79,7 @@ export const siteConfig = {
     'starbucks-siren119',
     'mlb-korea',
     'discovery-expedition',
+    'wconcept-us',
     'guud',
     'casamia',
   ] as const,
@@ -120,7 +121,7 @@ export const siteConfig = {
     sectionId: 'experience',
     sectionLabel: 'Experience',
     sectionDesc:
-      '2013년부터 현재까지 — Web Publisher & UI Developer로서의 12년 경력 아카이브.',
+      '2013년부터 현재까지 구축 프로젝트에서는 메인과 핵심 사용자 경험 영역을, 운영 프로젝트에서는 브랜드 서비스의 운영·고도화와 퍼블리싱 리드를 담당해 온 Web Publisher & UI Engineer 경력',
     projectsLabel: 'Projects',
     stackLabel: 'Stack',
   },

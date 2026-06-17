@@ -7,6 +7,7 @@ import { initWorkDetailAnimation } from '@/animations/workDetail';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
 import { registerGsapPlugins } from '@/utils/gsap/registerGsap';
 import { useLenis } from '@/hooks/useLenis';
+import { DetailImageViewerProvider } from '@/components/DetailImageViewer/DetailImageViewerContext';
 import WorkDetailStory from './WorkDetailStory';
 import WorkDetailNext from './WorkDetailNext';
 import styles from './WorkDetail.module.scss';
@@ -35,9 +36,11 @@ export default function WorkDetail({ project, nextProject }: WorkDetailProps) {
   }, [project.slug, lenis, isTransitioning, phase]);
 
   return (
-    <article className={styles.detail} ref={rootRef} data-work-detail data-cursor-style="default">
-      <WorkDetailStory project={project} />
-      {nextProject && <WorkDetailNext nextProject={nextProject} />}
-    </article>
+    <DetailImageViewerProvider>
+      <article className={styles.detail} ref={rootRef} data-work-detail data-cursor-style="default">
+        <WorkDetailStory project={project} />
+        {nextProject && <WorkDetailNext nextProject={nextProject} />}
+      </article>
+    </DetailImageViewerProvider>
   );
 }

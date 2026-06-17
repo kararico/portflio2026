@@ -41,24 +41,22 @@ function layoutItem(
   };
 }
 
-function pick(details: string[], hero: string, mobile: string | undefined, ...indices: number[]): string {
+function pick(details: string[], ...indices: number[]): string {
   for (const index of indices) {
     if (index >= 0 && index < details.length) return details[index];
   }
-  if (mobile) return mobile;
-  return hero;
+  return details[0] ?? '';
 }
 
 /** Garden Pizza 스타일 비대칭 editorial row 구성 */
 export function getEditorialStoryLayout(project: Project): EditorialStoryLayout {
   const details = getProjectGalleryImages(project);
-  const hero = project.images.hero;
   const mobile = project.images.mobile;
   const title = project.title;
 
-  const d0 = pick(details, hero, mobile, 0);
-  const d1 = pick(details, hero, mobile, 1, 0);
-  const d2 = pick(details, hero, mobile, 2, 1, 0);
+  const d0 = pick(details, 0);
+  const d1 = pick(details, 1, 0);
+  const d2 = pick(details, 2, 1, 0);
 
   return {
     rows: [
@@ -77,7 +75,7 @@ export function getEditorialStoryLayout(project: Project): EditorialStoryLayout 
       {
         id: 'mid',
         items: [
-          layoutItem('greenhouseLeft', [hero], title, 'interior'),
+          layoutItem('greenhouseLeft', [d2], title, 'interior'),
           layoutItem('ceilingRight', [d1], title, 'detail'),
         ],
       },

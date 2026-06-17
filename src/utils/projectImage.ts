@@ -1,9 +1,10 @@
 import type { HeroImagePosition, Project } from '@/types/project';
 import { assetPath } from '@/utils/assetPath';
 
-const IMAGE_BASE = '/images/projects';
-const VISUAL_MAIN_BASE = '/images/products/visual-main';
+export const VISUAL_MAIN_BASE = '/images/products/visual-main';
+export const DETAIL_MAIN_BASE = '/images/products/detail-main';
 const HOME_HERO_BASE = '/images/products/home-main';
+const PRODUCTS_THUMB_BASE = '/images/products';
 
 const HERO_POSITION_MAP: Record<HeroImagePosition, string> = {
   center: 'center center',
@@ -13,11 +14,8 @@ const HERO_POSITION_MAP: Record<HeroImagePosition, string> = {
   right: 'right center',
 };
 
-/**
- * Work Detail Hero — visual-main 대표 이미지 slug 매핑
- * 경로: public/images/products/visual-main/{file}
- */
-const VISUAL_MAIN_HERO_FILES: Record<string, string> = {
+/** Work Detail Hero — visual-main/{file} */
+const SLUG_VISUAL_MAIN: Record<string, string> = {
   bullsone: 'bs-main-bg.png',
   casamia: 'casa-main-bg.png',
   'discovery-expedition': 'dc-main-bg.png',
@@ -25,13 +23,43 @@ const VISUAL_MAIN_HERO_FILES: Record<string, string> = {
   guud: 'guud-main-bg.png',
   'hyundai-ezwel': 'hd-main-bg.png',
   'hodoo-english': 'hodoo-main-bg.png',
+  lifeplanet: 'life-main-bg.png',
   'mlb-korea': 'mlb-main-bg.png',
-  starbucks: 'st-main-bg.png',
+  'samsung-fire': 'saumsung-main-bg.png',
   'starbucks-employee-platform': 'st-main-bg.png',
   'starbucks-siren119': 'st-main-bg.png',
+  'wconcept-us': 'wc-main-bg.png',
 };
 
-/** Home 중앙 Hero — home-main slug 매핑 (파일명: *-main-bg.png) */
+/** Work Detail Gallery — detail-main/{prefix}-detail-0N.png */
+const SLUG_DETAIL_PREFIX: Record<string, string> = {
+  casamia: 'casa',
+  'discovery-expedition': 'dc',
+  goodpeople: 'gp',
+  'hyundai-ezwel': 'hd',
+  lifeplanet: 'life',
+  'mlb-korea': 'mlb',
+  'samsung-fire': 'saumsung',
+  'starbucks-employee-platform': 'st',
+  'starbucks-siren119': 'st',
+  'wconcept-us': 'wc',
+};
+
+/** Home floating 카드 썸네일 — /images/products/{file} */
+const SLUG_THUMBNAIL: Record<string, string> = {
+  casamia: 'casa-img.png',
+  'discovery-expedition': 'ds-img.png',
+  goodpeople: 'gp-img.png',
+  'hyundai-ezwel': 'hd-img.png',
+  lifeplanet: 'life-img.png',
+  'mlb-korea': 'mlb-img.png',
+  'samsung-fire': 'saumsung-img.png',
+  'starbucks-employee-platform': 'starbuck-img.png',
+  'starbucks-siren119': 'starbuck119-img.png',
+  'wconcept-us': 'wc-img.png',
+};
+
+/** Home 중앙 Hero — home-main */
 const HOME_HERO_FILES: Record<string, string> = {
   bullsone: 'bs-main-bg.png',
   casamia: 'casa-main-bg.png',
@@ -41,14 +69,51 @@ const HOME_HERO_FILES: Record<string, string> = {
   'hyundai-ezwel': 'hd-main-bg.png',
   'hodoo-english': 'hodoo-main-bg.png',
   'mlb-korea': 'mlb-main-bg.png',
+  'samsung-fire': 'saumsung-main-bg.png',
+  lifeplanet: 'life-main-bg.png',
   'starbucks-employee-platform': 'st-main-bg.png',
   'starbucks-siren119': 'st-main-bg.png',
+  'wconcept-us': 'wc-main-bg.png',
 };
 
 export function getVisualMainHeroPath(slug: string): string | null {
-  const file = VISUAL_MAIN_HERO_FILES[slug];
+  const file = SLUG_VISUAL_MAIN[slug];
   if (!file) return null;
   return assetPath(`${VISUAL_MAIN_BASE}/${file}`);
+}
+
+export function buildDetailMainPath(prefix: string, index: number): string {
+  const num = String(index).padStart(2, '0');
+  return assetPath(`${DETAIL_MAIN_BASE}/${prefix}-detail-${num}.png`);
+}
+
+export function buildProductThumbnailPath(slug: string): string {
+  const file = SLUG_THUMBNAIL[slug];
+  if (!file) return assetPath(`${PRODUCTS_THUMB_BASE}/mlb-img.png`);
+  return assetPath(`${PRODUCTS_THUMB_BASE}/${file}`);
+}
+
+export function buildProjectImages(slug: string, detailCount = 3): Project['images'] {
+  const prefix = SLUG_DETAIL_PREFIX[slug];
+  const hero = getVisualMainHeroPath(slug);
+
+  if (!hero || !prefix) {
+    throw new Error(`Missing visual-main or detail-main mapping for slug: ${slug}`);
+  }
+
+  return {
+    hero,
+    detail: Array.from({ length: detailCount }, (_, i) => buildDetailMainPath(prefix, i + 1)),
+    mobile: buildDetailMainPath(prefix, Math.min(detailCount, 3)),
+  };
+}
+
+export function buildHomeHeroPath(slug: string): string {
+  const file = HOME_HERO_FILES[slug];
+  if (file) {
+    return assetPath(`${HOME_HERO_BASE}/${file}`);
+  }
+  return getVisualMainHeroPath(slug) ?? assetPath(`${VISUAL_MAIN_BASE}/mlb-main-bg.png`);
 }
 
 export function getVisualMainHeroCandidates(slug: string): string[] {
@@ -56,24 +121,14 @@ export function getVisualMainHeroCandidates(slug: string): string[] {
   return path ? [path] : [];
 }
 
-export function buildHomeHeroPath(slug: string): string {
-  const file = HOME_HERO_FILES[slug];
-  if (!file) {
-    return assetPath(`${IMAGE_BASE}/${slug}/hero.svg`);
-  }
-  return assetPath(`${HOME_HERO_BASE}/${file}`);
-}
-
-/** Home 중앙 Hero 슬라이더 — homeHero 전용 (thumbnail · visual-main 미사용) */
 export function getProjectHomeHero(project: Project): string {
   return project.homeHero;
 }
 
 export function getProjectHomeHeroCandidates(project: Project): string[] {
-  return getImageCandidates(getProjectHomeHero(project));
+  return [assetPath(getProjectHomeHero(project))];
 }
 
-/** Hero cover crop 중심 — CSS object-position 값 */
 export function getProjectHeroObjectPosition(project: Project): string {
   const heroImage = project.heroImage;
   if (!heroImage) return 'center';
@@ -82,112 +137,49 @@ export function getProjectHeroObjectPosition(project: Project): string {
   return 'center';
 }
 
-function isVisualMainHeroPath(src: string): boolean {
-  return src.includes('/visual-main/');
-}
-
-/** Work Detail Hero fallback — visual-main · images.hero 전용 (thumbnail 제외) */
+/** Work Detail Hero — images.hero 단일 경로 */
 export function getProjectDetailHeroFallbackSrc(project: Project): string {
-  if (isVisualMainHeroPath(project.images.hero)) {
-    return project.images.hero;
-  }
-  const visualMain = getVisualMainHeroPath(project.slug);
-  if (visualMain) return visualMain;
   if (project.heroImage?.src) return project.heroImage.src;
-  if (!isVisualMainHeroPath(project.images.hero)) {
-    return project.images.hero;
-  }
-  return assetPath(`${IMAGE_BASE}/${project.slug}/hero.svg`);
+  return project.images.hero;
 }
 
-/** Work Detail Hero 최종 1순위 src (probe 없이 데이터 기준) */
 export function getProjectDetailHeroPrimarySrc(project: Project): string {
   return getProjectDetailHeroFallbackSrc(project);
 }
 
-/**
- * Work Detail Hero 이미지 후보
- * 1. visual-main/{file}-main-bg.png
- * 2. images.hero · heroImage.src · projects/{slug}/hero
- */
 export function getProjectDetailHeroCandidates(project: Project): string[] {
-  const visualMain = getVisualMainHeroCandidates(project.slug);
-
-  const otherCandidates: string[] = [];
-  if (project.heroImage?.src) {
-    otherCandidates.push(...getImageCandidates(project.heroImage.src));
-  }
-  if (project.images.hero) {
-    otherCandidates.push(...getImageCandidates(project.images.hero));
-  }
-  otherCandidates.push(
-    ...getImageCandidates(assetPath(`${IMAGE_BASE}/${project.slug}/hero.svg`)),
-  );
-
-  const seen = new Set<string>();
-  return [...visualMain, ...otherCandidates].filter((path) => {
-    if (seen.has(path)) return false;
-    seen.add(path);
-    return true;
-  });
+  return [assetPath(getProjectDetailHeroPrimarySrc(project))];
 }
 
-export function buildProjectImages(slug: string, detailCount = 3): Project['images'] {
-  return {
-    hero: getVisualMainHeroPath(slug) ?? assetPath(`${IMAGE_BASE}/${slug}/hero.svg`),
-    detail: Array.from({ length: detailCount }, (_, i) =>
-      assetPath(`${IMAGE_BASE}/${slug}/detail-0${i + 1}.svg`),
-    ),
-    mobile: assetPath(`${IMAGE_BASE}/${slug}/mobile.svg`),
-  };
-}
-
-/** JPG 우선, 없으면 SVG fallback */
+/** 선언 경로 그대로 사용 (fallback 없음) */
 export function getImageCandidates(src: string): string[] {
-  let paths: string[];
-
-  if (src.endsWith('.jpg')) {
-    paths = [src, src.replace(/\.jpg$/, '.svg')];
-  } else if (src.endsWith('.svg')) {
-    paths = [src.replace(/\.svg$/, '.jpg'), src];
-  } else if (src.endsWith('.png') || src.endsWith('.webp')) {
-    paths = [src];
-  } else {
-    paths = [src];
-  }
-
-  return paths.map(assetPath);
+  return [assetPath(src)];
 }
 
-export function getProjectHeroSrc(project: Project, isMobile = false): string {
-  if (isMobile && project.images.mobile) {
-    return project.images.mobile;
-  }
-  return project.images.hero;
+export function resolveImageSrc(src: string): string {
+  return assetPath(src);
 }
 
-export function getProjectHeroCandidates(project: Project, isMobile = false): string[] {
-  return getImageCandidates(getProjectHeroSrc(project, isMobile));
-}
-
-/** Home floating thumbnail — project.thumbnail 전용 */
 export function getProjectThumbnail(project: Project): string {
   return project.thumbnail;
 }
 
-/** Works ProjectVisual — thumbnail 우선, 없으면 hero */
-export function getProjectVisualCandidates(project: Project, isMobile = false): string[] {
-  const primary =
-    isMobile && project.images.mobile
-      ? project.images.mobile
-      : getProjectThumbnail(project);
-  return getImageCandidates(primary);
+/** Works / Home 카드 — thumbnail 전용 */
+export function getProjectVisualCandidates(project: Project): string[] {
+  return [assetPath(getProjectThumbnail(project))];
 }
 
-/** Gallery 섹션용 이미지 목록 (detail 우선, 없으면 hero) */
-export function getProjectGalleryImages(project: Project): string[] {
-  if (project.images.detail && project.images.detail.length > 0) {
-    return project.images.detail;
+export function classifyImageZone(src: string): 'thumbnail' | 'visual-main' | 'detail-main' | 'home-main' | 'other' {
+  if (src.includes('/visual-main/')) return 'visual-main';
+  if (src.includes('/detail-main/')) return 'detail-main';
+  if (src.includes('/home-main/')) return 'home-main';
+  if (src.includes('/images/products/') && !src.includes('/visual-main/') && !src.includes('/detail-main/') && !src.includes('/home-main/')) {
+    return 'thumbnail';
   }
-  return [project.images.hero];
+  return 'other';
+}
+
+/** Gallery — images.detail만 사용 */
+export function getProjectGalleryImages(project: Project): string[] {
+  return project.images.detail ?? [];
 }

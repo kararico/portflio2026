@@ -9,11 +9,11 @@ export interface ProjectDetailContent {
 }
 
 export interface ProjectImages {
-  /** 대표 이미지 (Works / Detail Hero) */
+  /** Work Detail Hero 대표 이미지 */
   hero: string;
-  /** 상세 페이지 갤러리 */
+  /** Work Detail Gallery (editorial) */
   detail?: string[];
-  /** 모바일 전용 크롭 */
+  /** 모바일 전용 크롭 · editorial duo 슬롯 등 */
   mobile?: string;
 }
 
@@ -21,7 +21,7 @@ export interface ProjectImages {
 export type HeroImagePosition = 'center' | 'top' | 'bottom' | 'left' | 'right';
 
 export interface HeroImage {
-  /** Hero 이미지 경로 (선택 — 미지정 시 visual-main 매핑 우선) */
+  /** Hero 이미지 경로 override (미지정 시 images.hero) */
   src?: string;
   /** 프리셋 중심점 — objectPosition보다 우선순위 낮음 */
   position?: HeroImagePosition;
@@ -43,12 +43,12 @@ export interface Project {
   platform?: string;
   contribution: string;
   description: string;
-  /** Home floating thumbnail — /images/products/* */
+  /** Home floating 카드 썸네일 — /images/products/* 또는 projects/{slug}/mobile */
   thumbnail: string;
-  /** Home 중앙 Hero 슬라이더 — /images/products/home-main/* */
+  /** Home 중앙 Hero 슬라이더 — /images/products/home-main/* 또는 projects/{slug} 전용 */
   homeHero: string;
   images: ProjectImages;
-  /** Work Detail Hero focal point · cover crop 중심 */
+  /** Work Detail Hero crop — focal point (src는 images.hero 사용) */
   heroImage?: HeroImage;
   /** CMS: 프로젝트 개요 */
   overview: string;

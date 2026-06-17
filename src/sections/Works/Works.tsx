@@ -1,7 +1,7 @@
 'use client';
 
-import { useRef, useLayoutEffect, useCallback } from 'react';
-import { projects } from '@/data/projects';
+import { useRef, useLayoutEffect, useCallback, useMemo } from 'react';
+import { getWorksIndexProjects } from '@/data/projects';
 import { siteConfig } from '@/data/site';
 import { useLenis } from '@/hooks/useLenis';
 import {
@@ -13,6 +13,7 @@ import styles from './Works.module.scss';
 
 export default function Works() {
   const lenis = useLenis();
+  const worksProjects = useMemo(() => getWorksIndexProjects(), []);
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -23,7 +24,7 @@ export default function Works() {
   const visualRefs = useRef<(HTMLElement | null)[]>([]);
 
   const collectItemRefs = useCallback((): WorksItemRefs[] => {
-    return projects.map((_, index) => {
+    return worksProjects.map((_, index) => {
       const entry = entryRefs.current[index];
       const indexEl = indexRefs.current[index];
       const headerEl = headerRefs.current[index];
@@ -51,7 +52,7 @@ export default function Works() {
         revealTargets,
       };
     }).filter((item): item is WorksItemRefs => item !== null);
-  }, []);
+  }, [worksProjects]);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -82,7 +83,7 @@ export default function Works() {
         </div>
 
         <div className={styles.archive}>
-          {projects.map((project, index) => (
+          {worksProjects.map((project, index) => (
             <WorksItem
               key={project.id}
               project={project}

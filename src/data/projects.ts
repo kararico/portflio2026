@@ -1,7 +1,7 @@
 import { siteConfig } from '@/data/site';
 import { projectDetailsBySlug } from '@/data/projectDetails';
 import type { Project } from '@/types/project';
-import { buildProjectImages, buildHomeHeroPath } from '@/utils/projectImage';
+import { buildProjectImages, buildHomeHeroPath, buildProductThumbnailPath } from '@/utils/projectImage';
 
 type ProjectSeed = Omit<Project, 'projectDetail'>;
 
@@ -10,18 +10,15 @@ const projectSeeds: ProjectSeed[] = [
     id: '1',
     slug: 'mlb-korea',
     title: 'MLB Korea',
-    year: '2024',
+    year: '2022',
     client: 'F&F',
     platform: 'E-commerce Web',
-    role: 'Web Publishing Lead',
+    role: 'Web Publisher & UI Engineer',
     contribution: '100%',
     description: '국내 MLB 공식몰 프론트엔드 Publishing Lead',
-    thumbnail: '/images/products/mlb-img.png',
+    thumbnail: buildProductThumbnailPath('mlb-korea'),
     homeHero: buildHomeHeroPath('mlb-korea'),
-    images: {
-      ...buildProjectImages('mlb-korea', 4),
-      mobile: '/images/products/mlb-img.png',
-    },
+    images: buildProjectImages('mlb-korea', 4),
     heroImage: {
       objectPosition: '50% 40%',
     },
@@ -48,18 +45,15 @@ const projectSeeds: ProjectSeed[] = [
     id: '2',
     slug: 'discovery-expedition',
     title: 'Discovery Expedition',
-    year: '2023',
+    year: '2022',
     client: 'F&F',
     platform: 'E-commerce Web',
-    role: 'Web Publisher & UI Developer',
+    role: 'Web Publisher & UI Engineer',
     contribution: '100%',
     description: 'Discovery Expedition 이커머스 플랫폼 UI 개발',
-    thumbnail: '/images/products/ds-img.png',
+    thumbnail: buildProductThumbnailPath('discovery-expedition'),
     homeHero: buildHomeHeroPath('discovery-expedition'),
-    images: {
-      ...buildProjectImages('discovery-expedition', 3),
-      mobile: '/images/products/ds-img.png',
-    },
+    images: buildProjectImages('discovery-expedition', 3),
     heroImage: {
       objectPosition: '50% 40%',
     },
@@ -89,15 +83,12 @@ const projectSeeds: ProjectSeed[] = [
     year: '2026',
     client: 'Starbucks Korea',
     platform: 'Enterprise Web',
-    role: 'Web Publisher & UI Developer',
+    role: 'Web Publisher & UI Engineer',
     contribution: '80%',
     description: '스타벅스 임직원 전용 내부 플랫폼 UI 개발',
-    thumbnail: '/images/products/starbuck-img.png',
+    thumbnail: buildProductThumbnailPath('starbucks-employee-platform'),
     homeHero: buildHomeHeroPath('starbucks-employee-platform'),
-    images: {
-      ...buildProjectImages('starbucks-employee-platform', 3),
-      mobile: '/images/products/starbuck-img.png',
-    },
+    images: buildProjectImages('starbucks-employee-platform', 3),
     heroImage: { position: 'center' },
     overview:
       '스타벅스 코리아 임직원 전용 내부 플랫폼의 프론트엔드 개발에 참여했습니다. 복잡한 권한 체계와 다양한 업무 모듈을 단순하고 일관된 UI로 통합하는 것이 핵심이었습니다.',
@@ -126,15 +117,12 @@ const projectSeeds: ProjectSeed[] = [
     year: '2024',
     client: 'Starbucks Korea',
     platform: 'Hybrid Web',
-    role: 'Web Publisher & UI Developer',
+    role: 'Web Publisher & UI Engineer',
     contribution: '100%',
     description: '스타벅스 Siren119 내부 업무 플랫폼 UI 개발',
-    thumbnail: '/images/products/starbuck-img.png',
+    thumbnail: buildProductThumbnailPath('starbucks-siren119'),
     homeHero: buildHomeHeroPath('starbucks-siren119'),
-    images: {
-      ...buildProjectImages('starbucks-siren119', 3),
-      mobile: '/images/products/starbuck-img.png',
-    },
+    images: buildProjectImages('starbucks-siren119', 3),
     heroImage: { position: 'top' },
     overview:
       '스타벅스 코리아 Siren119 내부 업무 플랫폼의 UI 개발을 담당했습니다. 매장·본사 임직원이 사용하는 업무 프로세스를 웹표준과 웹접근성 기준에 맞춰 구현하는 것이 핵심 과제였습니다.',
@@ -162,15 +150,12 @@ const projectSeeds: ProjectSeed[] = [
     year: '2024 ~ 2025',
     client: 'Hyundai EZWEL',
     platform: 'Welfare Platform',
-    role: 'Web Publisher & UI Developer',
+    role: 'Web Publisher & UI Engineer',
     contribution: '100%',
     description: '현대이지웰 복지 플랫폼 UI 개발',
-    thumbnail: '/images/products/hd-img.png',
+    thumbnail: buildProductThumbnailPath('hyundai-ezwel'),
     homeHero: buildHomeHeroPath('hyundai-ezwel'),
-    images: {
-      ...buildProjectImages('hyundai-ezwel', 3),
-      mobile: '/images/products/hd-img.png',
-    },
+    images: buildProjectImages('hyundai-ezwel', 3),
     heroImage: { position: 'center' },
     overview:
       '현대이지웰 복지 플랫폼의 UI 개발에 참여했습니다. 다양한 복지 서비스와 제휴 콘텐츠를 하나의 플랫폼에서 탐색·이용할 수 있도록, 웹표준과 사용성을 고려한 인터페이스를 구현했습니다.',
@@ -194,18 +179,15 @@ const projectSeeds: ProjectSeed[] = [
     id: '4',
     slug: 'wconcept-us',
     title: 'W Concept\nUS',
-    year: '2022',
+    year: '2023',
     client: 'W Concept',
     platform: 'Global E-commerce',
-    role: 'Web Publisher & UI Developer',
+    role: 'Web Publisher & UI Engineer',
     contribution: '100%',
     description: 'W Concept US 글로벌 패션 이커머스 UI',
-    thumbnail: '/images/products/wc-img.png',
+    thumbnail: buildProductThumbnailPath('wconcept-us'),
     homeHero: buildHomeHeroPath('wconcept-us'),
-    images: {
-      ...buildProjectImages('wconcept-us', 4),
-      mobile: '/images/products/wc-img.png',
-    },
+    images: buildProjectImages('wconcept-us', 4),
     heroImage: { objectPosition: '50% 40%' },
     overview:
       'W Concept의 미국 시장 진출을 위한 글로벌 이커머스 플랫폼 UI를 개발했습니다. 다국어·다통화·글로벌 배송 정책 등 현지화 요구사항을 반영한 프론트엔드 아키텍처를 구축했습니다.',
@@ -229,18 +211,15 @@ const projectSeeds: ProjectSeed[] = [
     id: '5',
     slug: 'casamia',
     title: 'Casamia',
-    year: '2022',
+    year: '2021',
     client: 'Casamia',
     platform: 'Brand Website',
     role: 'Web Publisher',
     contribution: '100%',
     description: 'Casamia 홈퍼니싱 브랜드 웹사이트 리뉴얼',
-    thumbnail: '/images/products/casa-img.png',
+    thumbnail: buildProductThumbnailPath('casamia'),
     homeHero: buildHomeHeroPath('casamia'),
-    images: {
-      ...buildProjectImages('casamia', 2),
-      mobile: '/images/products/casa-img.png',
-    },
+    images: buildProjectImages('casamia', 2),
     heroImage: { objectPosition: '50% 40%' },
     overview:
       '홈퍼니싱 브랜드 Casamia의 공식 웹사이트 리뉴얼 프로젝트에서 프론트엔드 Publishing을 담당했습니다. 제품 카탈로그와 브랜드 스토리를 미니멀한 레이아웃으로 표현하는 데 집중했습니다.',
@@ -270,12 +249,9 @@ const projectSeeds: ProjectSeed[] = [
     role: 'Web Publisher',
     contribution: '70%',
     description: '삼성화재 디지털 서비스 UI 개발',
-    thumbnail: '/images/products/saumsung-img.png',
+    thumbnail: buildProductThumbnailPath('samsung-fire'),
     homeHero: buildHomeHeroPath('samsung-fire'),
-    images: {
-      ...buildProjectImages('samsung-fire', 2),
-      mobile: '/images/products/saumsung-img.png',
-    },
+    images: buildProjectImages('samsung-fire', 2),
     heroImage: { position: 'center' },
     overview:
       '삼성화재 디지털 채널의 보험 상품 안내·가입 플로우 UI를 개발했습니다. 금융 규제와 접근성 요건을 충족하면서도, 복잡한 보험 정보를 직관적으로 전달하는 인터페이스 설계가 핵심이었습니다.',
@@ -302,15 +278,12 @@ const projectSeeds: ProjectSeed[] = [
     year: '2018',
     client: 'Lifeplanet',
     platform: 'Insurance Web',
-    role: 'Web Publisher & UI Developer',
+    role: 'Web Publisher & UI Engineer',
     contribution: '90%',
     description: '라이프플래닛 온라인 보험 플랫폼',
-    thumbnail: '/images/products/life-img.png',
+    thumbnail: buildProductThumbnailPath('lifeplanet'),
     homeHero: buildHomeHeroPath('lifeplanet'),
-    images: {
-      ...buildProjectImages('lifeplanet', 2),
-      mobile: '/images/products/life-img.png',
-    },
+    images: buildProjectImages('lifeplanet', 2),
     heroImage: { position: 'center' },
     overview:
       '온라인 보험 플랫폼 라이프플래닛의 프론트엔드 개발을 담당했습니다. 보험료 계산·비교·가입까지의 사용자 여정을 간결한 UI로 설계했습니다.',
@@ -340,12 +313,9 @@ const projectSeeds: ProjectSeed[] = [
     role: 'Web Publisher',
     contribution: '100%',
     description: '굿피플 NGO 후원 플랫폼 웹사이트',
-    thumbnail: '/images/products/gp-img.png',
+    thumbnail: buildProductThumbnailPath('goodpeople'),
     homeHero: buildHomeHeroPath('goodpeople'),
-    images: {
-      ...buildProjectImages('goodpeople', 2),
-      mobile: '/images/products/gp-img.png',
-    },
+    images: buildProjectImages('goodpeople', 2),
     heroImage: { position: 'top' },
     overview:
       'NGO 굿피플의 후원 플랫폼 웹사이트 UI를 개발했습니다. 후원 캠페인 스토리와 신뢰감을 전달하면서, 후원 전환을 자연스럽게 유도하는 UX가 목표였습니다.',
@@ -370,6 +340,46 @@ export const projects: Project[] = projectSeeds.map((project) => ({
   ...project,
   projectDetail: projectDetailsBySlug[project.slug],
 }));
+
+/** PROJECT INDEX — 동일 연도 내 우선순위 (Featured와 별도) */
+const WORKS_INDEX_SLUG_ORDER = [
+  'starbucks-employee-platform',
+  'hyundai-ezwel',
+  'starbucks-siren119',
+  'wconcept-us',
+  'mlb-korea',
+  'discovery-expedition',
+  'guud',
+  'casamia',
+  'goodpeople',
+  'samsung-fire',
+  'lifeplanet',
+] as const;
+
+const worksIndexSlugRank = new Map<string, number>(
+  WORKS_INDEX_SLUG_ORDER.map((slug, index) => [slug, index]),
+);
+
+/** "2024 ~ 2025" 등 범위 연도는 최댓값 기준 정렬 */
+export function parseProjectYear(year: string): number {
+  const matches = year.match(/\d{4}/g);
+  if (!matches?.length) return 0;
+  return Math.max(...matches.map(Number));
+}
+
+/** Works PROJECT INDEX — year 내림차순, 동일 연도는 WORKS_INDEX_SLUG_ORDER */
+export function getWorksIndexProjects(): Project[] {
+  return [...projects].sort((a, b) => {
+    const yearDiff = parseProjectYear(b.year) - parseProjectYear(a.year);
+    if (yearDiff !== 0) return yearDiff;
+
+    const aRank = worksIndexSlugRank.get(a.slug) ?? Number.MAX_SAFE_INTEGER;
+    const bRank = worksIndexSlugRank.get(b.slug) ?? Number.MAX_SAFE_INTEGER;
+    if (aRank !== bRank) return aRank - bRank;
+
+    return a.title.localeCompare(b.title);
+  });
+}
 
 export function getProjectBySlug(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);

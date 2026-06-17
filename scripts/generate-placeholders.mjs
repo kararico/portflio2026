@@ -14,6 +14,7 @@ const PROJECTS = [
   { slug: 'mlb-korea', detailCount: 4, c1: '#141414', c2: '#404040' },
   { slug: 'discovery-expedition', detailCount: 3, c1: '#243442', c2: '#4a8a96' },
   { slug: 'starbucks-employee-platform', detailCount: 3, c1: '#0d3d2a', c2: '#1e3932' },
+  { slug: 'starbucks-siren119', detailCount: 3, c1: '#1a4d35', c2: '#2d6a4f' },
   { slug: 'wconcept-us', detailCount: 4, c1: '#0a0a0a', c2: '#4a4a4a' },
   { slug: 'casamia', detailCount: 2, c1: '#6b5a45', c2: '#b8a088' },
   { slug: 'samsung-fire', detailCount: 2, c1: '#0f2080', c2: '#0066bb' },
