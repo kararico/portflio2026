@@ -11,9 +11,18 @@ export const siteConfig = {
   },
   contact: {
     email: 'jungwon11082015@gmail.com',
-    links: [
-      { label: 'GitHub', href: 'https://github.com/kararico' },
-      { label: 'Portfolio', href: 'https://kararico.github.io' },
+    location: 'Incheon, South Korea',
+    social: [
+      {
+        platform: 'instagram',
+        href: 'https://www.instagram.com/',
+        label: 'Instagram',
+      },
+      {
+        platform: 'facebook',
+        href: 'https://www.facebook.com/',
+        label: 'Facebook',
+      },
     ] as const,
   },
   hero: {

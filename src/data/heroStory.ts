@@ -6,31 +6,32 @@ export const heroStoryConfig = {
     desktop: 360,
     mobile: 220,
   },
-  scrollLerp: 0.06,
+  /** ScrollTrigger scrub: 0.85 상응 lag(초) */
+  scrollScrub: 0.85,
   scrollPhases: {
-    metaFade: { start: 0, end: 0.1 },
-    centerMove: { start: 0, end: 0.3 },
-    titleBack: { start: 0.06, end: 0.74 },
-    titleFront: { start: 0.1, end: 0.64 },
-    galleryReveal: { start: 0, end: 0.84 },
-    compositionDrift: { start: 0.5, end: 0.82 },
-    aboutCover: { start: 0.78, end: 1.0 },
+    metaFade: { start: 0, end: 0.15 },
+    centerMove: { start: 0, end: 0.38 },
+    titleBack: { start: 0.08, end: 0.65 },
+    titleFront: { start: 0.12, end: 0.55 },
+    galleryReveal: { start: 0.22, end: 0.78 },
+    compositionDrift: { start: 0.58, end: 0.85 },
+    aboutCover: { start: 0.72, end: 1.0 },
   },
   galleryReveal: {
     /** 갤러리 시퀀스 내 활성화 시점 (0–1) — center top 트리거 이후 상대 progress */
     activationAt: {
       '2': 0,
-      '1': 0.2,
-      '3': 0.4,
-      '4': 0.6,
-      '5': 0.8,
+      '1': 0.18,
+      '3': 0.38,
+      '4': 0.58,
+      '5': 0.78,
     } as const,
     /** 1번 카드 — @deprecated entrySpanViewport 사용 */
-    entrySpan: 0.18,
+    entrySpan: 0.22,
     /** viewport 하단 밖에서 진입하는 구간 (1번 포함) */
-    entrySpanViewport: 0.26,
+    entrySpanViewport: 0.32,
     /** 활성화 직후 이미지 zoom-out 구간 (시퀀스 progress) */
-    zoomSpan: 0.15,
+    zoomSpan: 0.2,
     /** 누적 등장 순서 */
     order: ['2', '1', '3', '4', '5'] as const,
   },
@@ -53,19 +54,25 @@ export const heroStoryConfig = {
   titleDrift: {
     x: { desktop: -200, mobile: -96 },
   },
+  /** 로드 시 intro 등장 타이밍 */
+  heroIntro: {
+    delayAfterReveal: 0.55,
+    composition: { duration: 0.95, y: 28, ease: 'power2.out' as const },
+    title: { stagger: 0.09, y: 44, duration: 1.05, ease: 'power3.out' as const },
+    titleFront: { duration: 0.95, ease: 'power2.out' as const, overlap: 0.72 },
+    meta: { stagger: 0.07, y: 12, duration: 0.75, ease: 'power2.out' as const, overlap: 0.48 },
+  },
   /**
    * Editorial gallery — Septiembre project-item-wrapper 패턴
-   * 각 플레이트: position:absolute + top/right + --img-w + --img-ratio
+   * 각 플레이트: position:absolute + top + left/right + --img-w + --img-ratio
    *
-   * | id | 위치   | pt     | pr              | img-w  | ratio | slug        |
-   * |----|--------|--------|-----------------|--------|-------|-------------|
-   * | 1  | 좌상단 | 1%     | 78%             | 18vw   | 0.60  | starbucks   |
-   * | 2  | 중앙   | 8%     | 44%             | 26vw   | 1.47  | mlb-korea   |
-   * | 3  | 우상단 | 1%     | 10%             | 14vw   | 1.01  | hyundai     |
-   * | 4  | 좌하단 | 36%    | 81%             | 14vw   | 1.48  | discovery   |
-   * | 5  | 우하단 | 44%    | padding-fluid   | 24vw   | 0.61  | starbucks-ep|
-   * IntroMedia(centerMediaSlug) — 타이틀 clip-path 기준 레이어
-   * galleryWrapper: translateY(-12vh) — 헤더 바로 아래 밀도
+   * | id | 위치   | pt (중앙 카드 기준)              | 좌/우             | img-w  | ratio |
+   * |----|--------|----------------------------------|-------------------|--------|-------|
+   * | 1  | 좌상단 | center-top (상단 정렬)           | left: fluid       | 21.6vw | 0.60  |
+   * | 2  | 중앙   | center-top                       | 50% - img-w/2     | 26vw   | 1.47  |
+   * | 3  | 우상단 | center-top + 3vh                 | right: fluid      | 14vw   | 1.01  |
+   * | 4  | 좌하단 | center-bottom - plate-h          | left: fluid       | 14vw   | 1.48  |
+   * | 5  | 우하단 | center-bottom - plate-h          | right: fluid      | 24vw   | 0.61  |
    */
   editorialPlates: [
     {
@@ -74,9 +81,9 @@ export const heroStoryConfig = {
       layer: 'between' as const,
       imageScaleFrom: 1.18,
       layout: {
-        pt: '1%',
-        pr: '78%',
-        imgW: '18vw',
+        pt: 'var(--hero-plate-center-pt)',
+        pl: 'var(--padding-fluid)',
+        imgW: '21.6vw',
         imgRatio: 0.6,
       },
     },
@@ -86,8 +93,8 @@ export const heroStoryConfig = {
       layer: 'front' as const,
       imageScaleFrom: 1.22,
       layout: {
-        pt: '8%',
-        pr: '44%',
+        pt: 'var(--hero-plate-center-pt)',
+        pr: 'calc(50% - var(--img-w) / 2)',
         imgW: '26vw',
         imgRatio: 1.47,
       },
@@ -98,8 +105,8 @@ export const heroStoryConfig = {
       layer: 'front' as const,
       imageScaleFrom: 1.2,
       layout: {
-        pt: '1%',
-        pr: '10%',
+        pt: 'calc(var(--hero-plate-center-pt) + 3vh)',
+        pr: 'var(--padding-fluid)',
         imgW: '14vw',
         imgRatio: 1.01,
       },
@@ -110,8 +117,8 @@ export const heroStoryConfig = {
       layer: 'behind' as const,
       imageScaleFrom: 1.25,
       layout: {
-        pt: '36%',
-        pr: '81%',
+        pt: 'calc(var(--hero-plate-center-pt) + var(--hero-plate-center-h) - 14vw * 1.48)',
+        pl: 'var(--padding-fluid)',
         imgW: '14vw',
         imgRatio: 1.48,
       },
@@ -122,7 +129,7 @@ export const heroStoryConfig = {
       layer: 'front' as const,
       imageScaleFrom: 1.15,
       layout: {
-        pt: '44%',
+        pt: 'calc(var(--hero-plate-center-pt) + var(--hero-plate-center-h) - 24vw * 0.61)',
         pr: 'var(--padding-fluid)',
         imgW: '24vw',
         imgRatio: 0.61,
@@ -218,7 +225,8 @@ export function getEditorialPlateLayoutLog(): Array<{
   slug: string;
   layer: HeroGalleryLayer;
   pt: string;
-  pr: string;
+  pl?: string;
+  pr?: string;
   imgW: string;
   imgRatio: number;
   computedHeight: string;
@@ -228,7 +236,8 @@ export function getEditorialPlateLayoutLog(): Array<{
     slug: plate.slug,
     layer: plate.layer,
     pt: plate.layout.pt,
-    pr: plate.layout.pr,
+    pl: 'pl' in plate.layout ? plate.layout.pl : undefined,
+    pr: 'pr' in plate.layout ? plate.layout.pr : undefined,
     imgW: plate.layout.imgW,
     imgRatio: plate.layout.imgRatio,
     computedHeight: `calc(${plate.layout.imgW} * ${plate.layout.imgRatio})`,

@@ -46,6 +46,21 @@ function easeOutCubic(t: number): number {
   return 1 - (1 - t) ** 3;
 }
 
+/** GSAP ScrollTrigger scrub(lag) — 프레임 독립 exponential smoothing */
+function scrubToward(current: number, target: number, deltaSeconds: number, lagSeconds: number): number {
+  if (lagSeconds <= 0) return target;
+  const factor = 1 - Math.exp(-deltaSeconds / lagSeconds);
+  return current + (target - current) * factor;
+}
+
+function measureCenterHandoffY(target: HTMLElement): number {
+  const savedY = Number(gsap.getProperty(target, 'y')) || 0;
+  gsap.set(target, { y: 0 });
+  const top = target.getBoundingClientRect().top;
+  gsap.set(target, { y: savedY });
+  return -top;
+}
+
 function resolveCenterExitY(
   target: HTMLElement | null,
   mobile: boolean,
@@ -194,7 +209,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
   const { root, heroSection, heroStage, aboutCover } = refs;
   const phases = heroStoryConfig.scrollPhases;
   const mobile = isMobile();
-  const scrollLerp = heroStoryConfig.scrollLerp;
+  const scrollScrub = mobile ? heroStoryConfig.scrollScrub * 0.82 : heroStoryConfig.scrollScrub;
 
   return gsap.context(() => {
     setHeroScrollHeight(root);
@@ -227,6 +242,12 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       ? heroStoryConfig.compositionDrift.y.mobile
       : heroStoryConfig.compositionDrift.y.desktop;
     const getCenterExitY = () => resolveCenterExitY(centerMoveTarget, mobile);
+    let centerHandoffY = 0;
+    const remeasureCenterHandoffY = () => {
+      if (!centerMoveTarget) return;
+      centerHandoffY = measureCenterHandoffY(centerMoveTarget);
+    };
+    remeasureCenterHandoffY();
 
     let gallerySequenceStartProgress: number | null = null;
 
@@ -255,16 +276,28 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
         gsap.set(el, { opacity: 1 - metaT, y: lerpValue(0, -18, metaT) });
       });
 
+      const galleryTriggered = isGalleryTopTriggered(galleryTriggerCard);
+
       const centerT = phaseProgress(progress, phases.centerMove.start, phases.centerMove.end);
       const exitY = getCenterExitY();
+      const centerEndY = Math.max(exitY, centerHandoffY);
+
       if (centerMoveTarget) {
         gsap.set(centerMoveTarget, {
-          y: lerpValue(0, exitY, easeOutCubic(centerT)),
+          y: lerpValue(0, centerEndY, easeOutCubic(centerT)),
           scale: lerpValue(1, centerMoveScale, centerT),
+          opacity: 1,
+        });
+      }
+      if (heroImageLayer) {
+        gsap.set(heroImageLayer, {
+          opacity: galleryTriggered ? 0 : 1,
+          visibility: galleryTriggered ? 'hidden' : 'visible',
+          pointerEvents: galleryTriggered ? 'none' : 'auto',
         });
       }
       if (subtitle) {
-        gsap.set(subtitle, { y: lerpValue(0, exitY, easeOutCubic(centerT)) });
+        gsap.set(subtitle, { y: lerpValue(0, centerEndY, easeOutCubic(centerT)) });
       }
 
       const titleT = phaseProgress(progress, phases.titleBack.start, phases.titleBack.end);
@@ -292,8 +325,6 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
 
       const aboutT = phaseProgress(progress, phases.aboutCover.start, phases.aboutCover.end);
       gsap.set(aboutCover, { y: `${lerpValue(100, 0, aboutT)}vh` });
-
-      const galleryTriggered = isGalleryTopTriggered(galleryTriggerCard);
 
       if (!galleryTriggered) {
         gallerySequenceStartProgress = null;
@@ -345,11 +376,12 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       },
     });
 
-    const onTick = () => {
-      const delta = targetProgress - currentProgress;
-      if (Math.abs(delta) < 0.00003) return;
+    const onTick = (_time: number, deltaTime: number) => {
+      const deltaSeconds = deltaTime / 1000;
+      const next = scrubToward(currentProgress, targetProgress, deltaSeconds, scrollScrub);
+      if (Math.abs(next - currentProgress) < 0.000015) return;
 
-      currentProgress += delta * scrollLerp;
+      currentProgress = next;
       applyScrollProgress(currentProgress);
     };
 
@@ -358,6 +390,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
     ScrollTrigger.addEventListener('refreshInit', () => {
       setHeroScrollHeight(root);
       remeasurePlateEntryYs(plateStates, mobile);
+      remeasureCenterHandoffY();
       gallerySequenceStartProgress = null;
       currentProgress = targetProgress;
       applyScrollProgress(currentProgress);

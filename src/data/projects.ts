@@ -1,7 +1,11 @@
 import { siteConfig } from '@/data/site';
 import { projectDetailsBySlug } from '@/data/projectDetails';
 import type { Project } from '@/types/project';
-import { buildProjectImages, buildHomeHeroPath, buildProductThumbnailPath } from '@/utils/projectImage';
+import {
+  buildProjectImages,
+  buildHomeHeroPath,
+  buildProductThumbnailPath,
+} from '@/utils/projectImage';
 
 type ProjectSeed = Omit<Project, 'projectDetail'>;
 
@@ -214,7 +218,7 @@ const projectSeeds: ProjectSeed[] = [
     year: '2021',
     client: 'Casamia',
     platform: 'Brand Website',
-    role: 'Web Publisher',
+    role: 'Web Publisher & UI Engineer',
     contribution: '100%',
     description: 'Casamia 홈퍼니싱 브랜드 웹사이트 리뉴얼',
     thumbnail: buildProductThumbnailPath('casamia'),
@@ -319,8 +323,7 @@ const projectSeeds: ProjectSeed[] = [
     heroImage: { position: 'top' },
     overview:
       'NGO 굿피플의 후원 플랫폼 웹사이트 UI를 개발했습니다. 후원 캠페인 스토리와 신뢰감을 전달하면서, 후원 전환을 자연스럽게 유도하는 UX가 목표였습니다.',
-    objectives:
-      '후원 전환율 향상, 캠페인 스토리텔링 강화, 저사양 모바일 환경에서의 성능 확보.',
+    objectives: '후원 전환율 향상, 캠페인 스토리텔링 강화, 저사양 모바일 환경에서의 성능 확보.',
     responsibilities: [
       '메인·캠페인·후원 페이지 마크업 및 인터랙션',
       '후원 폼 UX 및 유효성 검증',

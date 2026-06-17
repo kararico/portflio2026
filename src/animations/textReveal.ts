@@ -5,11 +5,18 @@ export interface TextRevealOptions {
   y?: number;
   duration?: number;
   delay?: number;
+  ease?: string;
 }
 
 export function textReveal(
   targets: gsap.TweenTarget,
-  { stagger = 0.08, y = 60, duration = 1, delay = 0 }: TextRevealOptions = {},
+  {
+    stagger = 0.08,
+    y = 60,
+    duration = 1,
+    delay = 0,
+    ease = 'power3.out',
+  }: TextRevealOptions = {},
 ) {
   return gsap.from(targets, {
     opacity: 0,
@@ -17,7 +24,7 @@ export function textReveal(
     duration,
     delay,
     stagger,
-    ease: 'power3.out',
+    ease,
   });
 }
 

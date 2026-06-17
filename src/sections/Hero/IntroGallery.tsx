@@ -85,12 +85,21 @@ function PlateImage({ src, slug }: { src: string; slug: string }) {
 }
 
 function plateLayoutStyle(layout: EditorialPlateLayout): CSSProperties {
-  return {
+  const style: CSSProperties = {
     top: layout.pt,
-    right: layout.pr,
     ['--img-w' as string]: layout.imgW,
     ['--img-ratio' as string]: String(layout.imgRatio),
   };
+
+  if ('pl' in layout) {
+    style.left = layout.pl;
+    style.right = 'auto';
+  } else {
+    style.right = layout.pr;
+    style.left = 'auto';
+  }
+
+  return style;
 }
 
 const LAYER_CLASS: Record<HeroGalleryLayer, string> = {

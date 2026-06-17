@@ -3,6 +3,7 @@
 .footer {
   --footer-muted: rgba(245, 243, 239, 0.55);
   --footer-border: rgba(255, 255, 255, 0.12);
+  --footer-col-gap: clamp(1.25rem, 2.5vw, 2.75rem);
 
   position: relative;
   padding-block: var(--space-3xl) var(--space-2xl);
@@ -69,15 +70,16 @@
 .contactBlock {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-xl);
-  padding-block: var(--space-2xl);
-  border-bottom: 1px solid var(--footer-border);
+  column-gap: var(--footer-col-gap);
+  row-gap: var(--space-xl);
+  padding-block: var(--space-2xl) 0;
 }
 
 .contactCol {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
+  display: grid;
+  grid-template-rows: auto minmax(1.75rem, auto);
+  align-content: start;
+  gap: clamp(0.65rem, 1vw, 0.85rem);
   min-width: 0;
 }
 
@@ -91,74 +93,77 @@
 
 .emailLink {
   display: inline-block;
-  font-family: var(--font-display);
-  font-size: clamp(1.25rem, 3vw, var(--text-lg));
-  line-height: var(--leading-snug);
+  align-self: start;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.35vw, 1.0625rem);
+  font-weight: var(--weight-regular);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
   word-break: break-all;
-  transition: opacity var(--transition-fast);
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
 
   @media (hover: hover) {
     &:hover {
       opacity: 0.65;
+      transform: translateY(-1px);
     }
   }
 }
 
 .valueText {
+  align-self: start;
+  margin: 0;
   font-size: var(--text-md);
-  line-height: var(--leading-relaxed);
+  line-height: 1.5;
   color: var(--color-inverse-text);
 }
 
-.linkList {
+.roleText {
+  max-width: 11rem;
+  text-wrap: balance;
+}
+
+.socialList {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 1.75rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
 
-  a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 1.75rem;
-    font-size: var(--text-md);
-    line-height: var(--leading-relaxed);
-    transition: opacity var(--transition-fast);
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-inverse-text);
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
 
-    @media (hover: hover) {
-      &:hover {
-        opacity: 0.65;
-      }
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.62;
+      transform: translateY(-2px);
     }
   }
 }
 
-.signature {
-  padding-block: var(--space-xl);
-}
-
-.signatureName {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 4vw, var(--text-lg));
-  line-height: var(--leading-tight);
-}
-
-.bottomRow {
-  display: flex;
-  justify-content: flex-start;
-  padding-top: var(--space-md);
-  border-top: 1px solid var(--footer-border);
-}
-
-.copyright {
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-wide);
-  color: var(--footer-muted);
+.socialIcon {
+  display: block;
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
 }
 
 @media (min-width: 1024px) {
   .topGrid {
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    gap: var(--space-2xl);
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: clamp(2rem, 3.5vw, 3rem);
     align-items: end;
   }
 
@@ -172,30 +177,28 @@
   }
 
   .ctaDesc {
-    max-width: 20rem;
+    max-width: min(22rem, 100%);
     margin-top: 0;
-    margin-left: auto;
-    text-align: right;
+    margin-inline: 0 auto;
+    padding-left: clamp(0.5rem, 2vw, 1.5rem);
+    text-align: left;
+    justify-self: start;
   }
 
   .contactBlock {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--space-lg);
+    column-gap: var(--footer-col-gap);
+    row-gap: 0;
     padding-block: var(--space-2xl);
   }
 
   .contactCol {
-    gap: var(--space-md);
+    gap: clamp(0.75rem, 1.1vw, 1rem);
   }
 
   .emailLink {
-    font-size: clamp(1.125rem, 1.5vw, var(--text-lg));
+    font-size: clamp(0.9375rem, 1.05vw, 1.0625rem);
     word-break: normal;
-  }
-
-  .bottomRow {
-    justify-content: space-between;
-    align-items: center;
   }
 }
 
@@ -221,27 +224,16 @@
   .ctaDesc {
     font-size: var(--text-base);
     line-height: 1.75;
+    padding-left: 0;
   }
 
   .contactBlock {
     grid-template-columns: 1fr;
-    gap: var(--block-gap);
+    row-gap: var(--block-gap);
     padding-block: var(--block-gap);
   }
 
   .contactCol {
     gap: var(--card-gap);
-  }
-
-  .linkList {
-    gap: 0.35rem;
-  }
-
-  .signature {
-    padding-block: var(--block-gap);
-  }
-
-  .bottomRow {
-    padding-top: var(--card-gap);
   }
 }

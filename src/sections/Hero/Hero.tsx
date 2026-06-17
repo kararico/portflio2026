@@ -4,7 +4,7 @@ import { useRef, useLayoutEffect } from 'react';
 import { siteConfig } from '@/data/site';
 import { useLenis } from '@/hooks/useLenis';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
-import { registerGsapPlugins } from '@/utils/gsap/registerGsap';
+import { gsap, registerGsapPlugins } from '@/utils/gsap/registerGsap';
 import { initHeroIntroAnimation } from './HeroAnimation';
 import { EditorialPlatesBehind, EditorialPlatesBetween, EditorialPlatesFront } from './IntroGallery';
 import IntroMedia from './IntroMedia';
@@ -42,6 +42,9 @@ export default function Hero() {
     ro.observe(composition);
     ro.observe(imageLayer);
 
+    const onTick = () => syncFrontClip();
+    gsap.ticker.add(onTick);
+
     let rafId = 0;
     const onScroll = () => {
       cancelAnimationFrame(rafId);
@@ -52,6 +55,7 @@ export default function Hero() {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     return () => {
+      gsap.ticker.remove(onTick);
       ro.disconnect();
       window.removeEventListener('resize', syncFrontClip);
       window.removeEventListener('scroll', onScroll);
