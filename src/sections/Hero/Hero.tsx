@@ -10,9 +10,16 @@ import { EditorialPlatesBehind, EditorialPlatesBetween, EditorialPlatesFront } f
 import IntroMedia from './IntroMedia';
 import styles from './Hero.module.scss';
 
+const HERO_WORD_REPEAT = 14;
+
+function buildHeroWordLine(phrase: string) {
+  return Array.from({ length: HERO_WORD_REPEAT }, () => phrase).join('  ');
+}
+
 export default function Hero() {
   const lenis = useLenis();
   const { hero, position } = siteConfig;
+  const heroWordLine = buildHeroWordLine(hero.indexLabel.toUpperCase());
 
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -27,19 +34,19 @@ export default function Hero() {
     if (!imageLayer || !frontTitle) return;
 
     const syncFrontClip = () => {
-      const compRect = composition.getBoundingClientRect();
+      const titleRect = frontTitle.getBoundingClientRect();
       const imgRect = imageLayer.getBoundingClientRect();
-      const top = Math.max(0, imgRect.top - compRect.top);
-      const left = Math.max(0, imgRect.left - compRect.left);
-      const bottom = Math.max(0, compRect.bottom - imgRect.bottom);
-      const right = Math.max(0, compRect.right - imgRect.right);
+      const top = Math.max(0, imgRect.top - titleRect.top);
+      const left = Math.max(0, imgRect.left - titleRect.left);
+      const bottom = Math.max(0, titleRect.bottom - imgRect.bottom);
+      const right = Math.max(0, titleRect.right - imgRect.right);
       frontTitle.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
     };
 
     syncFrontClip();
 
     const ro = new ResizeObserver(syncFrontClip);
-    ro.observe(composition);
+    ro.observe(frontTitle);
     ro.observe(imageLayer);
 
     const onTick = () => syncFrontClip();
@@ -111,8 +118,9 @@ export default function Hero() {
               data-hero-title
               data-hero-title-back
             >
-              <span className={styles.titleLine} data-reveal-line>
-                {hero.title}
+              <span className="sr-only">{hero.title}</span>
+              <span className={styles.heroWordTrack} data-reveal-line aria-hidden="true">
+                {heroWordLine}
               </span>
             </h1>
 
@@ -129,7 +137,7 @@ export default function Hero() {
               aria-hidden="true"
               data-hero-title-front
             >
-              <span className={styles.titleLine}>{hero.title}</span>
+              <span className={styles.heroWordTrack}>{heroWordLine}</span>
             </div>
 
             <EditorialPlatesFront />

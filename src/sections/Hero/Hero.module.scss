@@ -62,10 +62,6 @@
   pointer-events: none;
 }
 
-.credentialSlot {
-  pointer-events: none;
-}
-
 .credential {
   flex-shrink: 0;
   font-size: var(--text-xs);
@@ -114,6 +110,7 @@
   align-self: center;
   justify-self: center;
   transform: translateY(calc(-0.5 * var(--hero-image-height) - var(--space-md)));
+  pointer-events: none;
 }
 
 .heroStage {
@@ -138,36 +135,37 @@
 }
 
 .heroTitle {
-  grid-area: 1 / 1;
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 50vw);
+  width: 100vw;
   margin: 0;
-  width: 100%;
-  max-width: 100%;
   font-family: var(--font-display);
-  font-size: clamp(5rem, 19vw, var(--text-hero));
-  line-height: 1;
-  letter-spacing: -0.04em;
+  font-size: clamp(3.5rem, 11.5vw, 9.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
   text-align: center;
-  white-space: nowrap;
-  overflow: visible;
   user-select: none;
   pointer-events: none;
+  transform: translateY(-50%);
+  will-change: transform;
 }
 
-.titleLine {
+.heroWordTrack {
   display: block;
+  width: 100%;
+  white-space: nowrap;
 }
 
 .heroTitleBack {
-  position: relative;
   z-index: 1;
   color: #111;
   -webkit-text-fill-color: #111;
-  pointer-events: none;
 }
 
 .heroImage {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   flex-shrink: 0;
   width: var(--hero-image-width);
   height: var(--hero-image-height);
@@ -175,13 +173,11 @@
   will-change: transform;
 }
 
-/* 이미지 영역만 clip — 배경 위 텍스트는 back 레이어 솔리드 블랙 */
+/* 이미지 겹침 영역만 clip + blend — 전체 viewport 타이포 위 레이어 */
 .heroTitleFront {
-  position: relative;
-  z-index: 3;
+  z-index: 5;
   color: var(--color-bg);
   mix-blend-mode: difference;
-  pointer-events: none;
 }
 
 .subtitle {
@@ -275,7 +271,7 @@
     gap: var(--space-sm);
     flex: 1 1 0;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
     --hero-image-width: clamp(7rem, 27vw, 11rem);
     --hero-image-height: calc(var(--hero-image-width) * 5 / 4);
   }
@@ -298,7 +294,7 @@
     min-height: 0;
     display: grid;
     grid-area: auto;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .centerStack {
@@ -349,9 +345,8 @@
   }
 
   .heroTitle {
-    font-size: clamp(2.35rem, 11.5vw, 3.75rem);
+    font-size: clamp(2.1rem, 10vw, 3.5rem);
     letter-spacing: -0.03em;
-    white-space: normal;
   }
 
   .heroTitleFront {

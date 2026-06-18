@@ -13,7 +13,7 @@ html {
   scrollbar-gutter: stable;
   background-color: var(--color-bg);
   scrollbar-width: thin;
-  scrollbar-color: var(--color-brand) transparent;
+  scrollbar-color: #8e8a82 #eceae4;
 }
 
 body {
@@ -58,16 +58,16 @@ html[data-mobile-menu-open] #main-transition {
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #eceae4;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--color-brand);
-  border-radius: 3px;
+  background-color: #8e8a82;
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-brand-hover);
+  background-color: #6f6a63;
 }
 
 body.cursor-custom,

@@ -20,10 +20,26 @@
   .header {
     transition:
       transform 0.35s var(--ease-out-cubic),
-      color var(--transition-base);
+      color var(--transition-base),
+      background-color 0.3s ease,
+      border-color 0.3s ease;
     will-change: transform;
     height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
     padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .header.isScrolled[data-header-surface='solid'] {
+    background: rgba(246, 244, 239, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(20, 20, 20, 0.08);
+  }
+
+  .header.isScrolled[data-header-surface='transparent'] {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: none;
   }
 
   .headerHidden {

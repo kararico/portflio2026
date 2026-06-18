@@ -72,6 +72,12 @@
   color: var(--color-text-secondary);
   text-wrap: pretty;
 
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.85;
+    letter-spacing: -0.01em;
+  }
+
   @include respond-to('desktop') {
     line-height: 1.9;
   }
@@ -239,9 +245,5 @@
 
   .introProse {
     gap: clamp(1rem, 3vw, 1.35rem);
-  }
-
-  .bodyText {
-    line-height: 1.8;
   }
 }

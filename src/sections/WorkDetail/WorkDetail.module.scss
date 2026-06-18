@@ -348,6 +348,11 @@
   letter-spacing: -0.01em;
   color: var(--color-text);
   text-wrap: pretty;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
 }
 
 .detailMetaGrid {
@@ -443,6 +448,11 @@
   color: var(--color-text);
   border-left: 2px solid var(--color-text);
   quotes: none;
+
+  @media (max-width: 768px) {
+    font-size: 0.9375rem;
+    line-height: 1.8;
+  }
 }
 
 .featureList {
@@ -803,6 +813,18 @@
     flex: none;
     justify-content: flex-start;
     padding-block: 0 clamp(0.5rem, 2vw, 1rem);
+  }
+
+  .title {
+    max-width: none;
+  }
+
+  .titleLine {
+    display: inline;
+
+    & + .titleLine::before {
+      content: ' ';
+    }
   }
 
   .storyCanvas {

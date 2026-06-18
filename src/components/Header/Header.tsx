@@ -25,8 +25,11 @@ const NAV_ITEMS = [
 export default function Header({ theme = 'light' }: HeaderProps) {
   const pathname = usePathname();
   const isWorkDetail = pathname.startsWith('/work/');
+  const isHomePage = pathname === '/';
   const [menuOpen, setMenuOpen] = useState(false);
-  const headerVisible = useMobileHeaderReveal(!menuOpen);
+  const { visible: headerVisible, isScrolled } = useMobileHeaderReveal(!menuOpen, {
+    isHomePage: isHomePage && !isWorkDetail,
+  });
 
   const handleNavClick = () => {
     setMenuOpen(false);
@@ -58,9 +61,10 @@ export default function Header({ theme = 'light' }: HeaderProps) {
 
   return (
     <header
-      className={`${styles.header} ${headerVisible ? '' : styles.headerHidden}`}
+      className={`${styles.header} ${headerVisible ? '' : styles.headerHidden} ${isScrolled ? styles.isScrolled : ''}`}
       id="header"
       data-header-theme={theme}
+      data-header-surface={isWorkDetail ? 'transparent' : 'solid'}
       data-header-visible={headerVisible ? 'true' : 'false'}
       data-menu-open={menuOpen ? 'true' : 'false'}
     >
