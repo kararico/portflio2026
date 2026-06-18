@@ -2,6 +2,7 @@ import type Lenis from 'lenis';
 import { gsap, ScrollTrigger } from '@/utils/gsap/registerGsap';
 import { refreshScrollTrigger, refreshScrollTriggerDelayed } from '@/animations/scrollTriggerRefresh';
 import { isTouchDevice } from './scrollEnvironment';
+import { syncViewportWidth } from '@/utils/viewport/syncViewportWidth';
 
 let refreshDebounceId = 0;
 
@@ -74,7 +75,10 @@ export function bindNativeScrollToScrollTrigger(): () => void {
   window.addEventListener('scroll', onScroll, { passive: true });
   document.addEventListener('scroll', onScroll, { passive: true });
 
-  const onViewportChange = () => debouncedRefresh();
+  const onViewportChange = () => {
+    syncViewportWidth();
+    debouncedRefresh();
+  };
   window.addEventListener('resize', onViewportChange);
   window.addEventListener('orientationchange', onViewportChange);
 

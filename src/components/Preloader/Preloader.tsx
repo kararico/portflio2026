@@ -9,7 +9,8 @@ import styles from './Preloader.module.scss';
 
 export default function Preloader() {
   const pathname = usePathname();
-  const isHome = pathname === '/';
+  const normalizedPath = pathname.replace(/\/$/, '') || '/';
+  const isHome = normalizedPath === '/';
   const { progress, isExiting, isVisible, finishExit } = usePreloader({ enabled: isHome });
 
   useEffect(() => {

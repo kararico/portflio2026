@@ -14,6 +14,7 @@ import {
 } from '@/utils/scroll/bindScrollTrigger';
 import { ensureNativeScrollEnvironment, teardownNativeScrollEnvironment } from '@/utils/scroll/initNativeScroll';
 import { shouldUseNativeScroll } from '@/utils/scroll/scrollEnvironment';
+import { bindViewportWidthSync } from '@/utils/viewport/syncViewportWidth';
 
 interface SmoothScrollProviderProps {
   children: ReactNode;
@@ -29,18 +30,22 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
 
   useEffect(() => {
     registerGsapPlugins();
+    const unbindViewportWidth = bindViewportWidthSync();
 
     if (shouldUseNativeScroll()) {
       ensureNativeScrollEnvironment();
       refreshScrollTrigger();
-      return () => teardownNativeScrollEnvironment();
+      return () => {
+        unbindViewportWidth();
+        teardownNativeScrollEnvironment();
+      };
     }
 
     const lenisInstance = new Lenis({
-      duration: 1.5,
+      duration: 1.05,
       easing: (t: number) => Math.min(1, 1.001 - 2 ** (-10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 0.92,
+      wheelMultiplier: 1,
       touchMultiplier: 1.5,
     });
 
@@ -56,10 +61,13 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
     gsap.ticker.add(onTick);
     gsap.ticker.lagSmoothing(0);
 
-    const onResize = () => refreshScrollTrigger();
+    const onResize = () => {
+      refreshScrollTrigger();
+    };
     window.addEventListener('resize', onResize);
 
     return () => {
+      unbindViewportWidth();
       window.removeEventListener('resize', onResize);
       unbindScrollTrigger();
       gsap.ticker.remove(onTick);

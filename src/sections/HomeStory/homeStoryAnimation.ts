@@ -46,6 +46,11 @@ function easeOutCubic(t: number): number {
   return 1 - (1 - t) ** 3;
 }
 
+/** 갤러리 entry/zoom — cubic보다 완만한 quad */
+function easeOutQuad(t: number): number {
+  return 1 - (1 - t) ** 2;
+}
+
 /** GSAP ScrollTrigger scrub(lag) — 프레임 독립 exponential smoothing */
 function scrubToward(current: number, target: number, deltaSeconds: number, lagSeconds: number): number {
   if (lagSeconds <= 0) return target;
@@ -187,7 +192,7 @@ function applyPlateSequence(
     }
 
     const entryT = Math.min((seqT - activationAt) / entrySpan, 1);
-    const easedEntry = easeOutCubic(entryT);
+    const easedEntry = easeOutQuad(entryT);
 
     gsap.set(anchor, {
       visibility: 'visible',
@@ -197,7 +202,7 @@ function applyPlateSequence(
 
     const zoomT = Math.min((seqT - activationAt) / zoomSpan, 1);
     gsap.set(image, {
-      scale: lerpValue(scaleFrom, 1, easeOutCubic(zoomT)),
+      scale: lerpValue(scaleFrom, 1, easeOutQuad(zoomT)),
       transformOrigin: 'center center',
     });
   });
@@ -320,7 +325,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
         phases.compositionDrift.end,
       );
       if (composition) {
-        gsap.set(composition, { y: lerpValue(0, compositionDriftY, easeOutCubic(driftT)) });
+        gsap.set(composition, { y: lerpValue(0, compositionDriftY, driftT) });
       }
 
       const aboutT = phaseProgress(progress, phases.aboutCover.start, phases.aboutCover.end);

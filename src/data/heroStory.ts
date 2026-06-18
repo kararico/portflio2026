@@ -6,8 +6,8 @@ export const heroStoryConfig = {
     desktop: 360,
     mobile: 220,
   },
-  /** ScrollTrigger scrub: 0.85 상응 lag(초) */
-  scrollScrub: 0.85,
+  /** ScrollTrigger scrub lag(초) — 낮을수록 스크롤에 밀착 */
+  scrollScrub: 0.42,
   scrollPhases: {
     metaFade: { start: 0, end: 0.15 },
     centerMove: { start: 0, end: 0.38 },
@@ -29,17 +29,17 @@ export const heroStoryConfig = {
     /** 1번 카드 — @deprecated entrySpanViewport 사용 */
     entrySpan: 0.22,
     /** viewport 하단 밖에서 진입하는 구간 (1번 포함) */
-    entrySpanViewport: 0.32,
+    entrySpanViewport: 0.42,
     /** 활성화 직후 이미지 zoom-out 구간 (시퀀스 progress) */
-    zoomSpan: 0.2,
+    zoomSpan: 0.32,
     /** 누적 등장 순서 */
     order: ['2', '1', '3', '4', '5'] as const,
   },
   galleryMotion: {
-    defaultScaleFrom: 1.2,
+    defaultScaleFrom: 1.06,
     defaultEntryY: 160,
     /** viewport 진입 — 카드 top이 화면 하단 아래에서 시작 */
-    viewportEntryBuffer: { desktop: 120, mobile: 80 },
+    viewportEntryBuffer: { desktop: 56, mobile: 40 },
     /** viewport entry 대상 (1번 포함 — 2~5번과 동일 entrance) */
     viewportEntryPlateIds: ['1', '2', '3', '4', '5'] as const,
   },
@@ -49,18 +49,18 @@ export const heroStoryConfig = {
     exitBuffer: { desktop: 48, mobile: 32 },
   },
   compositionDrift: {
-    y: { desktop: -64, mobile: -36 },
+    y: { desktop: -24, mobile: -14 },
   },
   titleDrift: {
-    x: { desktop: -200, mobile: -96 },
+    x: { desktop: -72, mobile: -36 },
   },
   /** 로드 시 intro 등장 타이밍 */
   heroIntro: {
-    delayAfterReveal: 0.55,
-    composition: { duration: 0.95, y: 28, ease: 'power2.out' as const },
-    title: { stagger: 0.09, y: 44, duration: 1.05, ease: 'power3.out' as const },
-    titleFront: { duration: 0.95, ease: 'power2.out' as const, overlap: 0.72 },
-    meta: { stagger: 0.07, y: 12, duration: 0.75, ease: 'power2.out' as const, overlap: 0.48 },
+    delayAfterReveal: 0.65,
+    composition: { duration: 1.15, y: 16, ease: 'power2.out' as const },
+    title: { stagger: 0.05, y: 22, duration: 1.25, ease: 'power2.out' as const },
+    titleFront: { duration: 1.1, ease: 'power2.out' as const, overlap: 0.78 },
+    meta: { stagger: 0.04, y: 8, duration: 0.95, ease: 'power2.out' as const, overlap: 0.52 },
   },
   /**
    * Editorial gallery — Septiembre project-item-wrapper 패턴
@@ -79,7 +79,7 @@ export const heroStoryConfig = {
       id: '1' as const,
       slug: 'starbucks-siren119',
       layer: 'between' as const,
-      imageScaleFrom: 1.18,
+      imageScaleFrom: 1.07,
       layout: {
         pt: 'var(--hero-plate-center-pt)',
         pl: 'var(--padding-fluid)',
@@ -91,7 +91,7 @@ export const heroStoryConfig = {
       id: '2' as const,
       slug: 'mlb-korea',
       layer: 'front' as const,
-      imageScaleFrom: 1.22,
+      imageScaleFrom: 1.08,
       layout: {
         pt: 'var(--hero-plate-center-pt)',
         pr: 'calc(50% - var(--img-w) / 2)',
@@ -103,7 +103,7 @@ export const heroStoryConfig = {
       id: '3' as const,
       slug: 'hyundai-ezwel',
       layer: 'front' as const,
-      imageScaleFrom: 1.2,
+      imageScaleFrom: 1.07,
       layout: {
         pt: 'calc(var(--hero-plate-center-pt) + 3vh)',
         pr: 'var(--padding-fluid)',
@@ -115,7 +115,7 @@ export const heroStoryConfig = {
       id: '4' as const,
       slug: 'discovery-expedition',
       layer: 'behind' as const,
-      imageScaleFrom: 1.25,
+      imageScaleFrom: 1.08,
       layout: {
         pt: 'calc(var(--hero-plate-center-pt) + var(--hero-plate-center-h) - 14vw * 1.48)',
         pl: 'var(--padding-fluid)',
@@ -127,7 +127,7 @@ export const heroStoryConfig = {
       id: '5' as const,
       slug: 'starbucks-employee-platform',
       layer: 'front' as const,
-      imageScaleFrom: 1.15,
+      imageScaleFrom: 1.06,
       layout: {
         pt: 'calc(var(--hero-plate-center-pt) + var(--hero-plate-center-h) - 24vw * 0.61)',
         pr: 'var(--padding-fluid)',

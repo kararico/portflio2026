@@ -73,6 +73,8 @@ export function usePreloader({ enabled = true }: UsePreloaderOptions = {}) {
   const [progress, setProgress] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  /** bfcache 복원 시 타이머 재시작용 */
+  const [sessionId, setSessionId] = useState(0);
   const rafRef = useRef<number | null>(null);
   const startRef = useRef<number | null>(null);
 
@@ -81,10 +83,25 @@ export function usePreloader({ enabled = true }: UsePreloaderOptions = {}) {
   }, []);
 
   useEffect(() => {
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (!event.persisted || !enabled) return;
+      setSessionId((id) => id + 1);
+    };
+
+    window.addEventListener('pageshow', onPageShow);
+    return () => window.removeEventListener('pageshow', onPageShow);
+  }, [enabled]);
+
+  useEffect(() => {
     if (!enabled) {
       setIsComplete(true);
       return undefined;
     }
+
+    setIsComplete(false);
+    setIsExiting(false);
+    setProgress(0);
+    startRef.current = null;
 
     const tick = (now: number) => {
       if (startRef.current === null) startRef.current = now;
@@ -107,7 +124,14 @@ export function usePreloader({ enabled = true }: UsePreloaderOptions = {}) {
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
-  }, [enabled]);
+  }, [enabled, sessionId]);
+
+  useEffect(() => {
+    if (!isExiting) return undefined;
+
+    const fallback = window.setTimeout(finishExit, FADE_OUT + 120);
+    return () => window.clearTimeout(fallback);
+  }, [isExiting, finishExit]);
 
   useEffect(() => {
     if (!enabled || isComplete) return undefined;
