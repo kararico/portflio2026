@@ -18,7 +18,7 @@ const HERO_PROJECTS = [
   { slug: 'discovery-expedition', tone: [30, 38, 48] },
   { slug: 'casamia', tone: [48, 42, 36] },
   { slug: 'samsung-fire', tone: [20, 28, 72] },
-  { slug: 'lifeplanet', tone: [38, 42, 72] },
+  { slug: 'bullsone', tone: [26, 26, 46] },
   { slug: 'goodpeople', tone: [52, 32, 28] },
 ];
 

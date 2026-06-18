@@ -19,11 +19,10 @@ const SLUG_VISUAL_MAIN: Record<string, string> = {
   bullsone: 'bs-main-bg.png',
   casamia: 'casa-main-bg.png',
   'discovery-expedition': 'dc-main-bg.png',
-  goodpeople: 'gp-main-bg.png',
+  goodpeople: 'gp-img.png',
   guud: 'guud-main-bg.png',
   'hyundai-ezwel': 'hd-main-bg.png',
   'hodoo-english': 'hodoo-main-bg.png',
-  lifeplanet: 'life-main-bg.png',
   'mlb-korea': 'mlb-main-bg.png',
   'samsung-fire': 'saumsung-main-bg.png',
   'starbucks-employee-platform': 'st-main-bg.png',
@@ -31,13 +30,13 @@ const SLUG_VISUAL_MAIN: Record<string, string> = {
   'wconcept-us': 'wc-main-bg.png',
 };
 
-/** Work Detail Gallery — detail-main/{prefix}-detail-0N.png */
+/** Work Detail Gallery — detail-main/{slug}/{prefix}-detail-0N.png */
 const SLUG_DETAIL_PREFIX: Record<string, string> = {
+  bullsone: 'bullsone',
   casamia: 'casa',
   'discovery-expedition': 'dc',
   goodpeople: 'gp',
   'hyundai-ezwel': 'hd',
-  lifeplanet: 'life',
   'mlb-korea': 'mlb',
   'samsung-fire': 'saumsung',
   'starbucks-employee-platform': 'st',
@@ -45,13 +44,31 @@ const SLUG_DETAIL_PREFIX: Record<string, string> = {
   'wconcept-us': 'wc',
 };
 
+/** detail-main/{slug}/ 내 Gallery 이미지 수 — 에셋 폴더와 동기화 */
+const SLUG_DETAIL_COUNT: Record<string, number> = {
+  bullsone: 6,
+  casamia: 2,
+  'discovery-expedition': 7,
+  goodpeople: 7,
+  'hyundai-ezwel': 7,
+  'mlb-korea': 7,
+  'samsung-fire': 2,
+  'starbucks-employee-platform': 7,
+  'starbucks-siren119': 7,
+  'wconcept-us': 4,
+};
+
+export function getDetailMainCount(slug: string): number {
+  return SLUG_DETAIL_COUNT[slug] ?? 3;
+}
+
 /** Home floating 카드 썸네일 — /images/products/{file} */
 const SLUG_THUMBNAIL: Record<string, string> = {
+  bullsone: 'bs-img.png',
   casamia: 'casa-img.png',
   'discovery-expedition': 'ds-img.png',
   goodpeople: 'gp-img.png',
   'hyundai-ezwel': 'hd-img.png',
-  lifeplanet: 'life-img.png',
   'mlb-korea': 'mlb-img.png',
   'samsung-fire': 'saumsung-img.png',
   'starbucks-employee-platform': 'starbuck-img.png',
@@ -70,7 +87,6 @@ const HOME_HERO_FILES: Record<string, string> = {
   'hodoo-english': 'hodoo-main-bg.png',
   'mlb-korea': 'mlb-main-bg.png',
   'samsung-fire': 'saumsung-main-bg.png',
-  lifeplanet: 'life-main-bg.png',
   'starbucks-employee-platform': 'st-main-bg.png',
   'starbucks-siren119': 'st-main-bg.png',
   'wconcept-us': 'wc-main-bg.png',
@@ -82,9 +98,13 @@ export function getVisualMainHeroPath(slug: string): string | null {
   return assetPath(`${VISUAL_MAIN_BASE}/${file}`);
 }
 
-export function buildDetailMainPath(prefix: string, index: number): string {
+export function buildDetailMainPath(slug: string, index: number): string {
+  const prefix = SLUG_DETAIL_PREFIX[slug];
+  if (!prefix) {
+    throw new Error(`Missing detail-main prefix for slug: ${slug}`);
+  }
   const num = String(index).padStart(2, '0');
-  return assetPath(`${DETAIL_MAIN_BASE}/${prefix}-detail-${num}.png`);
+  return assetPath(`${DETAIL_MAIN_BASE}/${slug}/${prefix}-detail-${num}.png`);
 }
 
 export function buildProductThumbnailPath(slug: string): string {
@@ -93,7 +113,7 @@ export function buildProductThumbnailPath(slug: string): string {
   return assetPath(`${PRODUCTS_THUMB_BASE}/${file}`);
 }
 
-export function buildProjectImages(slug: string, detailCount = 3): Project['images'] {
+export function buildProjectImages(slug: string, detailCount = getDetailMainCount(slug)): Project['images'] {
   const prefix = SLUG_DETAIL_PREFIX[slug];
   const hero = getVisualMainHeroPath(slug);
 
@@ -103,8 +123,8 @@ export function buildProjectImages(slug: string, detailCount = 3): Project['imag
 
   return {
     hero,
-    detail: Array.from({ length: detailCount }, (_, i) => buildDetailMainPath(prefix, i + 1)),
-    mobile: buildDetailMainPath(prefix, Math.min(detailCount, 3)),
+    detail: Array.from({ length: detailCount }, (_, i) => buildDetailMainPath(slug, i + 1)),
+    mobile: buildDetailMainPath(slug, Math.min(detailCount, 3)),
   };
 }
 

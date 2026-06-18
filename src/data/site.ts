@@ -11,6 +11,7 @@ export const siteConfig = {
   },
   contact: {
     email: 'jungwon11082015@gmail.com',
+    github: 'https://github.com/kararico',
     location: 'Incheon, South Korea',
     social: [
       {
@@ -24,6 +25,12 @@ export const siteConfig = {
         label: 'Facebook',
       },
     ] as const,
+  },
+  resume: {
+    path: '/resume/HeoJungwon_Resume.pdf',
+    fileName: 'HeoJungwon_Resume.pdf',
+    aboutLabel: 'Download Resume',
+    contactLabel: 'Resume PDF',
   },
   hero: {
     title: 'Jungwon Heo.',

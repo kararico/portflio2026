@@ -5,6 +5,7 @@ import { Suspense, useRef, useLayoutEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { initAboutAnimation, bindProfileSectionReveal, bindSelectedProjectsAnimation, bindBackgroundTypeParallax } from '@/animations/about';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
+import ResumeDownloadLink from '@/components/ResumeDownloadLink/ResumeDownloadLink';
 import { siteConfig } from '@/data/site';
 import { getHeroFeaturedProjects } from '@/data/projects';
 import { registerGsapPlugins } from '@/utils/gsap/registerGsap';
@@ -86,6 +87,13 @@ function AboutContent({
                   </p>
                 ))}
               </div>
+              <ResumeDownloadLink
+                className={styles.resumeLink}
+                data-cursor-style="small"
+                data-about-reveal="description"
+              >
+                {siteConfig.resume.aboutLabel}
+              </ResumeDownloadLink>
             </div>
           </div>
 

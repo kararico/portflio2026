@@ -58,9 +58,8 @@ export const careerEntries: CareerEntry[] = [
     role: 'Web Publisher',
     projects: [
       { title: '삼성화재 프로포즈', slug: 'samsung-proposal' },
-      { title: '교보라이프플랫닛', slug: 'lifeplanet' },
+      { title: '불스원', slug: 'bullsone' },
       { title: '좋은사람들', slug: 'goodpeople' },
-      { title: '불스원' },
       { title: '호두 잉글리시' },
       { title: '팸퍼스' },
     ],
