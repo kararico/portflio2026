@@ -163,6 +163,10 @@ function isGalleryTopTriggered(triggerCard: HTMLElement | null): boolean {
   return triggerCard.getBoundingClientRect().top <= 1;
 }
 
+function isCenterHandoffPlate(plateId: HeroPlateId): boolean {
+  return plateId === heroStoryConfig.galleryReveal.centerHandoffPlateId;
+}
+
 function applyPlateSequence(
   plateStates: PlateAnimState[],
   progress: number,
@@ -173,6 +177,14 @@ function applyPlateSequence(
   const seqSpan = seqEnd - seqStart;
 
   plateStates.forEach(({ anchor, image, scaleFrom, entryY, activationAt, plateId }) => {
+    /** 중앙 MLB — heroImageLayer가 gallery 내내 유지, plate DOM은 비표시 */
+    if (isCenterHandoffPlate(plateId)) {
+      gsap.set(anchor, { y: 0, visibility: 'hidden' });
+      anchor.removeAttribute('data-plate-active');
+      gsap.set(image, { scale: 1, transformOrigin: 'center center' });
+      return;
+    }
+
     const entrySpan = getPlateEntrySpan(plateId);
 
     if (progress < seqStart || seqSpan <= 0) {
@@ -232,7 +244,12 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
     const plates = heroSection.querySelectorAll<HTMLElement>('[data-hero-float]');
     const plateStates = buildPlateStates(plates, mobile);
     remeasurePlateEntryYs(plateStates, mobile);
-    plateStates.forEach(({ anchor, image, scaleFrom, entryY }) => {
+    plateStates.forEach(({ anchor, image, scaleFrom, entryY, plateId }) => {
+      if (isCenterHandoffPlate(plateId)) {
+        gsap.set(anchor, { y: 0, visibility: 'hidden' });
+        gsap.set(image, { scale: 1, transformOrigin: 'center center' });
+        return;
+      }
       gsap.set(anchor, { y: entryY, visibility: 'hidden' });
       gsap.set(image, { scale: scaleFrom, transformOrigin: 'center center' });
     });
@@ -292,13 +309,6 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
           y: lerpValue(0, centerEndY, easeOutCubic(centerT)),
           scale: lerpValue(1, centerMoveScale, centerT),
           opacity: 1,
-        });
-      }
-      if (heroImageLayer) {
-        gsap.set(heroImageLayer, {
-          opacity: galleryTriggered ? 0 : 1,
-          visibility: galleryTriggered ? 'hidden' : 'visible',
-          pointerEvents: galleryTriggered ? 'none' : 'auto',
         });
       }
       if (subtitle) {

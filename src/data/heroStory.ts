@@ -21,27 +21,29 @@ export const heroStoryConfig = {
     /** 갤러리 시퀀스 내 활성화 시점 (0–1) — center top 트리거 이후 상대 progress */
     activationAt: {
       '2': 0,
-      '1': 0.18,
-      '3': 0.38,
-      '4': 0.58,
-      '5': 0.78,
+      '1': 0.1,
+      '3': 0.32,
+      '4': 0.56,
+      '5': 0.8,
     } as const,
     /** 1번 카드 — @deprecated entrySpanViewport 사용 */
     entrySpan: 0.22,
-    /** viewport 하단 밖에서 진입하는 구간 (1번 포함) */
-    entrySpanViewport: 0.42,
+    /** viewport 하단 밖에서 진입하는 구간 — 카드별 entry 겹침 최소화 */
+    entrySpanViewport: 0.2,
     /** 활성화 직후 이미지 zoom-out 구간 (시퀀스 progress) */
     zoomSpan: 0.32,
+    /** Hero 중앙 미디어 — gallery plate 2 DOM 대신 heroImageLayer가 담당 */
+    centerHandoffPlateId: '2' as const,
     /** 누적 등장 순서 */
     order: ['2', '1', '3', '4', '5'] as const,
   },
   galleryMotion: {
     defaultScaleFrom: 1.06,
     defaultEntryY: 160,
-    /** viewport 진입 — 카드 top이 화면 하단 아래에서 시작 */
-    viewportEntryBuffer: { desktop: 56, mobile: 40 },
-    /** viewport entry 대상 (1번 포함 — 2~5번과 동일 entrance) */
-    viewportEntryPlateIds: ['1', '2', '3', '4', '5'] as const,
+    /** viewport 진입 — 카드 top이 화면 하단 아래에서 시작 (중앙 plate 제외) */
+    viewportEntryBuffer: { desktop: 28, mobile: 20 },
+    /** viewport entry 대상 — id 2(중앙)는 heroImageLayer 연속 */
+    viewportEntryPlateIds: ['1', '3', '4', '5'] as const,
   },
   centerMove: {
     y: { desktop: -900, mobile: -560 },
