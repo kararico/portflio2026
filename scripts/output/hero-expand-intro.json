@@ -1,0 +1,692 @@
+[
+  {
+    "ms": 0,
+    "preloaderActive": true,
+    "preloaderExiting": false,
+    "mainVisible": "hidden",
+    "hasExpandTrack": true,
+    "titleBackOpacity": "1",
+    "compositionOpacity": "1",
+    "trackExpanded": false,
+    "jText": "j",
+    "wX": "translate(-0.5em, 0px)",
+    "maskWidths": [
+      {
+        "i": 0,
+        "text": "u",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 1,
+        "text": "n",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 2,
+        "text": "g",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 3,
+        "text": "o",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 4,
+        "text": "n",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 5,
+        "text": "",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 6,
+        "text": "h",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 7,
+        "text": "e",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 8,
+        "text": "o",
+        "width": "0px",
+        "rectW": 0
+      }
+    ],
+    "totalMaskRectW": 0
+  },
+  {
+    "ms": 500,
+    "preloaderActive": true,
+    "preloaderExiting": false,
+    "mainVisible": "hidden",
+    "hasExpandTrack": true,
+    "titleBackOpacity": "1",
+    "compositionOpacity": "1",
+    "trackExpanded": false,
+    "jText": "j",
+    "wX": "translate(-0.5em, 0px)",
+    "maskWidths": [
+      {
+        "i": 0,
+        "text": "u",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 1,
+        "text": "n",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 2,
+        "text": "g",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 3,
+        "text": "o",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 4,
+        "text": "n",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 5,
+        "text": "",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 6,
+        "text": "h",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 7,
+        "text": "e",
+        "width": "0px",
+        "rectW": 0
+      },
+      {
+        "i": 8,
+        "text": "o",
+        "width": "0px",
+        "rectW": 0
+      }
+    ],
+    "totalMaskRectW": 0
+  },
+  {
+    "ms": 1900,
+    "preloaderActive": false,
+    "preloaderExiting": false,
+    "mainVisible": "visible",
+    "hasExpandTrack": true,
+    "titleBackOpacity": "1",
+    "compositionOpacity": "1",
+    "trackExpanded": true,
+    "jText": "j",
+    "wX": "translate(0px, 0px)",
+    "maskWidths": [
+      {
+        "i": 0,
+        "text": "u",
+        "width": "66px",
+        "rectW": 66
+      },
+      {
+        "i": 1,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 2,
+        "text": "g",
+        "width": "51px",
+        "rectW": 51
+      },
+      {
+        "i": 3,
+        "text": "o",
+        "width": "55px",
+        "rectW": 55
+      },
+      {
+        "i": 4,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 5,
+        "text": "",
+        "width": "20px",
+        "rectW": 20
+      },
+      {
+        "i": 6,
+        "text": "h",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 7,
+        "text": "e",
+        "width": "50px",
+        "rectW": 50
+      },
+      {
+        "i": 8,
+        "text": "o",
+        "width": "57px",
+        "rectW": 57
+      }
+    ],
+    "totalMaskRectW": 500
+  },
+  {
+    "ms": 2050,
+    "preloaderActive": false,
+    "preloaderExiting": false,
+    "mainVisible": "visible",
+    "hasExpandTrack": true,
+    "titleBackOpacity": "1",
+    "compositionOpacity": "1",
+    "trackExpanded": true,
+    "jText": "j",
+    "wX": "translate(0px, 0px)",
+    "maskWidths": [
+      {
+        "i": 0,
+        "text": "u",
+        "width": "66px",
+        "rectW": 66
+      },
+      {
+        "i": 1,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 2,
+        "text": "g",
+        "width": "51px",
+        "rectW": 51
+      },
+      {
+        "i": 3,
+        "text": "o",
+        "width": "55px",
+        "rectW": 55
+      },
+      {
+        "i": 4,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 5,
+        "text": "",
+        "width": "20px",
+        "rectW": 20
+      },
+      {
+        "i": 6,
+        "text": "h",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 7,
+        "text": "e",
+        "width": "50px",
+        "rectW": 50
+      },
+      {
+        "i": 8,
+        "text": "o",
+        "width": "57px",
+        "rectW": 57
+      }
+    ],
+    "totalMaskRectW": 500
+  },
+  {
+    "ms": 2150,
+    "preloaderActive": false,
+    "preloaderExiting": false,
+    "mainVisible": "visible",
+    "hasExpandTrack": true,
+    "titleBackOpacity": "1",
+    "compositionOpacity": "1",
+    "trackExpanded": true,
+    "jText": "j",
+    "wX": "translate(0px, 0px)",
+    "maskWidths": [
+      {
+        "i": 0,
+        "text": "u",
+        "width": "66px",
+        "rectW": 66
+      },
+      {
+        "i": 1,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 2,
+        "text": "g",
+        "width": "51px",
+        "rectW": 51
+      },
+      {
+        "i": 3,
+        "text": "o",
+        "width": "55px",
+        "rectW": 55
+      },
+      {
+        "i": 4,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 5,
+        "text": "",
+        "width": "20px",
+        "rectW": 20
+      },
+      {
+        "i": 6,
+        "text": "h",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 7,
+        "text": "e",
+        "width": "50px",
+        "rectW": 50
+      },
+      {
+        "i": 8,
+        "text": "o",
+        "width": "57px",
+        "rectW": 57
+      }
+    ],
+    "totalMaskRectW": 500
+  },
+  {
+    "ms": 2250,
+    "preloaderActive": false,
+    "preloaderExiting": false,
+    "mainVisible": "visible",
+    "hasExpandTrack": true,
+    "titleBackOpacity": "1",
+    "compositionOpacity": "1",
+    "trackExpanded": true,
+    "jText": "j",
+    "wX": "translate(0px, 0px)",
+    "maskWidths": [
+      {
+        "i": 0,
+        "text": "u",
+        "width": "66px",
+        "rectW": 66
+      },
+      {
+        "i": 1,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 2,
+        "text": "g",
+        "width": "51px",
+        "rectW": 51
+      },
+      {
+        "i": 3,
+        "text": "o",
+        "width": "55px",
+        "rectW": 55
+      },
+      {
+        "i": 4,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 5,
+        "text": "",
+        "width": "20px",
+        "rectW": 20
+      },
+      {
+        "i": 6,
+        "text": "h",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 7,
+        "text": "e",
+        "width": "50px",
+        "rectW": 50
+      },
+      {
+        "i": 8,
+        "text": "o",
+        "width": "57px",
+        "rectW": 57
+      }
+    ],
+    "totalMaskRectW": 500
+  },
+  {
+    "ms": 2350,
+    "preloaderActive": false,
+    "preloaderExiting": false,
+    "mainVisible": "visible",
+    "hasExpandTrack": true,
+    "titleBackOpacity": "1",
+    "compositionOpacity": "1",
+    "trackExpanded": true,
+    "jText": "j",
+    "wX": "translate(0px, 0px)",
+    "maskWidths": [
+      {
+        "i": 0,
+        "text": "u",
+        "width": "66px",
+        "rectW": 66
+      },
+      {
+        "i": 1,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 2,
+        "text": "g",
+        "width": "51px",
+        "rectW": 51
+      },
+      {
+        "i": 3,
+        "text": "o",
+        "width": "55px",
+        "rectW": 55
+      },
+      {
+        "i": 4,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 5,
+        "text": "",
+        "width": "20px",
+        "rectW": 20
+      },
+      {
+        "i": 6,
+        "text": "h",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 7,
+        "text": "e",
+        "width": "50px",
+        "rectW": 50
+      },
+      {
+        "i": 8,
+        "text": "o",
+        "width": "57px",
+        "rectW": 57
+      }
+    ],
+    "totalMaskRectW": 500
+  },
+  {
+    "ms": 2500,
+    "preloaderActive": false,
+    "preloaderExiting": false,
+    "mainVisible": "visible",
+    "hasExpandTrack": true,
+    "titleBackOpacity": "1",
+    "compositionOpacity": "1",
+    "trackExpanded": true,
+    "jText": "j",
+    "wX": "translate(0px, 0px)",
+    "maskWidths": [
+      {
+        "i": 0,
+        "text": "u",
+        "width": "66px",
+        "rectW": 66
+      },
+      {
+        "i": 1,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 2,
+        "text": "g",
+        "width": "51px",
+        "rectW": 51
+      },
+      {
+        "i": 3,
+        "text": "o",
+        "width": "55px",
+        "rectW": 55
+      },
+      {
+        "i": 4,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 5,
+        "text": "",
+        "width": "20px",
+        "rectW": 20
+      },
+      {
+        "i": 6,
+        "text": "h",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 7,
+        "text": "e",
+        "width": "50px",
+        "rectW": 50
+      },
+      {
+        "i": 8,
+        "text": "o",
+        "width": "57px",
+        "rectW": 57
+      }
+    ],
+    "totalMaskRectW": 500
+  },
+  {
+    "ms": 2700,
+    "preloaderActive": false,
+    "preloaderExiting": false,
+    "mainVisible": "visible",
+    "hasExpandTrack": true,
+    "titleBackOpacity": "1",
+    "compositionOpacity": "1",
+    "trackExpanded": true,
+    "jText": "j",
+    "wX": "translate(0px, 0px)",
+    "maskWidths": [
+      {
+        "i": 0,
+        "text": "u",
+        "width": "66px",
+        "rectW": 66
+      },
+      {
+        "i": 1,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 2,
+        "text": "g",
+        "width": "51px",
+        "rectW": 51
+      },
+      {
+        "i": 3,
+        "text": "o",
+        "width": "55px",
+        "rectW": 55
+      },
+      {
+        "i": 4,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 5,
+        "text": "",
+        "width": "20px",
+        "rectW": 20
+      },
+      {
+        "i": 6,
+        "text": "h",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 7,
+        "text": "e",
+        "width": "50px",
+        "rectW": 50
+      },
+      {
+        "i": 8,
+        "text": "o",
+        "width": "57px",
+        "rectW": 57
+      }
+    ],
+    "totalMaskRectW": 500
+  },
+  {
+    "ms": 3200,
+    "preloaderActive": false,
+    "preloaderExiting": false,
+    "mainVisible": "visible",
+    "hasExpandTrack": true,
+    "titleBackOpacity": "1",
+    "compositionOpacity": "1",
+    "trackExpanded": true,
+    "jText": "j",
+    "wX": "translate(0px, 0px)",
+    "maskWidths": [
+      {
+        "i": 0,
+        "text": "u",
+        "width": "66px",
+        "rectW": 66
+      },
+      {
+        "i": 1,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 2,
+        "text": "g",
+        "width": "51px",
+        "rectW": 51
+      },
+      {
+        "i": 3,
+        "text": "o",
+        "width": "55px",
+        "rectW": 55
+      },
+      {
+        "i": 4,
+        "text": "n",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 5,
+        "text": "",
+        "width": "20px",
+        "rectW": 20
+      },
+      {
+        "i": 6,
+        "text": "h",
+        "width": "67px",
+        "rectW": 67
+      },
+      {
+        "i": 7,
+        "text": "e",
+        "width": "50px",
+        "rectW": 50
+      },
+      {
+        "i": 8,
+        "text": "o",
+        "width": "57px",
+        "rectW": 57
+      }
+    ],
+    "totalMaskRectW": 500
+  }
+]

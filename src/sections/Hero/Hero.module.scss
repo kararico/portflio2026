@@ -20,7 +20,7 @@
     calc(var(--header-height) + var(--space-lg))
     var(--padding-fluid)
     var(--space-2xl);
-  overflow-x: clip;
+  overflow-x: visible;
   overflow-y: visible;
   will-change: transform;
 }
@@ -103,7 +103,7 @@
   min-height: 0;
   min-width: 0;
   width: 100%;
-  overflow-x: clip;
+  overflow-x: visible;
   overflow-y: visible;
 }
 
@@ -126,7 +126,7 @@
   min-height: 0;
   min-width: 0;
   width: 100%;
-  overflow-x: clip;
+  overflow-x: visible;
   overflow-y: visible;
   will-change: transform;
   isolation: isolate;
@@ -141,20 +141,24 @@
 .heroTitle {
   position: absolute;
   top: 50%;
-  left: calc(50% - var(--viewport-width, 100vw) / 2);
+  left: 50%;
   width: var(--viewport-width, 100vw);
   max-width: var(--viewport-width, 100vw);
   overflow-x: clip;
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(3.5rem, 11.5vw, 9.5rem);
+  font-size: clamp(2.87rem, 9.42vw, 7.78rem);
   line-height: 0.92;
   letter-spacing: -0.03em;
   text-align: center;
   user-select: none;
   pointer-events: none;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
   will-change: transform;
+
+  &:has([data-hero-expand-root]) {
+    overflow-x: visible;
+  }
 }
 
 .heroWordTrack {
@@ -163,6 +167,64 @@
   max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.heroWordTrackRepeat {
+  position: relative;
+  left: 2.5vw;
+}
+
+.heroExpandTitle {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding-inline: 0.06em;
+}
+
+.heroExpandTrack {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+  line-height: 1;
+  letter-spacing: -0.09em;
+  text-transform: lowercase;
+  will-change: letter-spacing;
+
+  &.is-expanded {
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+
+    .heroExpandAnchor,
+    .heroExpandCharInner {
+      text-transform: uppercase;
+    }
+
+    .heroExpandCharMask {
+      overflow: visible;
+    }
+  }
+}
+
+.heroExpandAnchor {
+  display: block;
+  flex-shrink: 0;
+  line-height: inherit;
+  will-change: transform;
+}
+
+.heroExpandCharMask {
+  display: block;
+  flex-shrink: 0;
+  overflow: hidden;
+  width: 0;
+  min-width: 0;
+  line-height: inherit;
+}
+
+.heroExpandCharInner {
+  display: block;
+  line-height: inherit;
+  white-space: nowrap;
 }
 
 .heroTitleBack {
@@ -186,6 +248,11 @@
   z-index: 5;
   color: var(--color-bg);
   mix-blend-mode: difference;
+
+  .heroWordTrack,
+  .heroExpandTitle {
+    opacity: 0.9;
+  }
 }
 
 .subtitle {
@@ -254,6 +321,7 @@
 @include respond-below('tablet') {
   .homeIntro {
     height: var(--hero-scroll-height, 220vh);
+    overflow-x: visible;
   }
 
   .introSticky {
@@ -279,9 +347,9 @@
     gap: var(--space-sm);
     flex: 1 1 0;
     min-height: 0;
-    overflow-x: clip;
+    overflow-x: visible;
     overflow-y: visible;
-    --hero-image-width: clamp(7rem, 27vw, 11rem);
+    --hero-image-width: clamp(10rem, 44vw, 13rem);
     --hero-image-height: calc(var(--hero-image-width) * 5 / 4);
   }
 
@@ -303,7 +371,7 @@
     min-height: 0;
     display: grid;
     grid-area: auto;
-    overflow-x: clip;
+    overflow-x: visible;
     overflow-y: visible;
   }
 
@@ -316,7 +384,22 @@
   }
 
   .heroTitle {
-    font-size: clamp(2.75rem, 12.5vw, 4.25rem);
+    width: max-content;
+    max-width: calc(100vw - 2 * var(--padding-fluid, 1.5rem));
+    overflow-x: visible;
+    overflow-y: visible;
+    font-size: clamp(2.4rem, 10vw, 3.6rem);
+  }
+
+  .heroTitleFront {
+    overflow-x: visible;
+  }
+
+  .heroExpandTitle {
+    width: auto;
+    max-width: none;
+    padding-inline: 0;
+    display: inline-block;
   }
 
   .topMeta {
@@ -349,14 +432,18 @@
   }
 
   .composition {
-    --hero-image-width: clamp(8rem, 30vw, 12rem);
+    --hero-image-width: clamp(10rem, 44vw, 13rem);
     --hero-image-height: calc(var(--hero-image-width) * 1.47);
     gap: var(--space-xs);
   }
 
   .heroTitle {
-    font-size: clamp(2.1rem, 10vw, 3.5rem);
+    font-size: clamp(2.4rem, 10vw, 3.6rem);
     letter-spacing: -0.03em;
+  }
+
+  .heroWordTrackRepeat {
+    left: 2vw;
   }
 
   .heroTitleFront {

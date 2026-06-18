@@ -17,12 +17,22 @@ export default function Preloader() {
     const root = document.documentElement;
     if (!isVisible) {
       root.removeAttribute('data-preloader-active');
+      root.removeAttribute('data-preloader-exiting');
       return;
     }
 
     root.setAttribute('data-preloader-active', 'true');
-    return () => root.removeAttribute('data-preloader-active');
-  }, [isVisible]);
+    if (isExiting) {
+      root.setAttribute('data-preloader-exiting', 'true');
+    } else {
+      root.removeAttribute('data-preloader-exiting');
+    }
+
+    return () => {
+      root.removeAttribute('data-preloader-active');
+      root.removeAttribute('data-preloader-exiting');
+    };
+  }, [isVisible, isExiting]);
 
   if (!isVisible) return null;
 

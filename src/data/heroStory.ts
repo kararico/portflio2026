@@ -21,29 +21,27 @@ export const heroStoryConfig = {
     /** 갤러리 시퀀스 내 활성화 시점 (0–1) — center top 트리거 이후 상대 progress */
     activationAt: {
       '2': 0,
-      '1': 0.1,
-      '3': 0.32,
-      '4': 0.56,
-      '5': 0.8,
+      '1': 0.18,
+      '3': 0.38,
+      '4': 0.58,
+      '5': 0.78,
     } as const,
     /** 1번 카드 — @deprecated entrySpanViewport 사용 */
     entrySpan: 0.22,
-    /** viewport 하단 밖에서 진입하는 구간 — 카드별 entry 겹침 최소화 */
-    entrySpanViewport: 0.2,
+    /** viewport 하단 밖에서 진입하는 구간 */
+    entrySpanViewport: 0.32,
     /** 활성화 직후 이미지 zoom-out 구간 (시퀀스 progress) */
     zoomSpan: 0.32,
-    /** Hero 중앙 미디어 — gallery plate 2 DOM 대신 heroImageLayer가 담당 */
-    centerHandoffPlateId: '2' as const,
     /** 누적 등장 순서 */
     order: ['2', '1', '3', '4', '5'] as const,
   },
   galleryMotion: {
     defaultScaleFrom: 1.06,
     defaultEntryY: 160,
-    /** viewport 진입 — 카드 top이 화면 하단 아래에서 시작 (중앙 plate 제외) */
-    viewportEntryBuffer: { desktop: 28, mobile: 20 },
-    /** viewport entry 대상 — id 2(중앙)는 heroImageLayer 연속 */
-    viewportEntryPlateIds: ['1', '3', '4', '5'] as const,
+    /** viewport 진입 — 카드 top이 화면 하단 아래에서 시작 */
+    viewportEntryBuffer: { desktop: 56, mobile: 40 },
+    /** viewport 하단 밖에서 진입 — 모든 gallery plate 동일 처리 */
+    viewportEntryPlateIds: ['1', '2', '3', '4', '5'] as const,
   },
   centerMove: {
     y: { desktop: -900, mobile: -560 },
@@ -59,9 +57,26 @@ export const heroStoryConfig = {
   /** 로드 시 intro 등장 타이밍 */
   heroIntro: {
     delayAfterReveal: 0.65,
+    /** Preloader JW → Hero 확장 handoff */
+    delayAfterRevealExpand: 0,
     composition: { duration: 1.15, y: 16, ease: 'power2.out' as const },
     title: { stagger: 0.05, y: 22, duration: 1.25, ease: 'power2.out' as const },
     titleFront: { duration: 1.1, ease: 'power2.out' as const, overlap: 0.78 },
+    /** JW → JUNGWON HEO — 글자 단위 마스크 확장 (single variant) */
+    titleExpand: {
+      hold: 0.2,
+      wKernEm: -0.5,
+      wKernReleaseDuration: 0.5,
+      charDuration: 0.11,
+      charStagger: 0.045,
+      charEase: 'none' as const,
+      revealEase: 'power2.out' as const,
+      initialLetterSpacingEm: -0.09,
+      finalLetterSpacingEm: -0.03,
+      letterSpacingDuration: 0.4,
+      letterSpacingAt: 0.75,
+      uppercaseAt: 0.92,
+    },
     meta: { stagger: 0.04, y: 8, duration: 0.95, ease: 'power2.out' as const, overlap: 0.52 },
   },
   /**

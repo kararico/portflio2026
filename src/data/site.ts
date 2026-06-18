@@ -1,5 +1,7 @@
 import { assetPath } from '@/utils/assetPath';
 
+export type HeroTypoVariant = 'single' | 'repeat' | 'roles';
+
 export const siteConfig = {
   name: '허정원',
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3030',
@@ -33,8 +35,10 @@ export const siteConfig = {
     contactLabel: 'Resume PDF',
   },
   hero: {
-    title: 'Jungwon Heo.',
-    titleParts: ['Jungwon', 'Heo.'] as const,
+    title: 'Jungwon Heo',
+    titleParts: ['Jungwon', 'Heo'] as const,
+    /** Hero 대형 타이포: single(이름 1회) | repeat(이름 반복) | roles(직무) — ?heroTypo= 로 A/B */
+    displayVariant: 'single' as HeroTypoVariant,
     titleAlt: '허정원',
     index: '01',
     indexLabel: 'Selected Works',

@@ -58,14 +58,6 @@ function scrubToward(current: number, target: number, deltaSeconds: number, lagS
   return current + (target - current) * factor;
 }
 
-function measureCenterHandoffY(target: HTMLElement): number {
-  const savedY = Number(gsap.getProperty(target, 'y')) || 0;
-  gsap.set(target, { y: 0 });
-  const top = target.getBoundingClientRect().top;
-  gsap.set(target, { y: savedY });
-  return -top;
-}
-
 function resolveCenterExitY(
   target: HTMLElement | null,
   mobile: boolean,
@@ -158,13 +150,22 @@ function buildPlateStates(anchors: NodeListOf<HTMLElement>, mobile: boolean): Pl
   });
 }
 
-function isGalleryTopTriggered(triggerCard: HTMLElement | null): boolean {
-  if (!triggerCard) return false;
-  return triggerCard.getBoundingClientRect().top <= 1;
+/** Hero MLB — translateY 후 viewport 상단 밖으로 충분히 벗어났는지 (progress 무관, rect 기준) */
+function isHeroExitedViewport(layer: HTMLElement | null, mobile: boolean): boolean {
+  if (!layer) return false;
+
+  const rect = layer.getBoundingClientRect();
+  const buffer = mobile
+    ? heroStoryConfig.centerMove.exitBuffer.mobile
+    : heroStoryConfig.centerMove.exitBuffer.desktop;
+
+  return rect.bottom <= -buffer;
 }
 
-function isCenterHandoffPlate(plateId: HeroPlateId): boolean {
-  return plateId === heroStoryConfig.galleryReveal.centerHandoffPlateId;
+function hidePlateState({ anchor, image, scaleFrom, entryY }: PlateAnimState) {
+  gsap.set(anchor, { y: entryY, visibility: 'hidden' });
+  anchor.removeAttribute('data-plate-active');
+  gsap.set(image, { scale: scaleFrom, transformOrigin: 'center center' });
 }
 
 function applyPlateSequence(
@@ -176,30 +177,24 @@ function applyPlateSequence(
   const { zoomSpan } = heroStoryConfig.galleryReveal;
   const seqSpan = seqEnd - seqStart;
 
-  plateStates.forEach(({ anchor, image, scaleFrom, entryY, activationAt, plateId }) => {
-    /** 중앙 MLB — heroImageLayer가 gallery 내내 유지, plate DOM은 비표시 */
-    if (isCenterHandoffPlate(plateId)) {
-      gsap.set(anchor, { y: 0, visibility: 'hidden' });
-      anchor.removeAttribute('data-plate-active');
-      gsap.set(image, { scale: 1, transformOrigin: 'center center' });
-      return;
-    }
+  if (seqSpan <= 0) {
+    plateStates.forEach((state) => hidePlateState(state));
+    return;
+  }
 
+  plateStates.forEach((state) => {
+    const { anchor, image, scaleFrom, entryY, activationAt, plateId } = state;
     const entrySpan = getPlateEntrySpan(plateId);
 
-    if (progress < seqStart || seqSpan <= 0) {
-      gsap.set(anchor, { y: entryY, visibility: 'hidden' });
-      anchor.removeAttribute('data-plate-active');
-      gsap.set(image, { scale: scaleFrom, transformOrigin: 'center center' });
+    if (progress < seqStart) {
+      hidePlateState(state);
       return;
     }
 
     const seqT = (progress - seqStart) / seqSpan;
 
     if (seqT < activationAt) {
-      gsap.set(anchor, { y: entryY, visibility: 'hidden' });
-      anchor.removeAttribute('data-plate-active');
-      gsap.set(image, { scale: scaleFrom, transformOrigin: 'center center' });
+      hidePlateState(state);
       return;
     }
 
@@ -244,12 +239,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
     const plates = heroSection.querySelectorAll<HTMLElement>('[data-hero-float]');
     const plateStates = buildPlateStates(plates, mobile);
     remeasurePlateEntryYs(plateStates, mobile);
-    plateStates.forEach(({ anchor, image, scaleFrom, entryY, plateId }) => {
-      if (isCenterHandoffPlate(plateId)) {
-        gsap.set(anchor, { y: 0, visibility: 'hidden' });
-        gsap.set(image, { scale: 1, transformOrigin: 'center center' });
-        return;
-      }
+    plateStates.forEach(({ anchor, image, scaleFrom, entryY }) => {
       gsap.set(anchor, { y: entryY, visibility: 'hidden' });
       gsap.set(image, { scale: scaleFrom, transformOrigin: 'center center' });
     });
@@ -264,20 +254,16 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       ? heroStoryConfig.compositionDrift.y.mobile
       : heroStoryConfig.compositionDrift.y.desktop;
     const getCenterExitY = () => resolveCenterExitY(centerMoveTarget, mobile);
-    let centerHandoffY = 0;
-    const remeasureCenterHandoffY = () => {
-      if (!centerMoveTarget) return;
-      centerHandoffY = measureCenterHandoffY(centerMoveTarget);
-    };
-    remeasureCenterHandoffY();
 
     let gallerySequenceStartProgress: number | null = null;
+    let galleryTriggeredLatched = false;
 
     const scrollDistance = getScrollDistance();
+    const gallerySeqDisabledStart = phases.galleryReveal.end + 1;
 
     gsap.set(aboutCover, { y: '100vh' });
     if (centerMoveTarget) {
-      gsap.set(centerMoveTarget, { y: 0, scale: 1, opacity: 1, transformOrigin: 'center center' });
+      gsap.set(centerMoveTarget, { y: 0, scale: 1, transformOrigin: 'center center' });
     }
     if (composition) {
       gsap.set(composition, { y: 0 });
@@ -288,6 +274,9 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
     if (introMedia) gsap.set(introMedia, { transformOrigin: 'center center' });
     if (titleBack) gsap.set(titleBack, { x: 0, transformOrigin: 'center center' });
     if (titleFront) gsap.set(titleFront, { x: 0, transformOrigin: 'center center' });
+    if (heroImageLayer) {
+      gsap.set(heroImageLayer, { opacity: 1, visibility: 'visible', pointerEvents: 'auto' });
+    }
 
     let targetProgress = 0;
     let currentProgress = 0;
@@ -298,21 +287,19 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
         gsap.set(el, { opacity: 1 - metaT, y: lerpValue(0, -18, metaT) });
       });
 
-      const galleryTriggered = isGalleryTopTriggered(galleryTriggerCard);
-
       const centerT = phaseProgress(progress, phases.centerMove.start, phases.centerMove.end);
       const exitY = getCenterExitY();
-      const centerEndY = Math.max(exitY, centerHandoffY);
+
+      root.setAttribute('data-center-move-t', centerT.toFixed(4));
 
       if (centerMoveTarget) {
         gsap.set(centerMoveTarget, {
-          y: lerpValue(0, centerEndY, easeOutCubic(centerT)),
+          y: lerpValue(0, exitY, easeOutCubic(centerT)),
           scale: lerpValue(1, centerMoveScale, centerT),
-          opacity: 1,
         });
       }
       if (subtitle) {
-        gsap.set(subtitle, { y: lerpValue(0, centerEndY, easeOutCubic(centerT)) });
+        gsap.set(subtitle, { y: lerpValue(0, exitY, easeOutCubic(centerT)) });
       }
 
       const titleT = phaseProgress(progress, phases.titleBack.start, phases.titleBack.end);
@@ -341,16 +328,106 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       const aboutT = phaseProgress(progress, phases.aboutCover.start, phases.aboutCover.end);
       gsap.set(aboutCover, { y: `${lerpValue(100, 0, aboutT)}vh` });
 
-      if (!galleryTriggered) {
-        gallerySequenceStartProgress = null;
-        applyPlateSequence(plateStates, progress, phases.galleryReveal.end + 1);
-        root.removeAttribute('data-gallery-active');
-      } else {
+      const heroExitLayer = heroImageLayer ?? galleryTriggerCard;
+      const heroExited = isHeroExitedViewport(heroExitLayer, mobile);
+
+      /** Gallery — Hero MLB가 viewport 밖으로 나간 뒤에만 시작 (top<=1px 트리거 사용 안 함) */
+      if (heroExited) {
+        galleryTriggeredLatched = true;
         if (gallerySequenceStartProgress === null) {
           gallerySequenceStartProgress = progress;
         }
+      }
+
+      if (
+        gallerySequenceStartProgress !== null &&
+        progress < gallerySequenceStartProgress - 0.005
+      ) {
+        galleryTriggeredLatched = false;
+        gallerySequenceStartProgress = null;
+      }
+
+      const galleryActive = galleryTriggeredLatched;
+
+      if (heroImageLayer) {
+        if (heroExited) {
+          gsap.set(heroImageLayer, {
+            opacity: 0,
+            visibility: 'hidden',
+            pointerEvents: 'none',
+          });
+        } else {
+          gsap.set(heroImageLayer, {
+            opacity: 1,
+            visibility: 'visible',
+            pointerEvents: 'auto',
+          });
+        }
+      }
+
+      if (!galleryActive || gallerySequenceStartProgress === null) {
+        applyPlateSequence(plateStates, progress, gallerySeqDisabledStart);
+        root.removeAttribute('data-gallery-active');
+      } else {
         applyPlateSequence(plateStates, progress, gallerySequenceStartProgress);
         root.setAttribute('data-gallery-active', 'true');
+      }
+
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('heroDiag')) {
+          const snapEl = (selector: string) => {
+            const el = document.querySelector<HTMLElement>(selector);
+            if (!el) return null;
+            const st = getComputedStyle(el);
+            const r = el.getBoundingClientRect();
+            return {
+              selector,
+              top: Math.round(r.top),
+              bottom: Math.round(r.bottom),
+              opacity: st.opacity,
+              visibility: st.visibility,
+              transform: st.transform,
+              zIndex: st.zIndex,
+              clipPath: st.clipPath !== 'none' ? st.clipPath.slice(0, 80) : 'none',
+              plateActive: el.getAttribute('data-plate-active'),
+            };
+          };
+
+          (window as unknown as { __heroDiag?: object }).__heroDiag = {
+            progress,
+            targetProgress,
+            currentProgress,
+            centerT,
+            exitY,
+            heroExited,
+            galleryActive,
+            gallerySequenceStartProgress,
+            heroExitLayerSelector: heroImageLayer
+              ? '[data-hero-image-layer]'
+              : galleryTriggerCard
+                ? '[data-intro-media]|fallback'
+                : 'none',
+            centerMoveTarget: centerMoveTarget?.getAttribute('data-hero-center-stack')
+              ? '[data-hero-center-stack]'
+              : 'other',
+            root: {
+              galleryActive: root.getAttribute('data-gallery-active'),
+              scenePinned: root.getAttribute('data-scene-pinned'),
+            },
+            elements: {
+              centerStack: snapEl('[data-hero-center-stack]'),
+              heroImageLayer: snapEl('[data-hero-image-layer]'),
+              introMedia: snapEl('[data-intro-media]'),
+              heroMlbImg: snapEl('[data-hero-image-layer] [data-intro-media] img'),
+              composition: snapEl('[data-hero-composition]'),
+              homeStory: snapEl('[data-home-story]'),
+              titleFront: snapEl('[data-hero-title-front]'),
+              plate2: snapEl('[data-hero-float][data-plate-id="2"]'),
+              aboutCover: snapEl('[data-about-cover]'),
+            },
+          };
+        }
       }
     };
 
@@ -405,8 +482,8 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
     ScrollTrigger.addEventListener('refreshInit', () => {
       setHeroScrollHeight(root);
       remeasurePlateEntryYs(plateStates, mobile);
-      remeasureCenterHandoffY();
       gallerySequenceStartProgress = null;
+      galleryTriggeredLatched = false;
       currentProgress = targetProgress;
       applyScrollProgress(currentProgress);
     });
