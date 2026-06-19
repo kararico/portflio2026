@@ -4,9 +4,10 @@ import { useRef, useLayoutEffect, useEffect } from 'react';
 import About from '@/sections/About/About';
 import Hero from '@/sections/Hero/Hero';
 import { useLenis } from '@/hooks/useLenis';
-import { refreshScrollTrigger, refreshScrollTriggerDelayed } from '@/animations/scrollTriggerRefresh';
+import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
 import { registerGsapPlugins, ScrollTrigger } from '@/utils/gsap/registerGsap';
 import { isTouchDevice } from '@/utils/scroll/scrollEnvironment';
+import { subscribePreloaderComplete } from '@/utils/preloader/subscribePreloaderComplete';
 import { initHomeStoryAnimation } from './homeStoryAnimation';
 import styles from './HomeStory.module.scss';
 
@@ -33,23 +34,24 @@ export default function HomeStory() {
       aboutCover,
     });
 
-    refreshScrollTrigger();
-
     return () => ctx.revert();
   }, []);
 
-  // Lenis/뷰포트 준비 후 ScrollTrigger 치수 재계산 (실기기 iOS/Android)
+  // Preloader 종료 후 layout unlock — 1회 refresh (구 100/400/1000ms delayed 대체)
   useEffect(() => {
-    refreshScrollTriggerDelayed(100);
-    refreshScrollTriggerDelayed(400);
-    refreshScrollTriggerDelayed(1000);
+    const cancelPreloader = subscribePreloaderComplete(() => {
+      refreshScrollTrigger();
+    });
 
-    if (!isTouchDevice()) return;
+    if (!isTouchDevice()) {
+      return cancelPreloader;
+    }
 
     const onScroll = () => ScrollTrigger.update();
     window.addEventListener('scroll', onScroll, { passive: true });
 
     return () => {
+      cancelPreloader();
       window.removeEventListener('scroll', onScroll);
     };
   }, [lenis]);
