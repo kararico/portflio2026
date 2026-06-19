@@ -18,6 +18,9 @@ interface UsePreloaderOptions {
   enabled?: boolean;
 }
 
+/** Detail → Home 등 세션 내 재방문 시 Preloader·scroll lock 재실행 방지 */
+let homePreloaderSessionComplete = false;
+
 function resolveProgress(elapsed: number): number {
   if (elapsed <= 0) return 0;
   if (elapsed >= LOAD_DURATION) return 100;
@@ -61,11 +64,24 @@ function lockPageScroll(): () => void {
   }
 
   return () => {
-    html.style.overflow = previous.htmlOverflow;
-    body.style.overflow = previous.bodyOverflow;
     html.style.paddingRight = previous.htmlPaddingRight;
     body.style.paddingRight = previous.bodyPaddingRight;
     if (header) header.style.paddingRight = previous.headerPaddingRight;
+
+    const externalScrollLock =
+      html.hasAttribute('data-mobile-menu-open') ||
+      html.hasAttribute('data-orientation-overlay-active') ||
+      html.hasAttribute('data-project-transition');
+
+    if (externalScrollLock) {
+      html.style.overflow = previous.htmlOverflow;
+      body.style.overflow = previous.bodyOverflow;
+      return;
+    }
+
+    // transition lock 등 외부 hidden snapshot 오염 시에도 scroll 해제
+    html.style.overflow = '';
+    body.style.overflow = '';
   };
 }
 
@@ -79,12 +95,14 @@ export function usePreloader({ enabled = true }: UsePreloaderOptions = {}) {
   const startRef = useRef<number | null>(null);
 
   const finishExit = useCallback(() => {
+    homePreloaderSessionComplete = true;
     setIsComplete(true);
   }, []);
 
   useEffect(() => {
     const onPageShow = (event: PageTransitionEvent) => {
       if (!event.persisted || !enabled) return;
+      homePreloaderSessionComplete = false;
       setSessionId((id) => id + 1);
     };
 
@@ -95,6 +113,13 @@ export function usePreloader({ enabled = true }: UsePreloaderOptions = {}) {
   useEffect(() => {
     if (!enabled) {
       setIsComplete(true);
+      return undefined;
+    }
+
+    if (homePreloaderSessionComplete) {
+      setIsComplete(true);
+      setIsExiting(false);
+      setProgress(100);
       return undefined;
     }
 
