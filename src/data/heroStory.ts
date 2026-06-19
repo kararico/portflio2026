@@ -33,7 +33,7 @@ export const heroStoryConfig = {
   mobileGalleryReveal: {
     /** Hero image bottom ≤ innerHeight × ratio → galleryActive (overlap) */
     heroBottomViewportRatio: 0.22,
-    /** scroll up 시 latch 해제 — threshold + px */
+    /** gallery latch 전 scroll up 시 latch 해제 — threshold + px */
     hysteresisPx: 48,
     /** galleryActive 전 plate2만 선행 reveal 시작 progress */
     plate2PreRevealProgress: 0.045,
@@ -41,6 +41,12 @@ export const heroStoryConfig = {
     plate2EntrySpanScale: 0.48,
     /** gallery 구간 scrub lag(초) — dead zone 체감 완화 */
     scrollScrub: 0.14,
+    /** gallery reveal 시작 후 scroll up release — progress delta (rect bounce 무시) */
+    releaseProgressDelta: 0.04,
+    /** visualViewport debounce(ms) — gallery reveal 중 refresh skip 시 update만 */
+    viewportRefreshDebounceMs: 200,
+    /** gallery reveal 중 visualViewport refresh skip */
+    skipViewportRefreshDuringReveal: true,
   },
   galleryReveal: {
     /** 갤러리 시퀀스 내 활성화 시점 (0–1) — center top 트리거 이후 상대 progress */

@@ -173,12 +173,34 @@ function isMobileGalleryRevealReady(layer: HTMLElement | null): boolean {
   return rect.bottom <= getMobileGalleryRevealThreshold();
 }
 
-function shouldReleaseMobileGalleryLatch(layer: HTMLElement | null): boolean {
-  if (!layer) return true;
+function shouldReleaseMobileGalleryLatch(
+  layer: HTMLElement | null,
+  committed: boolean,
+  progress: number,
+  seqStart: number | null,
+): boolean {
+  const { releaseProgressDelta, hysteresisPx } = heroStoryConfig.mobileGalleryReveal;
+
+  if (committed && seqStart !== null) {
+    if (progress < seqStart - releaseProgressDelta) {
+      return true;
+    }
+    return false;
+  }
+
+  if (!layer || seqStart === null) return false;
+
   const rect = layer.getBoundingClientRect();
-  const releaseAt =
-    getMobileGalleryRevealThreshold() + heroStoryConfig.mobileGalleryReveal.hysteresisPx;
-  return rect.bottom > releaseAt;
+  const releaseAt = getMobileGalleryRevealThreshold() + hysteresisPx;
+  return rect.bottom > releaseAt && progress < seqStart - releaseProgressDelta;
+}
+
+function resolveMobileGallerySeqStart(
+  preRevealStart: number | null,
+  progress: number,
+): number {
+  if (preRevealStart === null) return progress;
+  return Math.min(preRevealStart, progress);
 }
 
 /** Hero MLB 중심 Y ↔ viewport 중심 Y 절대 거리(px) */
@@ -392,6 +414,8 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
     let gallerySequenceStartProgress: number | null = null;
     let galleryTriggeredLatched = false;
     let plate2PreRevealStartProgress: number | null = null;
+    /** preReveal 또는 gallery latch 이후 refreshInit latch 보존 */
+    let galleryRevealCommitted = false;
 
     const scrollDistance = getScrollDistance();
     const gallerySeqDisabledStart = phases.galleryReveal.end + 1;
@@ -454,17 +478,28 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       /** Gallery latch — mobile: overlap trigger / desktop: hero fully exited */
       if (mobile) {
         if (mobileGalleryRevealReady) {
-          galleryTriggeredLatched = true;
-          if (gallerySequenceStartProgress === null) {
-            gallerySequenceStartProgress = progress;
+          if (!galleryTriggeredLatched) {
+            galleryTriggeredLatched = true;
+            galleryRevealCommitted = true;
+            gallerySequenceStartProgress = resolveMobileGallerySeqStart(
+              plate2PreRevealStartProgress,
+              progress,
+            );
           }
+          plate2PreRevealStartProgress = null;
         } else if (
           gallerySequenceStartProgress !== null &&
-          shouldReleaseMobileGalleryLatch(heroExitLayer)
+          shouldReleaseMobileGalleryLatch(
+            heroExitLayer,
+            galleryRevealCommitted,
+            progress,
+            gallerySequenceStartProgress,
+          )
         ) {
           galleryTriggeredLatched = false;
           gallerySequenceStartProgress = null;
           plate2PreRevealStartProgress = null;
+          galleryRevealCommitted = false;
         }
 
         const preRevealAt = heroStoryConfig.mobileGalleryReveal.plate2PreRevealProgress;
@@ -474,14 +509,14 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
           plate2PreRevealStartProgress === null
         ) {
           plate2PreRevealStartProgress = progress;
-        }
-        if (galleryTriggeredLatched) {
-          plate2PreRevealStartProgress = null;
+          galleryRevealCommitted = true;
         } else if (
+          !galleryTriggeredLatched &&
           plate2PreRevealStartProgress !== null &&
           progress < plate2PreRevealStartProgress - 0.005
         ) {
           plate2PreRevealStartProgress = null;
+          galleryRevealCommitted = false;
         }
       } else if (heroExited) {
         galleryTriggeredLatched = true;
@@ -598,6 +633,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
               ? Math.round(heroExitLayer.getBoundingClientRect().bottom)
               : null,
             galleryActive,
+            galleryRevealCommitted,
             plate2PreRevealActive,
             plate2PreRevealStartProgress,
             gallerySequenceStartProgress,
@@ -683,12 +719,25 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
 
     ScrollTrigger.addEventListener('refreshInit', () => {
       setHeroScrollHeight(root);
-      remeasurePlateEntryYs(plateStates, mobile);
-      gallerySequenceStartProgress = null;
-      galleryTriggeredLatched = false;
-      plate2PreRevealStartProgress = null;
+
+      const preserveGalleryLatch =
+        mobile &&
+        galleryRevealCommitted &&
+        (galleryTriggeredLatched ||
+          plate2PreRevealStartProgress !== null ||
+          gallerySequenceStartProgress !== null);
+
+      if (!preserveGalleryLatch) {
+        remeasurePlateEntryYs(plateStates, mobile);
+        gallerySequenceStartProgress = null;
+        galleryTriggeredLatched = false;
+        plate2PreRevealStartProgress = null;
+        galleryRevealCommitted = false;
+      }
+
       if (
         mobile &&
+        !preserveGalleryLatch &&
         isHeroImageNearViewportCenter(
           heroTitleImage,
           heroStoryConfig.mobileTitleHide.revealCenterTolerance,

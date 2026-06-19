@@ -3,12 +3,41 @@ import { gsap, ScrollTrigger } from '@/utils/gsap/registerGsap';
 import { refreshScrollTrigger, refreshScrollTriggerDelayed } from '@/animations/scrollTriggerRefresh';
 import { isTouchDevice } from './scrollEnvironment';
 import { syncViewportWidth } from '@/utils/viewport/syncViewportWidth';
+import { heroStoryConfig } from '@/data/heroStory';
 
 let refreshDebounceId = 0;
 
 function debouncedRefresh(ms = 200): void {
   window.clearTimeout(refreshDebounceId);
   refreshDebounceId = window.setTimeout(() => refreshScrollTrigger(), ms);
+}
+
+/** 모바일 Gallery reveal 중 — full refresh 대신 layout update만 */
+function isMobileGalleryRevealInProgress(): boolean {
+  if (!isTouchDevice()) return false;
+  if (!heroStoryConfig.mobileGalleryReveal.skipViewportRefreshDuringReveal) return false;
+
+  const homeStory = document.querySelector('[data-home-story]');
+  if (!homeStory) return false;
+
+  return (
+    homeStory.getAttribute('data-gallery-active') === 'true' ||
+    homeStory.getAttribute('data-gallery-pre-reveal') === 'true'
+  );
+}
+
+function onHardViewportChange(): void {
+  syncViewportWidth();
+  debouncedRefresh(heroStoryConfig.mobileGalleryReveal.viewportRefreshDebounceMs);
+}
+
+function onSoftViewportChange(): void {
+  syncViewportWidth();
+  if (isMobileGalleryRevealInProgress()) {
+    ScrollTrigger.update();
+    return;
+  }
+  debouncedRefresh(heroStoryConfig.mobileGalleryReveal.viewportRefreshDebounceMs);
 }
 
 function scheduleMobileRefreshes(): void {
@@ -75,18 +104,15 @@ export function bindNativeScrollToScrollTrigger(): () => void {
   window.addEventListener('scroll', onScroll, { passive: true });
   document.addEventListener('scroll', onScroll, { passive: true });
 
-  const onViewportChange = () => {
-    syncViewportWidth();
-    debouncedRefresh();
-  };
+  const onViewportChange = () => onHardViewportChange();
   window.addEventListener('resize', onViewportChange);
   window.addEventListener('orientationchange', onViewportChange);
 
   const vv = window.visualViewport;
   if (vv) {
-    vv.addEventListener('resize', onViewportChange);
+    vv.addEventListener('resize', onSoftViewportChange);
     if (isTouchDevice()) {
-      vv.addEventListener('scroll', onViewportChange);
+      vv.addEventListener('scroll', onSoftViewportChange);
     }
   }
 
@@ -107,9 +133,9 @@ export function bindNativeScrollToScrollTrigger(): () => void {
     window.removeEventListener('orientationchange', onViewportChange);
     window.removeEventListener('pageshow', onPageShow);
     if (vv) {
-      vv.removeEventListener('resize', onViewportChange);
+      vv.removeEventListener('resize', onSoftViewportChange);
       if (isTouchDevice()) {
-        vv.removeEventListener('scroll', onViewportChange);
+        vv.removeEventListener('scroll', onSoftViewportChange);
       }
     }
     unbindPoll();
