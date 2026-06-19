@@ -10,12 +10,13 @@ import styles from './CustomCursor.module.scss';
 
 interface CustomCursorProps {
   state: CursorState;
+  theme?: 'default' | 'light';
   innerRef: React.RefObject<HTMLDivElement | null>;
   labelRef: React.RefObject<HTMLSpanElement | null>;
 }
 
 const CustomCursor = forwardRef<HTMLDivElement, CustomCursorProps>(function CustomCursor(
-  { state, innerRef, labelRef },
+  { state, theme = 'default', innerRef, labelRef },
   ref,
 ) {
   const expanded = isExpandedCursorState(state);
@@ -27,6 +28,7 @@ const CustomCursor = forwardRef<HTMLDivElement, CustomCursorProps>(function Cust
       className={styles.cursor}
       aria-hidden="true"
       data-cursor-state={state}
+      data-cursor-theme={theme}
     >
       <div
         ref={innerRef}

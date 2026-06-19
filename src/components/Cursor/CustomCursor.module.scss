@@ -35,3 +35,20 @@
   line-height: 1;
   user-select: none;
 }
+
+/* Footer(Contact) 등 어두운 배경 — cursor-theme-light */
+.cursor[data-cursor-theme='light'] {
+  .inner {
+    background-color: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .innerExpanded {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.92);
+  }
+
+  .label {
+    color: #111;
+  }
+}

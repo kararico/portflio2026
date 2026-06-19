@@ -141,7 +141,7 @@ export const siteConfig = {
     sectionId: 'experience',
     sectionLabel: 'Experience',
     sectionDesc:
-      '2013년부터 현재까지 구축 프로젝트에서는 메인과 핵심 사용자 경험 영역을, 운영 프로젝트에서는 브랜드 서비스의 운영·고도화와 퍼블리싱 리드를 담당해 온 Web Publisher & UI Engineer 경력',
+      '2013년부터 현재까지 구축 프로젝트에서는 메인과 핵심 사용자 경험 영역을,\n운영 프로젝트에서는 브랜드 서비스의 운영·고도화와 퍼블리싱 리드를 담당해 온 Web Publisher & UI Engineer 경력',
     projectsLabel: 'Projects',
     stackLabel: 'Stack',
   },

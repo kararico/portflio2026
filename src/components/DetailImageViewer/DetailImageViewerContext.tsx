@@ -9,6 +9,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { createPortal } from 'react-dom';
 import DetailImageViewer from './DetailImageViewer';
 
 export interface DetailImageViewerPayload {
@@ -37,6 +38,7 @@ interface DetailImageViewerProviderProps {
 
 export function DetailImageViewerProvider({ children }: DetailImageViewerProviderProps) {
   const [active, setActive] = useState<DetailImageViewerPayload | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   const openViewer = useCallback((payload: DetailImageViewerPayload) => {
     if (!payload.src) return;
@@ -48,16 +50,23 @@ export function DetailImageViewerProvider({ children }: DetailImageViewerProvide
   }, []);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (!active) return;
 
+    const root = document.documentElement;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') closeViewer();
     };
 
+    root.setAttribute('data-detail-image-viewer-open', 'true');
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', onKeyDown);
 
     return () => {
+      root.removeAttribute('data-detail-image-viewer-open');
       document.body.style.overflow = '';
       window.removeEventListener('keydown', onKeyDown);
     };
@@ -71,7 +80,12 @@ export function DetailImageViewerProvider({ children }: DetailImageViewerProvide
   return (
     <DetailImageViewerContext.Provider value={value}>
       {children}
-      {active ? <DetailImageViewer src={active.src} alt={active.alt} onClose={closeViewer} /> : null}
+      {mounted && active
+        ? createPortal(
+            <DetailImageViewer src={active.src} alt={active.alt} onClose={closeViewer} />,
+            document.body,
+          )
+        : null}
     </DetailImageViewerContext.Provider>
   );
 }

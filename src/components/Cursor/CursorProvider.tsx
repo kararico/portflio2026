@@ -39,6 +39,8 @@ export default function CursorProvider({ children }: CursorProviderProps) {
 
   const [state, setState] = useState<CursorState>(CURSOR_STATES.DEFAULT);
   const [isActive, setIsActive] = useState(false);
+  const [isLightTheme, setIsLightTheme] = useState(false);
+  const pointerRef = useRef({ x: 0, y: 0 });
 
   const applyState = useCallback((next: CursorState) => {
     const normalized = normalizeCursorState(next);
@@ -62,7 +64,19 @@ export default function CursorProvider({ children }: CursorProviderProps) {
   useEffect(() => {
     applyState(CURSOR_STATES.DEFAULT);
     hasMovedRef.current = false;
+    setIsLightTheme(false);
+    document.documentElement.classList.remove('cursor-theme-light');
   }, [pathname, applyState]);
+
+  const syncContactCursorTheme = useCallback((x: number, y: number) => {
+    if (typeof document === 'undefined') return;
+
+    const target = document.elementFromPoint(x, y);
+    const inContact = Boolean(target?.closest('[data-contact-section]'));
+
+    setIsLightTheme((prev) => (prev === inContact ? prev : inContact));
+    document.documentElement.classList.toggle('cursor-theme-light', inContact);
+  }, []);
 
   useEffect(() => {
     return registerCursorListener(applyState);
@@ -81,6 +95,10 @@ export default function CursorProvider({ children }: CursorProviderProps) {
     const ySetter = gsap.quickTo(cursor, 'y', { duration: 0.45, ease: 'power3.out' });
 
     const onMouseMove = (event: MouseEvent) => {
+      pointerRef.current.x = event.clientX;
+      pointerRef.current.y = event.clientY;
+      syncContactCursorTheme(event.clientX, event.clientY);
+
       xSetter(event.clientX);
       ySetter(event.clientY);
 
@@ -94,25 +112,38 @@ export default function CursorProvider({ children }: CursorProviderProps) {
       const target = event.target;
       if (!(target instanceof Element)) return;
 
+      syncContactCursorTheme(event.clientX, event.clientY);
+
       const el = target.closest('[data-cursor-style]');
       applyState(normalizeCursorState(el?.getAttribute('data-cursor-style')));
     };
 
+    const onScroll = () => {
+      if (!hasMovedRef.current) return;
+      const { x, y } = pointerRef.current;
+      syncContactCursorTheme(x, y);
+    };
+
     const onMouseLeave = () => {
       hasMovedRef.current = false;
+      setIsLightTheme(false);
+      document.documentElement.classList.remove('cursor-theme-light');
       gsap.to(cursor, { opacity: 0, duration: 0.2, ease: 'power2.out' });
     };
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
     document.addEventListener('mouseover', onMouseOver, { passive: true });
     document.documentElement.addEventListener('mouseleave', onMouseLeave);
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('scroll', onScroll);
       document.removeEventListener('mouseover', onMouseOver);
       document.documentElement.removeEventListener('mouseleave', onMouseLeave);
+      document.documentElement.classList.remove('cursor-theme-light');
     };
-  }, [isActive, applyState]);
+  }, [isActive, applyState, syncContactCursorTheme]);
 
   useLayoutEffect(() => {
     if (!isActive || typeof window === 'undefined') return;
@@ -153,6 +184,7 @@ export default function CursorProvider({ children }: CursorProviderProps) {
         <CustomCursor
           ref={cursorRef}
           state={state}
+          theme={isLightTheme ? 'light' : 'default'}
           innerRef={innerRef}
           labelRef={labelRef}
         />

@@ -65,7 +65,12 @@ export default function WorkDetailHero({ project }: WorkDetailHeroProps) {
               </p>
             ) : null}
 
-            <p className={styles.heroIntro} data-detail-hero-reveal data-reveal-item>
+            <p
+              className={styles.heroIntro}
+              data-detail-hero-reveal
+              data-reveal-item
+              lang={hasKoreanText(getDetailHeroIntro(project)) ? 'ko' : undefined}
+            >
               {getDetailHeroIntro(project)}
             </p>
           </div>

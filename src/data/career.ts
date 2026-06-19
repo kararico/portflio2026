@@ -8,23 +8,28 @@ export const careerEntries: CareerEntry[] = [
     role: 'Web Publisher & UI Engineer',
     projects: [
       {
-        title: 'Starbucks Partner Hub — 메인·핵심 업무 모듈 UI 및 공통 UI 구조 구축',
+        name: 'Starbucks Partner Hub',
+        description: '업무 모듈·공통 UI 설계',
         slug: 'starbucks-employee-platform',
       },
       {
-        title: 'Hyundai EZWEL — 메인·핵심 화면 UI 구축, PL·퍼블리싱 총괄',
+        name: 'Hyundai EZWEL',
+        description: '퍼블리싱 총괄·PL',
         slug: 'hyundai-ezwel',
       },
       {
-        title: 'Starbucks Siren119 — 핵심 모바일 UX 및 고난도 인터랙션 구현',
+        name: 'Starbucks Siren119',
+        description: '모바일 UX·인터랙션 구현',
         slug: 'starbucks-siren119',
       },
       {
-        title: 'MLB Korea — Publishing Lead, 메인·프로모션 UI 운영·고도화',
+        name: 'MLB Korea',
+        description: '퍼블리싱 리드·운영 고도화',
         slug: 'mlb-korea',
       },
       {
-        title: 'Discovery Expedition — PLP·PDP·룩북 핵심 커머스 화면 운영·UI 고도화',
+        name: 'Discovery Expedition',
+        description: '커머스 UI 운영·고도화',
         slug: 'discovery-expedition',
       },
     ],
@@ -37,15 +42,18 @@ export const careerEntries: CareerEntry[] = [
     role: 'Web Publisher & UI Engineer',
     projects: [
       {
-        title: 'W Concept US — 영문 쇼핑몰 PDP·Checkout·Account 핵심 화면 UI 구축',
+        name: 'W Concept US',
+        description: '글로벌 PDP·Checkout UI',
         slug: 'wconcept-us',
       },
       {
-        title: 'GUUD — 메인·핵심 사용자 경험 영역 UI 구축',
+        name: 'GUUD',
+        description: '핵심 UX 영역 UI 설계',
         slug: 'guud',
       },
       {
-        title: 'Casamia — 메인·브랜드·제품 핵심 페이지 UI 구축',
+        name: 'Casamia',
+        description: '브랜드·제품 페이지 UI',
         slug: 'casamia',
       },
     ],
@@ -57,11 +65,29 @@ export const careerEntries: CareerEntry[] = [
     company: '애드쿠아인터렉티브',
     role: 'Web Publisher',
     projects: [
-      { title: '삼성화재 프로포즈', slug: 'samsung-proposal' },
-      { title: '불스원', slug: 'bullsone' },
-      { title: '좋은사람들', slug: 'goodpeople' },
-      { title: '호두 잉글리시' },
-      { title: '팸퍼스' },
+      {
+        name: '삼성화재 프로포즈',
+        description: '보험 가입·추천 UI',
+        slug: 'samsung-proposal',
+      },
+      {
+        name: '불스원',
+        description: '브랜드·제품 페이지 UI',
+        slug: 'bullsone',
+      },
+      {
+        name: '좋은사람들',
+        description: '쇼핑몰 핵심 화면 UI',
+        slug: 'goodpeople',
+      },
+      {
+        name: '호두 잉글리시',
+        description: '영어 학습 서비스 UI',
+      },
+      {
+        name: '팸퍼스',
+        description: '캠페인·프로모션 페이지',
+      },
     ],
     stack: ['HTML', 'CSS3', 'JavaScript', 'jQuery', 'Vue', 'SCSS'],
   },
@@ -70,7 +96,20 @@ export const careerEntries: CareerEntry[] = [
     period: '2016 — 2017',
     company: '피싱트리',
     role: 'Web Publisher',
-    projects: [{ title: 'LG Signature' }, { title: 'Lineage M' }, { title: 'CARBY' }],
+    projects: [
+      {
+        name: 'LG Signature',
+        description: '프리미엄 브랜드 사이트 UI',
+      },
+      {
+        name: 'Lineage M',
+        description: '프로모션·이벤트 페이지',
+      },
+      {
+        name: 'CARBY',
+        description: '자동차 서비스 웹 UI',
+      },
+    ],
     stack: ['HTML5', 'CSS3', 'jQuery', 'JavaScript', 'Responsive Web'],
   },
   {
@@ -78,7 +117,20 @@ export const careerEntries: CareerEntry[] = [
     period: '2013 — 2014',
     company: '해리코리아',
     role: 'Web Publisher',
-    projects: [{ title: '트레블 앤쿡' }, { title: '삼육지' }, { title: '펀비어킹' }],
+    projects: [
+      {
+        name: '트레블 앤쿡',
+        description: '여행·레시피 콘텐츠 UI',
+      },
+      {
+        name: '삼육지',
+        description: '출판 브랜드 사이트 UI',
+      },
+      {
+        name: '펀비어킹',
+        description: '프랜차이즈 브랜드 사이트 UI',
+      },
+    ],
     stack: ['HTML5', 'CSS3', 'jQuery', 'Photoshop'],
   },
 ];

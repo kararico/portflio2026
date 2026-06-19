@@ -4,6 +4,7 @@ import {
   type DetailStorySection,
 } from '@/utils/detailStorySequence';
 import { getProjectDetail, getProjectKeyFeatures } from '@/utils/detailStoryContent';
+import { hasKoreanText } from '@/utils/projectTitle';
 import { siteConfig } from '@/data/site';
 import {
   slotToImageLayout,
@@ -33,6 +34,7 @@ function StoryImage({
     <figure
       className={`${styles.storyImage} ${slotClass}`}
       data-story-image
+      data-story-slot={item.slot}
       data-gallery-item
       data-cursor-style="view"
     >
@@ -86,7 +88,7 @@ function StoryDetailContent({ project }: { project: Project }) {
     <div className={styles.storyDetail} data-story-text data-detail-reveal>
       <div className={styles.detailChapterBody}>
         <header className={styles.detailChapterHeader}>
-          <h2 className={styles.detailChapterTitle} data-reveal-item>
+          <h2 className={styles.detailLabel} data-reveal-item>
             Case Study
           </h2>
         </header>
@@ -95,7 +97,11 @@ function StoryDetailContent({ project }: { project: Project }) {
           <h3 className={styles.detailLabel} data-reveal-item>
             {labels.overviewLabel}
           </h3>
-          <p className={styles.detailLeadProse} data-reveal-item>
+          <p
+            className={styles.detailLeadProse}
+            data-reveal-item
+            lang={hasKoreanText(detail.overview) ? 'ko' : undefined}
+          >
             {detail.overview}
           </p>
         </section>
@@ -105,7 +111,11 @@ function StoryDetailContent({ project }: { project: Project }) {
             <h3 className={styles.detailLabel} data-reveal-item>
               {labels.roleLabel}
             </h3>
-            <p className={styles.detailRole} data-reveal-item>
+            <p
+              className={styles.detailRole}
+              data-reveal-item
+              lang={hasKoreanText(detail.role) ? 'ko' : undefined}
+            >
               {detail.role}
             </p>
           </section>
@@ -130,7 +140,12 @@ function StoryDetailContent({ project }: { project: Project }) {
           </h3>
           <ul className={styles.contributionGrid}>
             {detail.contributions.map((item) => (
-              <li key={item} className={styles.contributionCard} data-reveal-item>
+              <li
+                key={item}
+                className={styles.contributionCard}
+                data-reveal-item
+                lang={hasKoreanText(item) ? 'ko' : undefined}
+              >
                 {item}
               </li>
             ))}
@@ -141,7 +156,11 @@ function StoryDetailContent({ project }: { project: Project }) {
           <h3 className={styles.detailLabel} data-reveal-item>
             {labels.outcomeLabel}
           </h3>
-          <blockquote className={styles.outcomeStatement} data-reveal-item>
+          <blockquote
+            className={styles.outcomeStatement}
+            data-reveal-item
+            lang={hasKoreanText(detail.outcome) ? 'ko' : undefined}
+          >
             {detail.outcome}
           </blockquote>
         </section>

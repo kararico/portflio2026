@@ -12,13 +12,13 @@
 }
 
 .topGrid {
-  padding-bottom: var(--space-2xl);
+  padding-bottom: var(--space-xl);
   border-bottom: 1px solid var(--footer-border);
 }
 
 .sectionLabel {
   display: block;
-  margin-bottom: var(--space-md);
+  margin-bottom: clamp(2rem, 2.5vw, 2.5rem);
   font-size: var(--text-xs);
   font-weight: var(--weight-light);
   text-transform: uppercase;
@@ -31,7 +31,7 @@
 }
 
 .ctaLead {
-  margin-bottom: var(--space-sm);
+  margin: 0 0 clamp(1rem, 1.5vw, 1.5rem);
   font-size: var(--text-xs);
   font-weight: var(--weight-light);
   text-transform: uppercase;
@@ -54,15 +54,16 @@
 }
 
 .ctaHeadlineAccent {
+  margin-top: clamp(0.5rem, 0.65vw, 0.75rem);
   font-style: italic;
   opacity: 0.72;
 }
 
 .ctaDesc {
-  max-width: 28rem;
-  margin-top: var(--space-md);
-  font-size: var(--text-md);
-  line-height: var(--leading-relaxed);
+  max-width: min(32.5rem, 100%);
+  margin: clamp(3.5rem, 4vw, 4.5rem) 0 0;
+  font-size: var(--text-base);
+  line-height: 1.7;
   color: var(--footer-muted);
   text-wrap: pretty;
 }
@@ -141,29 +142,9 @@
 }
 
 @media (min-width: 1024px) {
-  .topGrid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
-    gap: clamp(2rem, 3.5vw, 3rem);
-    align-items: end;
-  }
-
-  .ctaBlock {
-    max-width: none;
-  }
-
   .ctaHeadline {
     font-size: clamp(3rem, 4.5vw, var(--text-3xl));
     max-width: 12ch;
-  }
-
-  .ctaDesc {
-    max-width: min(22rem, 100%);
-    margin-top: 0;
-    margin-inline: 0 auto;
-    padding-left: clamp(0.5rem, 2vw, 1.5rem);
-    text-align: left;
-    justify-self: start;
   }
 
   .contactBlock {
@@ -204,9 +185,7 @@
   }
 
   .ctaDesc {
-    font-size: var(--text-base);
-    line-height: 1.75;
-    padding-left: 0;
+    line-height: 1.7;
   }
 
   .contactBlock {

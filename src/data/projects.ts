@@ -243,38 +243,6 @@ const projectSeeds: ProjectSeed[] = [
     stack: ['HTML', 'CSS', 'JavaScript', 'jQuery', 'SCSS'],
   },
   {
-    id: '6',
-    slug: 'samsung-fire',
-    title: 'Samsung Fire',
-    subtitle: '삼성화재',
-    year: '2018',
-    client: 'Samsung Fire & Marine Insurance',
-    platform: 'Financial Web',
-    role: 'Web Publisher',
-    contribution: '70%',
-    description: '삼성화재 디지털 서비스 UI 개발',
-    thumbnail: buildProductThumbnailPath('samsung-fire'),
-    homeHero: buildHomeHeroPath('samsung-fire'),
-    images: buildProjectImages('samsung-fire'),
-    heroImage: { position: 'center' },
-    overview:
-      '삼성화재 디지털 채널의 보험 상품 안내·가입 플로우 UI를 개발했습니다. 금융 규제와 접근성 요건을 충족하면서도, 복잡한 보험 정보를 직관적으로 전달하는 인터페이스 설계가 핵심이었습니다.',
-    objectives:
-      '가입 전환율 개선, 복잡한 약관·혜택 정보의 단계적 disclosure, 금융권 UI 가이드 준수.',
-    responsibilities: [
-      '상품 소개·가입·마이페이지 UI 개발',
-      '폼 유효성 검증 및 에러 핸들링 UX',
-      '금융권 디자인 시스템 컴포넌트 적용',
-      '접근성·사용성 테스트 대응',
-    ],
-    achievements: [
-      '가입 플로우 단계 최적화로 이탈률 15% 감소',
-      '접근성 심사 기준 충족 UI 패턴 라이브러리 구축',
-      '공통 폼 컴포넌트로 개발 생산성 향상',
-    ],
-    stack: ['React', 'JavaScript', 'SCSS', 'Redux'],
-  },
-  {
     id: '7',
     slug: 'bullsone',
     title: 'Bullsone',
@@ -354,7 +322,6 @@ const WORKS_INDEX_SLUG_ORDER = [
   'guud',
   'casamia',
   'goodpeople',
-  'samsung-fire',
   'bullsone',
 ] as const;
 

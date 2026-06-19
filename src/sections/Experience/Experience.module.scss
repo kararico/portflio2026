@@ -26,13 +26,16 @@
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 8vw, var(--text-3xl));
   line-height: var(--leading-tight);
-  margin-bottom: var(--space-md);
+  margin-bottom: clamp(1.75rem, 3vw, 2.5rem);
 }
 
 .sectionDesc {
   font-size: var(--text-md);
   line-height: var(--leading-relaxed);
   color: var(--color-text-secondary);
+  white-space: pre-line;
+  word-break: keep-all;
+  text-wrap: pretty;
 }
 
 .timeline {
@@ -59,10 +62,30 @@
 }
 
 .period {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 4vw, var(--text-xl));
   line-height: var(--leading-snug);
   white-space: nowrap;
+}
+
+.periodStart,
+.periodEnd {
+  display: block;
+  font-weight: var(--weight-regular);
+  color: var(--color-text);
+}
+
+.periodSep {
+  display: block;
+  font-size: 0.72em;
+  line-height: 1;
+  color: var(--color-muted);
+  letter-spacing: 0.02em;
+  user-select: none;
 }
 
 .index {
@@ -89,8 +112,10 @@
 
 .company {
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 4vw, var(--text-lg));
+  font-size: clamp(1.5rem, 3.5vw, 1.575rem);
+  font-weight: var(--weight-semibold);
   line-height: var(--leading-normal);
+  color: var(--color-text);
 }
 
 .role {
@@ -123,21 +148,52 @@
 .projectList {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: var(--space-md);
   max-width: 28rem;
+  list-style: none;
+}
 
-  li {
-    font-size: var(--text-base);
-    line-height: var(--leading-relaxed);
-    padding-left: 1.2em;
-    position: relative;
+.projectItem {
+  margin: 0;
+  padding: 0;
+}
 
-    &::before {
-      content: '—';
-      position: absolute;
-      left: 0;
-      color: var(--color-muted);
-    }
+.projectEntry,
+.projectLink {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.projectName {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+  color: var(--color-muted);
+}
+
+.projectDesc {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-regular);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.005em;
+}
+
+/* 구 경력 — 프로젝트명은 보조, 설명 가독성 우선 */
+.item[data-career-id='adcqua'],
+.item[data-career-id='phishingtree'],
+.item[data-career-id='hyeri-korea'] {
+  .projectName {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-regular);
+    color: var(--color-muted);
+  }
+
+  .projectDesc {
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--color-text-secondary);
   }
 }
 
@@ -202,7 +258,7 @@
 
   .periodCol {
     flex-direction: row;
-    align-items: baseline;
+    align-items: flex-end;
     justify-content: space-between;
     gap: var(--space-md);
   }

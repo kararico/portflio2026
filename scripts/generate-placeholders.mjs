@@ -17,7 +17,6 @@ const PROJECTS = [
   { slug: 'starbucks-siren119', detailCount: 3, c1: '#1a4d35', c2: '#2d6a4f' },
   { slug: 'wconcept-us', detailCount: 4, c1: '#0a0a0a', c2: '#4a4a4a' },
   { slug: 'casamia', detailCount: 2, c1: '#6b5a45', c2: '#b8a088' },
-  { slug: 'samsung-fire', detailCount: 2, c1: '#0f2080', c2: '#0066bb' },
   { slug: 'bullsone', detailCount: 6, c1: '#1a1a2e', c2: '#4a4a6a' },
   { slug: 'goodpeople', detailCount: 7, c1: '#994433', c2: '#cc8866' },
 ];

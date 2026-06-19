@@ -42,6 +42,10 @@ html[data-mobile-menu-open] #main-transition {
   visibility: hidden;
 }
 
+html[data-detail-image-viewer-open] {
+  overflow: hidden;
+}
+
 html[data-orientation-overlay-active] {
   overflow: hidden;
 }

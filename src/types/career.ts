@@ -1,5 +1,6 @@
 export interface CareerProject {
-  title: string;
+  name: string;
+  description: string;
   /** 포트폴리오 상세 페이지 slug — 없으면 텍스트만 표시 */
   slug?: string;
 }

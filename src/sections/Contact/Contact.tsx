@@ -6,7 +6,7 @@ export default function Contact() {
   const { contact, position, footer, resume } = siteConfig;
 
   return (
-    <footer className={styles.footer} id="contact">
+    <footer className={styles.footer} id="contact" data-contact-section>
       <div className="container-fluid">
         <div className={styles.topGrid}>
           <header className={styles.ctaBlock}>
@@ -18,9 +18,8 @@ export default function Contact() {
                 {footer.headlineLines[1]}
               </span>
             </h2>
+            <p className={styles.ctaDesc}>{footer.description}</p>
           </header>
-
-          <p className={styles.ctaDesc}>{footer.description}</p>
         </div>
 
         <div className={styles.contactBlock}>

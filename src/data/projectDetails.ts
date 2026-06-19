@@ -159,28 +159,6 @@ export const projectDetailsBySlug: Record<string, ProjectDetailContent> = {
       '운영 친화 구조',
     ],
   },
-  'samsung-fire': {
-    overview:
-      '삼성화재 디지털 채널의 보험 상품 안내 및 가입 플로우 UI 개발 프로젝트입니다. 금융권 UI 가이드와 접근성 요건을 반영했습니다.',
-    role: 'Web Publisher',
-    contributions: [
-      '상품 소개·가입·마이페이지 UI 개발',
-      '폼 유효성 검증 및 에러 처리 UX 구현',
-      '금융권 디자인 시스템 컴포넌트 적용',
-      '접근성·사용성 테스트 대응',
-      '공통 폼 컴포넌트 정리',
-    ],
-    techStack: ['React', 'JavaScript', 'SCSS', 'Redux'],
-    outcome:
-      '복잡한 보험 정보를 단계별로 전달하는 가입 플로우 UI를 구현하고, 금융권 심사 기준에 맞는 패턴을 화면 단위로 정리했습니다.',
-    keyFeatures: [
-      '가입 플로우 UX',
-      '금융 UI 가이드',
-      '접근성 대응',
-      '폼 컴포넌트',
-      '단계별 정보 전달',
-    ],
-  },
   bullsone: {
     overview:
       '자동차 관리 브랜드 불스원 웹사이트 UI 개발 프로젝트입니다. 제품 정보와 브랜드 콘텐츠를 효과적으로 전달하는 페이지 구조와 반응형 UI를 구현했습니다.',

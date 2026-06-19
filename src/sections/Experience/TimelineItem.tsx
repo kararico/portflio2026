@@ -8,8 +8,17 @@ interface TimelineItemProps {
   index: number;
 }
 
+function parseCareerPeriod(period: string): { start: string; end?: string } {
+  const parts = period.split(/\s*—\s*/);
+  if (parts.length < 2) {
+    return { start: period.trim() };
+  }
+  return { start: parts[0].trim(), end: parts.slice(1).join(' — ').trim() };
+}
+
 export default function TimelineItem({ entry, index }: TimelineItemProps) {
   const { projectsLabel, stackLabel } = siteConfig.experience;
+  const { start: periodStart, end: periodEnd } = parseCareerPeriod(entry.period);
 
   return (
     <article
@@ -19,7 +28,15 @@ export default function TimelineItem({ entry, index }: TimelineItemProps) {
     >
       <div className={styles.periodCol}>
         <time className={styles.period} dateTime={entry.period} data-reveal-item>
-          {entry.period}
+          <span className={styles.periodStart}>{periodStart}</span>
+          {periodEnd ? (
+            <>
+              <span className={styles.periodSep} aria-hidden="true">
+                —
+              </span>
+              <span className={styles.periodEnd}>{periodEnd}</span>
+            </>
+          ) : null}
         </time>
         <span className={styles.index} aria-hidden="true" data-reveal-item>
           {String(index + 1).padStart(2, '0')}
@@ -44,21 +61,29 @@ export default function TimelineItem({ entry, index }: TimelineItemProps) {
             {projectsLabel}
           </span>
           <ul className={styles.projectList}>
-            {entry.projects.map((project) => (
-              <li key={project.title} data-reveal-item>
-                {project.slug ? (
-                  <Link
-                    href={`/work/${project.slug}`}
-                    className={styles.projectLink}
-                    data-cursor-style="small"
-                  >
-                    {project.title}
-                  </Link>
-                ) : (
-                  <span>{project.title}</span>
-                )}
-              </li>
-            ))}
+            {entry.projects.map((project) => {
+              const key = project.slug ?? `${entry.id}-${project.name}`;
+
+              return (
+                <li key={key} className={styles.projectItem} data-reveal-item>
+                  {project.slug ? (
+                    <Link
+                      href={`/work/${project.slug}`}
+                      className={styles.projectLink}
+                      data-cursor-style="small"
+                    >
+                      <span className={styles.projectName}>{project.name}</span>
+                      <span className={styles.projectDesc}>{project.description}</span>
+                    </Link>
+                  ) : (
+                    <div className={styles.projectEntry}>
+                      <span className={styles.projectName}>{project.name}</span>
+                      <span className={styles.projectDesc}>{project.description}</span>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
 

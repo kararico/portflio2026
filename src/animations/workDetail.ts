@@ -1,23 +1,116 @@
-import { gsap } from '@/utils/gsap/registerGsap';
+import { gsap, ScrollTrigger } from '@/utils/gsap/registerGsap';
 import { registerGsapPlugins } from '@/utils/gsap/registerGsap';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
+import type { EditorialSlotType } from '@/utils/detailEditorialLayout';
+import { shouldUseNativeScroll } from '@/utils/scroll/scrollEnvironment';
 
-/** Septiembre garden.html — ease-out-cubic 근사 */
+/** WorkDetail.module.scss mobile gallery breakpoint */
+const MOBILE_GALLERY_MQL = '(max-width: 767px)';/** Septiembre garden.html — ease-out-cubic 근사 */
 const EASE_OUT = 'power2.out';
 const EASE_POWER3 = 'power3.out';
 
-/** Fade in up: opacity + translateY (~0.8s) */
 const REVEAL_DURATION = 0.8;
 const REVEAL_Y = 48;
 const REVEAL_START = 'top 90%';
 const NEXT_REVEAL_Y = 48;
 
-function isTouchDevice(): boolean {
-  return window.matchMedia('(hover: none), (pointer: coarse)').matches;
+type StoryRevealVariant = 'fadeUp' | 'fadeScale' | 'scaleIn' | 'slideLeft' | 'slideRight' | 'none';
+
+interface SlotRevealConfig {
+  variant: StoryRevealVariant;
+  y?: number;
+  scale?: number;
+  delay?: number;
 }
 
-function bindMediaParallax(item: HTMLElement, media: HTMLElement, strength = 0.14): void {
+const SLOT_REVEAL: Record<EditorialSlotType, SlotRevealConfig> = {
+  planLeft: { variant: 'fadeUp', y: 48 },
+  tallRight: { variant: 'fadeScale', y: 32, scale: 1.08 },
+  bannerOverlap: { variant: 'scaleIn', scale: 1.08 },
+  greenhouseLeft: { variant: 'none' },
+  ceilingRight: { variant: 'fadeUp', y: 24 },
+  duoLeft: { variant: 'slideLeft' },
+  duoRight: { variant: 'slideRight', delay: 0.12 },
+};
+
+/** Editorial detail — visible band only, subtle depth */
+const PARALLAX_START = 'top 88%';
+const PARALLAX_END = 'bottom 12%';
+const PARALLAX_SCRUB = 0.55;
+const PARALLAX_STRENGTH = 0.07;
+
+/** null = parallax off */
+const SLOT_PARALLAX: Record<EditorialSlotType, number | null> = {
+  planLeft: PARALLAX_STRENGTH,
+  tallRight: PARALLAX_STRENGTH,
+  bannerOverlap: null,
+  greenhouseLeft: null,
+  ceilingRight: null,
+  duoLeft: null,
+  duoRight: null,
+};
+
+const STATIC_IMAGE_COUNT = 1;
+const PARALLAX_IMAGE_COUNT = 2;
+
+/** CSS mobile stack(767px) + touch — DevTools responsive 포함 */
+function isMobileGalleryContext(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia(MOBILE_GALLERY_MQL).matches || shouldUseNativeScroll();
+}
+
+function parseStorySlot(item: HTMLElement): EditorialSlotType | null {
+  const slot = item.dataset.storySlot;
+  if (slot && slot in SLOT_REVEAL) {
+    return slot as EditorialSlotType;
+  }
+  return null;
+}
+
+/** Mobile — Gallery ScrollTrigger/reveal/parallax 없이 즉시 visible */
+function ensureStoryImagesVisible(storyImages: NodeListOf<HTMLElement>): void {
+  storyImages.forEach((item) => {
+    ScrollTrigger.getAll().forEach((trigger) => {
+      if (trigger.trigger === item) trigger.kill();
+    });
+
+    gsap.killTweensOf(item);
+
+    const media = item.querySelector<HTMLElement>('[data-detail-media-inner]');
+    if (media) {
+      gsap.killTweensOf(media);
+    }
+
+    gsap.set(item, { opacity: 1, x: 0, y: 0, clearProps: 'transform,opacity' });
+
+    if (media) {
+      gsap.set(media, { scale: 1, x: 0, y: 0, clearProps: 'transform' });
+    }
+  });
+}
+
+function initDesktopStoryGallery(storyImages: NodeListOf<HTMLElement>): void {
+  storyImages.forEach((item) => {
+    const media = item.querySelector<HTMLElement>('[data-detail-media-inner]');
+    const slot = parseStorySlot(item);
+    const revealConfig = slot ? SLOT_REVEAL[slot] : { variant: 'fadeUp' as const, y: REVEAL_Y };
+
+    bindStoryImageReveal(item, media, revealConfig);
+
+    if (media && slot) {
+      const parallaxStrength = SLOT_PARALLAX[slot];
+      if (parallaxStrength !== null) {
+        bindMediaParallax(item, media, parallaxStrength);
+      }
+    }
+  });
+}
+function bindMediaParallax(item: HTMLElement, media: HTMLElement, strength: number): void {
   const travel = () => window.innerHeight * strength;
+
+  const resetParallax = () => {
+    gsap.set(media, { y: 0 });
+  };
 
   gsap.fromTo(
     media,
@@ -27,9 +120,11 @@ function bindMediaParallax(item: HTMLElement, media: HTMLElement, strength = 0.1
       ease: 'none',
       scrollTrigger: {
         trigger: item,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 0.85,
+        start: PARALLAX_START,
+        end: PARALLAX_END,
+        scrub: PARALLAX_SCRUB,
+        onLeave: resetParallax,
+        onLeaveBack: resetParallax,
       },
     },
   );
@@ -55,6 +150,62 @@ function bindRevealUp(
   });
 }
 
+function bindStoryImageReveal(
+  item: HTMLElement,
+  media: HTMLElement | null,
+  config: SlotRevealConfig,
+): void {
+  const { variant, y = REVEAL_Y, scale = 1.08, delay = 0 } = config;
+  if (variant === 'none') return;
+
+  const scrollTrigger = {
+    trigger: item,
+    start: REVEAL_START,
+    once: true as const,
+  };
+
+  const tweenBase = {
+    duration: REVEAL_DURATION,
+    ease: EASE_OUT,
+    delay,
+    scrollTrigger,
+  };
+
+  switch (variant) {
+    case 'fadeUp':
+      gsap.from(item, { opacity: 0, y, ...tweenBase });
+      break;
+    case 'fadeScale':
+      gsap.from(item, { opacity: 0, y, ...tweenBase });
+      if (media) {
+        gsap.from(media, {
+          scale,
+          transformOrigin: 'center center',
+          ...tweenBase,
+        });
+      }
+      break;
+    case 'scaleIn':
+      gsap.from(item, { opacity: 0, ...tweenBase });
+      if (media) {
+        gsap.from(media, {
+          scale,
+          transformOrigin: 'center center',
+          ...tweenBase,
+        });
+      }
+      break;
+    case 'slideLeft':
+      gsap.from(item, { opacity: 0, x: -56, ...tweenBase });
+      break;
+    case 'slideRight':
+      gsap.from(item, { opacity: 0, x: 56, ...tweenBase });
+      break;
+    default:
+      break;
+  }
+}
+
 export function initWorkDetailAnimation(
   root: HTMLElement,
   options?: { skipHeroReveal?: boolean },
@@ -62,26 +213,17 @@ export function initWorkDetailAnimation(
   registerGsapPlugins();
 
   return gsap.context(() => {
-    const touch = isTouchDevice();
+    const mobileGallery = isMobileGalleryContext();
 
     const storyImages = root.querySelectorAll<HTMLElement>('[data-story-image]');
     const storyTexts = root.querySelectorAll<HTMLElement>('[data-story-text]');
     const revealBlocks = root.querySelectorAll<HTMLElement>('[data-detail-reveal]');
 
-    storyImages.forEach((item, index) => {
-      const media = item.querySelector<HTMLElement>('[data-detail-media-inner]');
-      const isOverlap = item.closest('[data-story-overlap="true"]') !== null;
-
-      bindRevealUp(item, item, {
-        y: isOverlap ? 64 : REVEAL_Y,
-        delay: index * 0.04,
-      });
-
-      if (!touch && media) {
-        bindMediaParallax(item, media, isOverlap ? 0.18 : 0.12);
-      }
-    });
-
+    if (mobileGallery) {
+      ensureStoryImagesVisible(storyImages);
+    } else {
+      initDesktopStoryGallery(storyImages);
+    }
     storyTexts.forEach((block) => {
       const targets = block.querySelectorAll<HTMLElement>('[data-reveal-item]');
       bindRevealUp(targets.length ? targets : block, block, {
@@ -140,16 +282,23 @@ export function initWorkDetailAnimation(
     });
 
     refreshScrollTrigger();
+
+    if (mobileGallery) {
+      requestAnimationFrame(() => {
+        ensureStoryImagesVisible(storyImages);
+        refreshScrollTrigger();
+      });
+    }
   }, root);
 }
-
 /** ScrollTrigger 인스턴스 수 (문서화용) */
 export function countWorkDetailScrollTriggers(
   storyImageCount: number,
   storyTextCount: number,
   isDesktop = true,
 ): number {
-  let count = storyTextCount + storyImageCount;
-  if (isDesktop) count += storyImageCount;
+  const revealCount = Math.max(0, storyImageCount - STATIC_IMAGE_COUNT);
+  let count = storyTextCount + revealCount;
+  if (isDesktop) count += PARALLAX_IMAGE_COUNT;
   return count;
 }

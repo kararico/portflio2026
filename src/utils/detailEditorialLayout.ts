@@ -100,7 +100,7 @@ export type EditorialImageLayout = 'large' | 'wide' | 'small' | 'sketch' | 'tall
 export function slotToImageLayout(slot: EditorialSlotType): EditorialImageLayout {
   switch (slot) {
     case 'planLeft':
-      return 'sketch';
+      return 'large';
     case 'tallRight':
     case 'ceilingRight':
       return 'tall';

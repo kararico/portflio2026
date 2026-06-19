@@ -16,7 +16,6 @@ const PREFIX = {
   'hyundai-ezwel': 'hd',
   bullsone: 'bullsone',
   'mlb-korea': 'mlb',
-  'samsung-fire': 'saumsung',
   'starbucks-employee-platform': 'st',
   'starbucks-siren119': 'st',
   'wconcept-us': 'wc',
