@@ -118,34 +118,34 @@
     --hero-plate-y-bottom-right: 72%;
   }
 
-  /* 2 — 중앙 portrait (viewport 중심) */
+  /* 2 — 중앙 portrait */
   .projectItem[data-plate-id='2'] .plateAnchor {
-    top: var(--hero-plate-y-center) !important;
+    top: 13rem !important;
     left: 50% !important;
     right: auto !important;
     bottom: auto !important;
     margin-left: calc(var(--hero-plate-center-w) / -2) !important;
-    margin-top: calc(var(--hero-plate-center-w) * var(--hero-plate-center-ratio) / -2) !important;
+    margin-top: 0 !important;
     --img-w: var(--hero-plate-center-w) !important;
     --img-ratio: var(--hero-plate-center-ratio) !important;
   }
 
   /* 1 — 좌상단 landscape */
   .projectItem[data-plate-id='1'] .plateAnchor {
-    top: var(--hero-plate-y-top-left) !important;
+    top: 5rem !important;
     bottom: auto !important;
-    left: var(--padding-fluid) !important;
+    left: 0 !important;
     right: auto !important;
     margin: 0 !important;
     --img-w: var(--hero-plate-landscape-w) !important;
     --img-ratio: var(--hero-plate-landscape-ratio) !important;
   }
 
-  /* 3 — 우상단 portrait (좌상단 대비 살짝 위 stagger) */
+  /* 3 — 우상단 portrait */
   .projectItem[data-plate-id='3'] .plateAnchor {
-    top: var(--hero-plate-y-top-right) !important;
+    top: 5rem !important;
     bottom: auto !important;
-    right: var(--padding-fluid) !important;
+    right: 0 !important;
     left: auto !important;
     margin: 0 !important;
     --img-w: var(--hero-plate-portrait-w) !important;
@@ -154,9 +154,9 @@
 
   /* 4 — 좌하단 portrait */
   .projectItem[data-plate-id='4'] .plateAnchor {
-    top: var(--hero-plate-y-bottom-left) !important;
+    top: 29.375rem !important;
     bottom: auto !important;
-    left: var(--padding-fluid) !important;
+    left: 0 !important;
     right: auto !important;
     margin: 0 !important;
     --img-w: var(--hero-plate-portrait-w) !important;
@@ -165,9 +165,9 @@
 
   /* 5 — 우하단 landscape */
   .projectItem[data-plate-id='5'] .plateAnchor {
-    top: var(--hero-plate-y-bottom-right) !important;
+    top: 29.375rem !important;
     bottom: auto !important;
-    right: var(--padding-fluid) !important;
+    right: 0 !important;
     left: auto !important;
     margin: 0 !important;
     --img-w: var(--hero-plate-wide-w) !important;
@@ -178,30 +178,5 @@
 @include respond-below('mobile') {
   .galleryWrapper {
     --hero-plate-center-ratio: 1.47;
-  }
-
-  .projectItem[data-plate-id='1'] .plateAnchor {
-    top: 0% !important;
-    left: 0 !important;
-  }
-
-  .projectItem[data-plate-id='3'] .plateAnchor {
-    top: 4% !important;
-    right: 0 !important;
-  }
-}
-
-/* 390px+ phone — mobile breakpoint (min 390) × tablet gallery layout (max 767) */
-@include respond-to('mobile') {
-  @include respond-below('tablet') {
-    .projectItem[data-plate-id='1'] .plateAnchor {
-      top: 0% !important;
-      left: 0 !important;
-    }
-
-    .projectItem[data-plate-id='3'] .plateAnchor {
-      top: 4% !important;
-      right: 0 !important;
-    }
   }
 }

@@ -162,8 +162,29 @@ function isHeroExitedViewport(layer: HTMLElement | null, mobile: boolean): boole
   return rect.bottom <= -buffer;
 }
 
-function getScrollY(): number {
-  return window.scrollY || document.documentElement.scrollTop || 0;
+/** Hero MLB 중심 Y ↔ viewport 중심 Y 절대 거리(px) */
+function getHeroImageCenterDeltaY(heroImageEl: HTMLElement | null): number | null {
+  if (!heroImageEl) return null;
+
+  const rect = heroImageEl.getBoundingClientRect();
+  if (rect.width <= 0 || rect.height <= 0) return null;
+
+  const imageCenterY = rect.top + rect.height / 2;
+  const viewportCenterY = window.innerHeight / 2;
+  return Math.abs(imageCenterY - viewportCenterY);
+}
+
+function isHeroImageNearViewportCenter(
+  heroImageEl: HTMLElement | null,
+  tolerance: number,
+): boolean {
+  const delta = getHeroImageCenterDeltaY(heroImageEl);
+  return delta !== null && delta <= tolerance;
+}
+
+/** 모바일 타이틀 one-way hide — progress 역행 시 hidePeak 유지, MLB 중심이 viewport 중심 근처일 때만 reveal */
+interface MobileHeroTitleState {
+  hidePeak: number;
 }
 
 function applyMobileHeroTitle(
@@ -171,30 +192,50 @@ function applyMobileHeroTitle(
   titleFront: HTMLElement | null,
   progress: number,
   galleryActive: boolean,
+  heroImageEl: HTMLElement | null,
+  state: MobileHeroTitleState,
 ) {
   const { mobileTitleHide } = heroStoryConfig;
-  const atTop = getScrollY() <= mobileTitleHide.topScrollY;
+  const { revealCenterTolerance, revealCenterSpan } = mobileTitleHide;
   const hiddenY = mobileTitleHide.y;
   const setTitle = (el: HTMLElement | null, opacity: number, y: number) => {
     if (!el) return;
     gsap.set(el, { xPercent: -50, yPercent: -50, x: 0, y, opacity });
   };
 
-  if (atTop) {
-    setTitle(titleBack, 1, 0);
-    setTitle(titleFront, 1, 0);
-    return;
-  }
-
   if (galleryActive) {
+    state.hidePeak = 1;
     setTitle(titleBack, 0, hiddenY);
     setTitle(titleFront, 0, hiddenY);
     return;
   }
 
+  const centerDelta = getHeroImageCenterDeltaY(heroImageEl);
+
+  if (centerDelta !== null && centerDelta <= revealCenterTolerance) {
+    state.hidePeak = 0;
+    setTitle(titleBack, 1, 0);
+    setTitle(titleFront, 1, 0);
+    return;
+  }
+
   const hideT = easeOutQuad(phaseProgress(progress, 0, mobileTitleHide.progressEnd));
-  const opacity = lerpValue(1, 0, hideT);
-  const y = lerpValue(0, hiddenY, hideT);
+  state.hidePeak = Math.max(state.hidePeak, hideT);
+
+  let effectivePeak = state.hidePeak;
+  if (
+    centerDelta !== null &&
+    revealCenterSpan > revealCenterTolerance &&
+    centerDelta <= revealCenterSpan
+  ) {
+    const revealT = easeOutQuad(
+      1 - phaseProgress(centerDelta, revealCenterTolerance, revealCenterSpan),
+    );
+    effectivePeak = state.hidePeak * (1 - revealT);
+  }
+
+  const opacity = lerpValue(1, 0, effectivePeak);
+  const y = lerpValue(0, hiddenY, effectivePeak);
   setTitle(titleBack, opacity, y);
   setTitle(titleFront, opacity, y);
 }
@@ -291,6 +332,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
     const introMedia = heroSection.querySelector<HTMLElement>('[data-intro-media]');
     const centerMoveTarget = centerStack ?? heroImageLayer;
     const galleryTriggerCard = heroImageLayer ?? introMedia ?? centerMoveTarget;
+    const heroTitleImage = introMedia ?? heroImageLayer;
     const titleBack = heroSection.querySelector<HTMLElement>('[data-hero-title]');
     const titleFront = heroSection.querySelector<HTMLElement>('[data-hero-title-front]');
     const subtitle = heroSection.querySelector<HTMLElement>('[data-intro-subtitle]');
@@ -347,6 +389,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
 
     let targetProgress = 0;
     let currentProgress = 0;
+    const mobileTitleState: MobileHeroTitleState = { hidePeak: 0 };
 
     const applyScrollProgress = (progress: number) => {
       const metaT = phaseProgress(progress, phases.metaFade.start, phases.metaFade.end);
@@ -391,7 +434,14 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       const galleryActive = galleryTriggeredLatched;
 
       if (mobile) {
-        applyMobileHeroTitle(titleBack, titleFront, progress, galleryActive);
+        applyMobileHeroTitle(
+          titleBack,
+          titleFront,
+          progress,
+          galleryActive,
+          heroTitleImage,
+          mobileTitleState,
+        );
       } else {
         applyDesktopHeroTitle(titleBack, titleFront, progress, titleDriftX, phases);
       }
@@ -543,6 +593,15 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       remeasurePlateEntryYs(plateStates, mobile);
       gallerySequenceStartProgress = null;
       galleryTriggeredLatched = false;
+      if (
+        mobile &&
+        isHeroImageNearViewportCenter(
+          heroTitleImage,
+          heroStoryConfig.mobileTitleHide.revealCenterTolerance,
+        )
+      ) {
+        mobileTitleState.hidePeak = 0;
+      }
       currentProgress = targetProgress;
       applyScrollProgress(currentProgress);
     });
