@@ -162,6 +162,65 @@ function isHeroExitedViewport(layer: HTMLElement | null, mobile: boolean): boole
   return rect.bottom <= -buffer;
 }
 
+function getScrollY(): number {
+  return window.scrollY || document.documentElement.scrollTop || 0;
+}
+
+function applyMobileHeroTitle(
+  titleBack: HTMLElement | null,
+  titleFront: HTMLElement | null,
+  progress: number,
+  galleryActive: boolean,
+) {
+  const { mobileTitleHide } = heroStoryConfig;
+  const atTop = getScrollY() <= mobileTitleHide.topScrollY;
+  const hiddenY = mobileTitleHide.y;
+  const setTitle = (el: HTMLElement | null, opacity: number, y: number) => {
+    if (!el) return;
+    gsap.set(el, { xPercent: -50, yPercent: -50, x: 0, y, opacity });
+  };
+
+  if (atTop) {
+    setTitle(titleBack, 1, 0);
+    setTitle(titleFront, 1, 0);
+    return;
+  }
+
+  if (galleryActive) {
+    setTitle(titleBack, 0, hiddenY);
+    setTitle(titleFront, 0, hiddenY);
+    return;
+  }
+
+  const hideT = easeOutQuad(phaseProgress(progress, 0, mobileTitleHide.progressEnd));
+  const opacity = lerpValue(1, 0, hideT);
+  const y = lerpValue(0, hiddenY, hideT);
+  setTitle(titleBack, opacity, y);
+  setTitle(titleFront, opacity, y);
+}
+
+function applyDesktopHeroTitle(
+  titleBack: HTMLElement | null,
+  titleFront: HTMLElement | null,
+  progress: number,
+  titleDriftX: number,
+  phases: typeof heroStoryConfig.scrollPhases,
+) {
+  const titleT = phaseProgress(progress, phases.titleBack.start, phases.titleBack.end);
+  if (titleBack) {
+    gsap.set(titleBack, {
+      x: lerpValue(0, titleDriftX, titleT),
+      opacity: lerpValue(1, 0.58, titleT),
+    });
+  }
+  if (titleFront) {
+    gsap.set(titleFront, {
+      x: lerpValue(0, titleDriftX, titleT),
+      opacity: lerpValue(1, 0.08, titleT),
+    });
+  }
+}
+
 function hidePlateState({ anchor, image, scaleFrom, entryY }: PlateAnimState) {
   gsap.set(anchor, { y: entryY, visibility: 'hidden' });
   anchor.removeAttribute('data-plate-active');
@@ -272,8 +331,16 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       gsap.set(subtitle, { y: 0, opacity: 1 });
     }
     if (introMedia) gsap.set(introMedia, { transformOrigin: 'center center' });
-    if (titleBack) gsap.set(titleBack, { x: 0, transformOrigin: 'center center' });
-    if (titleFront) gsap.set(titleFront, { x: 0, transformOrigin: 'center center' });
+    if (titleBack) {
+      gsap.set(titleBack, mobile
+        ? { xPercent: -50, yPercent: -50, x: 0, y: 0, opacity: 1, transformOrigin: 'center center' }
+        : { x: 0, transformOrigin: 'center center' });
+    }
+    if (titleFront) {
+      gsap.set(titleFront, mobile
+        ? { xPercent: -50, yPercent: -50, x: 0, y: 0, opacity: 1, transformOrigin: 'center center' }
+        : { x: 0, transformOrigin: 'center center' });
+    }
     if (heroImageLayer) {
       gsap.set(heroImageLayer, { opacity: 1, visibility: 'visible', pointerEvents: 'auto' });
     }
@@ -302,32 +369,6 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
         gsap.set(subtitle, { y: lerpValue(0, exitY, easeOutCubic(centerT)) });
       }
 
-      const titleT = phaseProgress(progress, phases.titleBack.start, phases.titleBack.end);
-      if (titleBack) {
-        gsap.set(titleBack, {
-          x: lerpValue(0, titleDriftX, titleT),
-          opacity: lerpValue(1, 0.58, titleT),
-        });
-      }
-      if (titleFront) {
-        gsap.set(titleFront, {
-          x: lerpValue(0, titleDriftX, titleT),
-          opacity: lerpValue(1, 0.08, titleT),
-        });
-      }
-
-      const driftT = phaseProgress(
-        progress,
-        phases.compositionDrift.start,
-        phases.compositionDrift.end,
-      );
-      if (composition) {
-        gsap.set(composition, { y: lerpValue(0, compositionDriftY, driftT) });
-      }
-
-      const aboutT = phaseProgress(progress, phases.aboutCover.start, phases.aboutCover.end);
-      gsap.set(aboutCover, { y: `${lerpValue(100, 0, aboutT)}vh` });
-
       const heroExitLayer = heroImageLayer ?? galleryTriggerCard;
       const heroExited = isHeroExitedViewport(heroExitLayer, mobile);
 
@@ -348,6 +389,24 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       }
 
       const galleryActive = galleryTriggeredLatched;
+
+      if (mobile) {
+        applyMobileHeroTitle(titleBack, titleFront, progress, galleryActive);
+      } else {
+        applyDesktopHeroTitle(titleBack, titleFront, progress, titleDriftX, phases);
+      }
+
+      const driftT = phaseProgress(
+        progress,
+        phases.compositionDrift.start,
+        phases.compositionDrift.end,
+      );
+      if (composition) {
+        gsap.set(composition, { y: lerpValue(0, compositionDriftY, driftT) });
+      }
+
+      const aboutT = phaseProgress(progress, phases.aboutCover.start, phases.aboutCover.end);
+      gsap.set(aboutCover, { y: `${lerpValue(100, 0, aboutT)}vh` });
 
       if (heroImageLayer) {
         if (heroExited) {

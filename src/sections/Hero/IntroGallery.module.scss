@@ -110,51 +110,66 @@
     --hero-plate-landscape-ratio: #{101 / 169};
     --hero-plate-portrait-w: #{10.5625rem * 14 / 21.6};
     --hero-plate-wide-w: #{10.5625rem * 24 / 21.6};
+    /* heroStage containing block 기준 % — vh 미사용 */
+    --hero-plate-y-top-left: 4%;
+    --hero-plate-y-top-right: 7%;
+    --hero-plate-y-center: 55%;
+    --hero-plate-y-bottom-left: 76%;
+    --hero-plate-y-bottom-right: 72%;
   }
 
-  /* 2 — 중앙 portrait (IntroMedia와 동일 footprint, gallery phase용) */
+  /* 2 — 중앙 portrait (viewport 중심) */
   .projectItem[data-plate-id='2'] .plateAnchor {
-    top: 50% !important;
+    top: var(--hero-plate-y-center) !important;
     left: 50% !important;
     right: auto !important;
+    bottom: auto !important;
     margin-left: calc(var(--hero-plate-center-w) / -2) !important;
     margin-top: calc(var(--hero-plate-center-w) * var(--hero-plate-center-ratio) / -2) !important;
     --img-w: var(--hero-plate-center-w) !important;
     --img-ratio: var(--hero-plate-center-ratio) !important;
   }
 
-  /* 1 — 좌상단 landscape 169×101 */
+  /* 1 — 좌상단 landscape */
   .projectItem[data-plate-id='1'] .plateAnchor {
-    top: var(--hero-plate-center-pt) !important;
+    top: var(--hero-plate-y-top-left) !important;
+    bottom: auto !important;
     left: var(--padding-fluid) !important;
     right: auto !important;
+    margin: 0 !important;
     --img-w: var(--hero-plate-landscape-w) !important;
     --img-ratio: var(--hero-plate-landscape-ratio) !important;
   }
 
-  /* 3 — 우상단 portrait (1 대비 14/21.6 비율) */
+  /* 3 — 우상단 portrait (좌상단 대비 살짝 위 stagger) */
   .projectItem[data-plate-id='3'] .plateAnchor {
-    top: calc(var(--hero-plate-center-pt) + 3vh) !important;
+    top: var(--hero-plate-y-top-right) !important;
+    bottom: auto !important;
     right: var(--padding-fluid) !important;
     left: auto !important;
+    margin: 0 !important;
     --img-w: var(--hero-plate-portrait-w) !important;
     --img-ratio: 1.01 !important;
   }
 
   /* 4 — 좌하단 portrait */
   .projectItem[data-plate-id='4'] .plateAnchor {
-    top: 54vh !important;
+    top: var(--hero-plate-y-bottom-left) !important;
+    bottom: auto !important;
     left: var(--padding-fluid) !important;
     right: auto !important;
+    margin: 0 !important;
     --img-w: var(--hero-plate-portrait-w) !important;
     --img-ratio: 1.48 !important;
   }
 
-  /* 5 — 우하단 landscape (1 대비 24/21.6 너비) */
+  /* 5 — 우하단 landscape */
   .projectItem[data-plate-id='5'] .plateAnchor {
-    top: 61vh !important;
+    top: var(--hero-plate-y-bottom-right) !important;
+    bottom: auto !important;
     right: var(--padding-fluid) !important;
     left: auto !important;
+    margin: 0 !important;
     --img-w: var(--hero-plate-wide-w) !important;
     --img-ratio: 0.61 !important;
   }
@@ -163,5 +178,30 @@
 @include respond-below('mobile') {
   .galleryWrapper {
     --hero-plate-center-ratio: 1.47;
+  }
+
+  .projectItem[data-plate-id='1'] .plateAnchor {
+    top: 0% !important;
+    left: 0 !important;
+  }
+
+  .projectItem[data-plate-id='3'] .plateAnchor {
+    top: 4% !important;
+    right: 0 !important;
+  }
+}
+
+/* 390px+ phone — mobile breakpoint (min 390) × tablet gallery layout (max 767) */
+@include respond-to('mobile') {
+  @include respond-below('tablet') {
+    .projectItem[data-plate-id='1'] .plateAnchor {
+      top: 0% !important;
+      left: 0 !important;
+    }
+
+    .projectItem[data-plate-id='3'] .plateAnchor {
+      top: 4% !important;
+      right: 0 !important;
+    }
   }
 }

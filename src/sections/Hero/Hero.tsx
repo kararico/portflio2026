@@ -60,28 +60,6 @@ export default function Hero() {
     const getClipTarget = () =>
       imageLayer.querySelector<HTMLElement>('[data-intro-media]') ?? imageLayer;
 
-    const getExpandTextSpanRect = (track: HTMLElement, firstLetter: HTMLElement) => {
-      if (track.classList.contains('is-expanded')) {
-        const trackRect = track.getBoundingClientRect();
-        return { left: trackRect.left, right: trackRect.right };
-      }
-
-      const left = firstLetter.getBoundingClientRect().left;
-      let right = left;
-      track
-        .querySelectorAll<HTMLElement>(
-          '[data-hero-expand-j], [data-hero-expand-w], [data-hero-expand-char-inner]',
-        )
-        .forEach((el) => {
-          const charRect = el.getBoundingClientRect();
-          if (charRect.width > 0.5) {
-            right = Math.max(right, charRect.right);
-          }
-        });
-
-      return { left, right };
-    };
-
     const syncFrontClip = () => {
       const mode = getHeroFrontClipMode();
       const titleBack = composition.querySelector<HTMLElement>('[data-hero-title-back]');
@@ -98,39 +76,9 @@ export default function Hero() {
 
       if (imgRect.width <= 0 || imgRect.height <= 0) return;
 
-      /** 모바일 — 문자열 중심(첫·끝 글자) = 이미지 중심 (GSAP transform과 무관하게 px 기준) */
-      if (isMobileLayout && expandTracks.length > 0 && titleBack) {
-        const stageRect = composition.getBoundingClientRect();
-        const track = expandTracks[0];
-        const firstLetter =
-          track.querySelector<HTMLElement>('[data-hero-expand-j]') ??
-          track.querySelector<HTMLElement>('[data-hero-expand-char-inner]');
-        const lastLetter =
-          track.querySelector<HTMLElement>('[data-hero-expand-char]:last-of-type [data-hero-expand-char-inner]') ??
-          track.querySelector<HTMLElement>('[data-hero-expand-w]');
-
-        if (firstLetter && lastLetter) {
-          const textSpan = getExpandTextSpanRect(track, firstLetter);
-          const textWidth = textSpan.right - textSpan.left;
-
-          if (textWidth > 0) {
-            const imgCenterX = imgRect.left + imgRect.width / 2;
-            const titleRectNow = titleBack.getBoundingClientRect();
-            const textOffsetInTitle = textSpan.left - titleRectNow.left;
-            const gsapX = Number(gsap.getProperty(titleBack, 'x')) || 0;
-            const targetTextLeft = imgCenterX - textWidth / 2;
-            const leftPx = Math.round(
-              targetTextLeft - textOffsetInTitle - gsapX - stageRect.left,
-            );
-
-            titleBack.style.left = `${leftPx}px`;
-            frontTitle.style.left = `${leftPx}px`;
-          }
-        }
-      } else {
-        if (titleBack) titleBack.style.left = '';
-        frontTitle.style.left = '';
-      }
+      /** 타이틀 가로 정렬은 CSS left:50% + translate(-50%) 유지 (모바일 px left 오버라이드 금지) */
+      if (titleBack) titleBack.style.left = '';
+      frontTitle.style.left = '';
 
       const titleRect = frontTitle.getBoundingClientRect();
 

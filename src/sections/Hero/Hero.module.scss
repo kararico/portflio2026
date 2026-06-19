@@ -335,6 +335,10 @@
       var(--space-lg);
   }
 
+  :global([data-home-story][data-gallery-active='true']) .introSticky {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
   .topRow {
     display: none;
   }
@@ -389,6 +393,11 @@
     overflow-x: visible;
     overflow-y: visible;
     font-size: clamp(2.4rem, 10vw, 3.6rem);
+  }
+
+  :global([data-home-story][data-gallery-active]) .heroTitle {
+    top: 44%;
+    transform: translate(-50%, -50%);
   }
 
   .heroTitleFront {

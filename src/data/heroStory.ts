@@ -17,6 +17,12 @@ export const heroStoryConfig = {
     compositionDrift: { start: 0.58, end: 0.85 },
     aboutCover: { start: 0.72, end: 1.0 },
   },
+  /** 모바일 Hero 타이포 — 스크롤 시 fade + translateY (gallery active 시 완전 숨김) */
+  mobileTitleHide: {
+    progressEnd: 0.12,
+    y: -20,
+    topScrollY: 10,
+  },
   galleryReveal: {
     /** 갤러리 시퀀스 내 활성화 시점 (0–1) — center top 트리거 이후 상대 progress */
     activationAt: {

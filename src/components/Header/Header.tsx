@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState, type CSSProperties } from 'react';
-import { siteConfig } from '@/data/site';
+import { createPortal } from 'react-dom';
 import { useMobileHeaderReveal } from '@/hooks/useMobileHeaderReveal';
 import HeaderLogo from './HeaderLogo';
 import styles from './Header.module.scss';
@@ -27,6 +27,7 @@ export default function Header({ theme = 'light' }: HeaderProps) {
   const isWorkDetail = pathname.startsWith('/work/');
   const isHomePage = pathname === '/';
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { visible: headerVisible, isScrolled } = useMobileHeaderReveal(!menuOpen, {
     isHomePage: isHomePage && !isWorkDetail,
   });
@@ -34,6 +35,10 @@ export default function Header({ theme = 'light' }: HeaderProps) {
   const handleNavClick = () => {
     setMenuOpen(false);
   };
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (isWorkDetail) {
@@ -99,49 +104,48 @@ export default function Header({ theme = 'light' }: HeaderProps) {
               </span>
             </button>
 
-            <nav className={`${styles.menu} ${menuOpen ? styles.menuOpen : ''}`} aria-hidden={!menuOpen}>
-              <div className={styles.menuWrapper}>
-                <div className={styles.menuPanel}>
-                  <ul className={styles.menuList}>
-                    {NAV_ITEMS.map((item, index) => (
-                      <li
-                        key={item.href}
-                        className={styles.menuItem}
-                        style={{ '--menu-index': index } as CSSProperties}
-                      >
+            {mounted
+              ? createPortal(
+                  <nav
+                    className={`${styles.menu} ${menuOpen ? styles.menuOpen : ''}`}
+                    aria-hidden={!menuOpen}
+                  >
+                    <div className={styles.menuWrapper}>
+                      <div className={styles.menuPanel}>
                         <Link
-                          href={item.href}
-                          className={styles.menuLink}
+                          href="/"
+                          className={styles.menuLogo}
                           onClick={handleNavClick}
                           data-cursor-style="small"
                         >
-                          <span>{item.label}</span>
+                          <span className="sr-only">허정원</span>
+                          <HeaderLogo className={styles.menuLogoSvg} />
                         </Link>
-                      </li>
-                    ))}
-                  </ul>
 
-                  <div className={styles.menuVisual} aria-hidden="true">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={siteConfig.about.portraitImage}
-                      alt=""
-                      className={styles.menuPortrait}
-                      decoding="async"
-                    />
-                  </div>
-
-                  <div className={styles.menuMeta} aria-hidden="true">
-                    {siteConfig.position.heroRoles.map((role) => (
-                      <span key={role} className={styles.menuMetaLine}>
-                        {role}
-                      </span>
-                    ))}
-                    <span className={styles.menuMetaLine}>{siteConfig.hero.location}</span>
-                  </div>
-                </div>
-              </div>
-            </nav>
+                        <ul className={styles.menuList}>
+                          {NAV_ITEMS.map((item, index) => (
+                            <li
+                              key={item.href}
+                              className={styles.menuItem}
+                              style={{ '--menu-index': index } as CSSProperties}
+                            >
+                              <Link
+                                href={item.href}
+                                className={styles.menuLink}
+                                onClick={handleNavClick}
+                                data-cursor-style="small"
+                              >
+                                <span>{item.label}</span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </nav>,
+                  document.body,
+                )
+              : null}
           </div>
         ) : (
           <div className={styles.menuCol} aria-hidden="true" />
