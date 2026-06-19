@@ -4,6 +4,7 @@ import Header from '@/components/Header/Header';
 import Preloader from '@/components/Preloader/Preloader';
 import CursorProvider from '@/components/Cursor/CursorProvider';
 import SmoothScrollProvider from '@/components/SmoothScroll/SmoothScrollProvider';
+import LandscapeOrientationOverlay from '@/components/LandscapeOrientationOverlay/LandscapeOrientationOverlay';
 import ProjectTransitionProvider from '@/components/ProjectTransition/ProjectTransitionProvider';
 import { siteConfig } from '@/data/site';
 import '@/styles/globals.scss';
@@ -47,6 +48,7 @@ export default function RootLayout({
         <Preloader />
         <CursorProvider>
           <SmoothScrollProvider>
+            <LandscapeOrientationOverlay />
             <ProjectTransitionProvider>
               <Header />
               <div id="main-transition" className="mainTransition">

@@ -162,6 +162,25 @@ function isHeroExitedViewport(layer: HTMLElement | null, mobile: boolean): boole
   return rect.bottom <= -buffer;
 }
 
+function getMobileGalleryRevealThreshold(): number {
+  return window.innerHeight * heroStoryConfig.mobileGalleryReveal.heroBottomViewportRatio;
+}
+
+/** 모바일 — Hero 완전 이탈 전 overlap 구간에서 gallery latch */
+function isMobileGalleryRevealReady(layer: HTMLElement | null): boolean {
+  if (!layer) return false;
+  const rect = layer.getBoundingClientRect();
+  return rect.bottom <= getMobileGalleryRevealThreshold();
+}
+
+function shouldReleaseMobileGalleryLatch(layer: HTMLElement | null): boolean {
+  if (!layer) return true;
+  const rect = layer.getBoundingClientRect();
+  const releaseAt =
+    getMobileGalleryRevealThreshold() + heroStoryConfig.mobileGalleryReveal.hysteresisPx;
+  return rect.bottom > releaseAt;
+}
+
 /** Hero MLB 중심 Y ↔ viewport 중심 Y 절대 거리(px) */
 function getHeroImageCenterDeltaY(heroImageEl: HTMLElement | null): number | null {
   if (!heroImageEl) return null;
@@ -272,10 +291,16 @@ function applyPlateSequence(
   plateStates: PlateAnimState[],
   progress: number,
   seqStart: number,
+  options?: { mobile?: boolean; plate2Only?: boolean },
 ) {
   const seqEnd = heroStoryConfig.scrollPhases.galleryReveal.end;
   const { zoomSpan } = heroStoryConfig.galleryReveal;
   const seqSpan = seqEnd - seqStart;
+  const mobile = options?.mobile ?? false;
+  const plate2Only = options?.plate2Only ?? false;
+  const plate2EntrySpanScale = mobile
+    ? heroStoryConfig.mobileGalleryReveal.plate2EntrySpanScale
+    : 1;
 
   if (seqSpan <= 0) {
     plateStates.forEach((state) => hidePlateState(state));
@@ -284,7 +309,15 @@ function applyPlateSequence(
 
   plateStates.forEach((state) => {
     const { anchor, image, scaleFrom, entryY, activationAt, plateId } = state;
-    const entrySpan = getPlateEntrySpan(plateId);
+    if (plate2Only && plateId !== '2') {
+      hidePlateState(state);
+      return;
+    }
+
+    let entrySpan = getPlateEntrySpan(plateId);
+    if (mobile && plateId === '2') {
+      entrySpan *= plate2EntrySpanScale;
+    }
 
     if (progress < seqStart) {
       hidePlateState(state);
@@ -358,6 +391,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
 
     let gallerySequenceStartProgress: number | null = null;
     let galleryTriggeredLatched = false;
+    let plate2PreRevealStartProgress: number | null = null;
 
     const scrollDistance = getScrollDistance();
     const gallerySeqDisabledStart = phases.galleryReveal.end + 1;
@@ -414,9 +448,42 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
 
       const heroExitLayer = heroImageLayer ?? galleryTriggerCard;
       const heroExited = isHeroExitedViewport(heroExitLayer, mobile);
+      const mobileGalleryRevealReady =
+        mobile && isMobileGalleryRevealReady(heroExitLayer);
 
-      /** Gallery — Hero MLB가 viewport 밖으로 나간 뒤에만 시작 (top<=1px 트리거 사용 안 함) */
-      if (heroExited) {
+      /** Gallery latch — mobile: overlap trigger / desktop: hero fully exited */
+      if (mobile) {
+        if (mobileGalleryRevealReady) {
+          galleryTriggeredLatched = true;
+          if (gallerySequenceStartProgress === null) {
+            gallerySequenceStartProgress = progress;
+          }
+        } else if (
+          gallerySequenceStartProgress !== null &&
+          shouldReleaseMobileGalleryLatch(heroExitLayer)
+        ) {
+          galleryTriggeredLatched = false;
+          gallerySequenceStartProgress = null;
+          plate2PreRevealStartProgress = null;
+        }
+
+        const preRevealAt = heroStoryConfig.mobileGalleryReveal.plate2PreRevealProgress;
+        if (
+          !galleryTriggeredLatched &&
+          progress >= preRevealAt &&
+          plate2PreRevealStartProgress === null
+        ) {
+          plate2PreRevealStartProgress = progress;
+        }
+        if (galleryTriggeredLatched) {
+          plate2PreRevealStartProgress = null;
+        } else if (
+          plate2PreRevealStartProgress !== null &&
+          progress < plate2PreRevealStartProgress - 0.005
+        ) {
+          plate2PreRevealStartProgress = null;
+        }
+      } else if (heroExited) {
         galleryTriggeredLatched = true;
         if (gallerySequenceStartProgress === null) {
           gallerySequenceStartProgress = progress;
@@ -424,6 +491,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       }
 
       if (
+        !mobile &&
         gallerySequenceStartProgress !== null &&
         progress < gallerySequenceStartProgress - 0.005
       ) {
@@ -432,6 +500,8 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       }
 
       const galleryActive = galleryTriggeredLatched;
+      const plate2PreRevealActive =
+        mobile && !galleryActive && plate2PreRevealStartProgress !== null;
 
       if (mobile) {
         applyMobileHeroTitle(
@@ -475,10 +545,22 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       }
 
       if (!galleryActive || gallerySequenceStartProgress === null) {
-        applyPlateSequence(plateStates, progress, gallerySeqDisabledStart);
+        if (plate2PreRevealActive && plate2PreRevealStartProgress !== null) {
+          applyPlateSequence(plateStates, progress, plate2PreRevealStartProgress, {
+            mobile: true,
+            plate2Only: true,
+          });
+          root.setAttribute('data-gallery-pre-reveal', 'true');
+        } else {
+          applyPlateSequence(plateStates, progress, gallerySeqDisabledStart);
+          root.removeAttribute('data-gallery-pre-reveal');
+        }
         root.removeAttribute('data-gallery-active');
       } else {
-        applyPlateSequence(plateStates, progress, gallerySequenceStartProgress);
+        applyPlateSequence(plateStates, progress, gallerySequenceStartProgress, {
+          mobile,
+        });
+        root.removeAttribute('data-gallery-pre-reveal');
         root.setAttribute('data-gallery-active', 'true');
       }
 
@@ -510,7 +592,14 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
             centerT,
             exitY,
             heroExited,
+            mobileGalleryRevealReady,
+            mobileGalleryThreshold: mobile ? Math.round(getMobileGalleryRevealThreshold()) : null,
+            heroExitBottom: heroExitLayer
+              ? Math.round(heroExitLayer.getBoundingClientRect().bottom)
+              : null,
             galleryActive,
+            plate2PreRevealActive,
+            plate2PreRevealStartProgress,
             gallerySequenceStartProgress,
             heroExitLayerSelector: heroImageLayer
               ? '[data-hero-image-layer]'
@@ -579,7 +668,11 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
 
     const onTick = (_time: number, deltaTime: number) => {
       const deltaSeconds = deltaTime / 1000;
-      const next = scrubToward(currentProgress, targetProgress, deltaSeconds, scrollScrub);
+      const activeScrub =
+        mobile && (galleryTriggeredLatched || plate2PreRevealStartProgress !== null)
+          ? heroStoryConfig.mobileGalleryReveal.scrollScrub
+          : scrollScrub;
+      const next = scrubToward(currentProgress, targetProgress, deltaSeconds, activeScrub);
       if (Math.abs(next - currentProgress) < 0.000015) return;
 
       currentProgress = next;
@@ -593,6 +686,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       remeasurePlateEntryYs(plateStates, mobile);
       gallerySequenceStartProgress = null;
       galleryTriggeredLatched = false;
+      plate2PreRevealStartProgress = null;
       if (
         mobile &&
         isHeroImageNearViewportCenter(

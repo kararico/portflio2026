@@ -26,6 +26,22 @@ export const heroStoryConfig = {
     /** tolerance ~ span 구간에서 이미지 위치 기반 fade-in */
     revealCenterSpan: 140,
   },
+  /**
+   * 모바일 Hero→Gallery overlap — heroExited(-32px) 전에 gallery latch
+   * Hero MLB bottom이 viewport 높이 × ratio 이하일 때 reveal (Hero still partially visible)
+   */
+  mobileGalleryReveal: {
+    /** Hero image bottom ≤ innerHeight × ratio → galleryActive (overlap) */
+    heroBottomViewportRatio: 0.22,
+    /** scroll up 시 latch 해제 — threshold + px */
+    hysteresisPx: 48,
+    /** galleryActive 전 plate2만 선행 reveal 시작 progress */
+    plate2PreRevealProgress: 0.045,
+    /** plate2 entry 구간 단축 (× entrySpanViewport) */
+    plate2EntrySpanScale: 0.48,
+    /** gallery 구간 scrub lag(초) — dead zone 체감 완화 */
+    scrollScrub: 0.14,
+  },
   galleryReveal: {
     /** 갤러리 시퀀스 내 활성화 시점 (0–1) — center top 트리거 이후 상대 progress */
     activationAt: {

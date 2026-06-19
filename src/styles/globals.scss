@@ -42,6 +42,14 @@ html[data-mobile-menu-open] #main-transition {
   visibility: hidden;
 }
 
+html[data-orientation-overlay-active] {
+  overflow: hidden;
+}
+
+html[data-orientation-overlay-active] body {
+  overflow: hidden;
+}
+
 ::selection {
   background-color: var(--color-brand);
   color: #ffffff;
