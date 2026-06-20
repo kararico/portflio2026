@@ -1,9 +1,8 @@
-import ResumeDownloadLink from '@/components/ResumeDownloadLink/ResumeDownloadLink';
 import { siteConfig } from '@/data/site';
 import styles from './Contact.module.scss';
 
 export default function Contact() {
-  const { contact, position, footer, resume } = siteConfig;
+  const { contact, position, footer } = siteConfig;
 
   return (
     <footer className={styles.footer} id="contact" data-contact-section>
@@ -45,11 +44,6 @@ export default function Contact() {
                 >
                   Github
                 </a>
-              </li>
-              <li>
-                <ResumeDownloadLink className={styles.contactLink} data-cursor-style="small">
-                  {resume.contactLabel}
-                </ResumeDownloadLink>
               </li>
             </ul>
           </div>

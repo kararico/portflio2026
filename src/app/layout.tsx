@@ -6,7 +6,7 @@ import CursorProvider from '@/components/Cursor/CursorProvider';
 import SmoothScrollProvider from '@/components/SmoothScroll/SmoothScrollProvider';
 import LandscapeOrientationOverlay from '@/components/LandscapeOrientationOverlay/LandscapeOrientationOverlay';
 import ProjectTransitionProvider from '@/components/ProjectTransition/ProjectTransitionProvider';
-import { siteConfig } from '@/data/site';
+import { buildRootMetadataDefaults } from '@/utils/seo';
 import '@/styles/globals.scss';
 
 const gildaDisplay = Gilda_Display({
@@ -23,19 +23,7 @@ const inter = Inter({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: {
-    default: `Jungwon Heo — ${siteConfig.position.title}`,
-    template: '%s | Jungwon Heo',
-  },
-  description: siteConfig.position.seoDescription,
-  openGraph: {
-    type: 'website',
-    locale: 'ko_KR',
-    siteName: siteConfig.name,
-  },
-};
+export const metadata: Metadata = buildRootMetadataDefaults();
 
 export default function RootLayout({
   children,

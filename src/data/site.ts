@@ -5,6 +5,16 @@ export type HeroTypoVariant = 'single' | 'repeat' | 'roles';
 export const siteConfig = {
   name: '허정원',
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3030',
+  seo: {
+    homeTitle: 'Jungwon Heo | Web Publisher & UI Engineer',
+    homeDescription:
+      '12+ years experience in web publishing, UI engineering and digital product implementation. Portfolio featuring Starbucks, MLB, Discovery, Hyundai EZWEL and W Concept US projects.',
+    ogImagePath: '/og-image.jpg',
+    ogImageAlt: 'Jungwon Heo — Web Publisher & UI Engineer',
+    ogImageWidth: 1200,
+    ogImageHeight: 630,
+    homeSections: ['#about', '#works', '#experience', '#contact'] as const,
+  },
   position: {
     title: 'Web Publisher & UI Engineer',
     heroRoles: ['Web Publisher', 'UI Engineer'] as const,
@@ -27,12 +37,6 @@ export const siteConfig = {
         label: 'Facebook',
       },
     ] as const,
-  },
-  resume: {
-    path: '/resume/HeoJungwon_Resume.pdf',
-    fileName: 'HeoJungwon_Resume.pdf',
-    aboutLabel: 'Download Resume',
-    contactLabel: 'Resume PDF',
   },
   hero: {
     title: 'Jungwon Heo',
