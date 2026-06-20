@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useId, useMemo, useState } from 'react';
+import { useCallback, useId, useMemo, useState, type MouseEvent } from 'react';
 import { siteConfig } from '@/data/site';
+import { useProjectTransition } from '@/components/ProjectTransition/ProjectTransitionProvider';
 import type { Project } from '@/types/project';
 import { hasKoreanText, splitTitleLines } from '@/utils/projectTitle';
 import ProjectVisual from './ProjectVisual';
@@ -32,6 +33,7 @@ export default function WorksItem({
   const [metaOpen, setMetaOpen] = useState(false);
   const panelId = useId();
   const { metaLabels, mobileInfoLabels } = siteConfig.works;
+  const { openProject, isTransitioning } = useProjectTransition();
   const indexNumber = String(index + 1).padStart(2, '0');
   const isReversed = index % 2 === 1;
   const titleLines = splitTitleLines(project.title);
@@ -51,6 +53,22 @@ export default function WorksItem({
   const handleToggleMeta = useCallback(() => {
     setMetaOpen((prev) => !prev);
   }, []);
+
+  const handleVisualClick = useCallback(
+    (event: MouseEvent<HTMLAnchorElement>) => {
+      if (isTransitioning) {
+        event.preventDefault();
+        return;
+      }
+
+      event.preventDefault();
+      const sourceEl =
+        event.currentTarget.querySelector<HTMLElement>('[data-works-image-inner]') ??
+        event.currentTarget;
+      openProject(project.slug, sourceEl);
+    },
+    [isTransitioning, openProject, project.slug],
+  );
 
   return (
     <article
@@ -121,13 +139,9 @@ export default function WorksItem({
                     <dt>{metaLabels.client}</dt>
                     <dd>{project.client}</dd>
                   </div>
-                  <div className={`${styles.metaRow} ${styles.metaRowYear}`}>
-                    <dt>{metaLabels.year}</dt>
-                    <dd>{project.year}</dd>
-                  </div>
                   <div className={styles.metaRow}>
-                    <dt>{metaLabels.role}</dt>
-                    <dd>{project.role}</dd>
+                    <dt>{metaLabels.type}</dt>
+                    <dd>{project.platform}</dd>
                   </div>
                   <div className={styles.metaRow}>
                     <dt>{metaLabels.contribution}</dt>
@@ -170,8 +184,10 @@ export default function WorksItem({
           className={styles.visualLink}
           ref={visualRef}
           data-works-visual
+          data-project-slug={project.slug}
           data-cursor-style="view"
           aria-label={`View ${project.title} project`}
+          onClick={handleVisualClick}
         >
           <ProjectVisual project={project} priority={priority} />
         </Link>

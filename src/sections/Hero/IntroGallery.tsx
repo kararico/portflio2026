@@ -113,7 +113,7 @@ interface EditorialPlatesProps {
 }
 
 function EditorialPlates({ layer }: EditorialPlatesProps) {
-  const { openProject } = useProjectTransition();
+  const { openProject, isTransitioning } = useProjectTransition();
 
   const plates = heroStoryConfig.editorialPlates
     .filter((item) => item.layer === layer)
@@ -147,11 +147,19 @@ function EditorialPlates({ layer }: EditorialPlatesProps) {
             role="button"
             tabIndex={0}
             onClick={(event) => {
+              if (isTransitioning) {
+                event.preventDefault();
+                return;
+              }
               event.preventDefault();
               openProject(project.slug, event.currentTarget);
             }}
             onKeyDown={(event) => {
               if (event.key !== 'Enter' && event.key !== ' ') return;
+              if (isTransitioning) {
+                event.preventDefault();
+                return;
+              }
               event.preventDefault();
               openProject(project.slug, event.currentTarget);
             }}

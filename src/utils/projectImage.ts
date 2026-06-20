@@ -43,7 +43,7 @@ const SLUG_DETAIL_PREFIX: Record<string, string> = {
 
 /** detail-main/{slug}/ 내 Gallery 이미지 수 — 에셋 폴더와 동기화 */
 const SLUG_DETAIL_COUNT: Record<string, number> = {
-  bullsone: 6,
+  bullsone: 7,
   casamia: 7,
   'discovery-expedition': 7,
   goodpeople: 7,
@@ -51,7 +51,7 @@ const SLUG_DETAIL_COUNT: Record<string, number> = {
   'mlb-korea': 7,
   'starbucks-employee-platform': 7,
   'starbucks-siren119': 7,
-  'wconcept-us': 4,
+  'wconcept-us': 7,
 };
 
 export function getDetailMainCount(slug: string): number {

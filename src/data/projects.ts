@@ -1,3 +1,11 @@
+/**
+ * 프로젝트 카드·목록·SEO 메타 데이터
+ *
+ * - overview: 카드/목록/SEO용 짧은 설명 (상세 본문은 projectDetails.ts)
+ * - role, stack: projectDetails.ts에서 attachProjectDetail()로 주입 (SSOT)
+ * - achievements: 이 파일에서만 관리
+ */
+
 import { siteConfig } from '@/data/site';
 import { projectDetailsBySlug } from '@/data/projectDetails';
 import type { Project } from '@/types/project';
@@ -7,7 +15,7 @@ import {
   buildProductThumbnailPath,
 } from '@/utils/projectImage';
 
-type ProjectSeed = Omit<Project, 'projectDetail'>;
+type ProjectSeed = Omit<Project, 'projectDetail' | 'role' | 'stack'>;
 
 const projectSeeds: ProjectSeed[] = [
   {
@@ -16,8 +24,7 @@ const projectSeeds: ProjectSeed[] = [
     title: 'MLB Korea',
     year: '2022',
     client: 'F&F',
-    platform: 'E-commerce Web',
-    role: 'Web Publisher & UI Engineer',
+    platform: 'Commerce Platform',
     contribution: '100%',
     description: '국내 MLB 공식몰 프론트엔드 Publishing Lead',
     thumbnail: buildProductThumbnailPath('mlb-korea'),
@@ -39,10 +46,9 @@ const projectSeeds: ProjectSeed[] = [
     achievements: [
       { value: '40%', label: '프로모션 제작 리드타임 단축' },
       { value: '100+', label: '프로모션 페이지 운영' },
-      { value: 'Mobile', label: '모바일 중심 커머스 경험' },
-      { value: 'Lead', label: '퍼블리싱 리드 담당' },
+      { value: '모바일', label: '중심 커머스 경험' },
+      { value: '퍼블리싱 리드', label: '프로모션 UI 운영' },
     ],
-    stack: ['React', 'Next.js', 'TypeScript', 'SCSS', 'GSAP'],
     featured: true,
   },
   {
@@ -51,8 +57,7 @@ const projectSeeds: ProjectSeed[] = [
     title: 'Discovery Expedition',
     year: '2022',
     client: 'F&F',
-    platform: 'E-commerce Web',
-    role: 'Web Publisher & UI Engineer',
+    platform: 'Commerce Platform',
     contribution: '100%',
     description: 'Discovery Expedition 이커머스 플랫폼 UI 개발',
     thumbnail: buildProductThumbnailPath('discovery-expedition'),
@@ -62,9 +67,9 @@ const projectSeeds: ProjectSeed[] = [
       objectPosition: '50% 40%',
     },
     overview:
-      '아웃door 브랜드 Discovery Expedition의 공식 이커머스 플랫폼 프론트엔드를 담당했습니다. 대용량 상품 카탈로그와 시즌별 룩북 콘텐츠를 효과적으로 전달하면서도, 모바일 퍼스트 쇼핑 경험을 유지하는 UI를 구현했습니다.',
+      '아웃도어 브랜드 Discovery Expedition의 공식 이커머스 플랫폼 프론트엔드를 담당했습니다. 대용량 상품 카탈로그와 시즌별 룩북 콘텐츠를 효과적으로 전달하면서도, 모바일 퍼스트 쇼핑 경험을 유지하는 UI를 구현했습니다.',
     objectives:
-      '브랜드 아웃door 아이덴티티를 디지털에 반영하고, 상품 탐색·필터링 UX를 개선하여 전환율을 높이는 것.',
+      '브랜드 아웃도어 아이덴티티를 디지털에 반영하고, 상품 탐색·필터링 UX를 개선하여 전환율을 높이는 것.',
     responsibilities: [
       'PLP·PDP·룩북 페이지 UI 개발',
       '반응형 레이아웃 및 인터랙션 구현',
@@ -72,12 +77,11 @@ const projectSeeds: ProjectSeed[] = [
       '성능 최적화 및 크로스 디바이스 QA',
     ],
     achievements: [
-      { value: 'PLP · PDP', label: 'Lookbook Commerce Pages' },
-      { value: 'GSAP', label: 'Immersive Scroll UX' },
-      { value: 'Seasonal', label: 'Campaign Operations' },
-      { value: 'Outdoor', label: 'Brand Commerce' },
+      { value: 'PLP · PDP', label: '룩북·커머스 페이지' },
+      { value: 'GSAP', label: '몰입형 스크롤 UX' },
+      { value: '시즌', label: '캠페인 운영' },
+      { value: '아웃도어', label: '브랜드 커머스' },
     ],
-    stack: ['React', 'JavaScript', 'SCSS', 'GSAP', 'Webpack'],
   },
   {
     id: '3',
@@ -86,8 +90,7 @@ const projectSeeds: ProjectSeed[] = [
     subtitle: '스타벅스 임직원 플랫폼',
     year: '2026',
     client: 'Starbucks Korea',
-    platform: 'Enterprise Web',
-    role: 'Web Publisher & UI Engineer',
+    platform: 'Enterprise Platform',
     contribution: '80%',
     description: '스타벅스 임직원 전용 내부 플랫폼 UI 개발',
     thumbnail: buildProductThumbnailPath('starbucks-employee-platform'),
@@ -108,9 +111,8 @@ const projectSeeds: ProjectSeed[] = [
       { value: '90+', label: 'Lighthouse 성능 점수' },
       { value: '12+', label: '핵심 업무 모듈 구축' },
       { value: '70%+', label: '컴포넌트 재사용률' },
-      { value: 'Enterprise', label: '엔터프라이즈 플랫폼 구축' },
+      { value: '엔터프라이즈', label: '플랫폼 구축' },
     ],
-    stack: ['React', 'TypeScript', 'Redux', 'SCSS', 'REST API'],
     featured: true,
   },
   {
@@ -120,8 +122,7 @@ const projectSeeds: ProjectSeed[] = [
     subtitle: '스타벅스 Siren119',
     year: '2024',
     client: 'Starbucks Korea',
-    platform: 'Hybrid Web',
-    role: 'Web Publisher & UI Engineer',
+    platform: 'Hybrid Web App',
     contribution: '100%',
     description: '스타벅스 Siren119 내부 업무 플랫폼 UI 개발',
     thumbnail: buildProductThumbnailPath('starbucks-siren119'),
@@ -140,11 +141,10 @@ const projectSeeds: ProjectSeed[] = [
     ],
     achievements: [
       { value: '30+', label: '모바일 업무 화면 구축' },
-      { value: 'GSAP', label: '기반 인터랙션 구현' },
-      { value: 'Hybrid', label: '하이브리드 앱 환경 대응' },
-      { value: 'Workflow', label: '업무 프로세스 최적화' },
+      { value: '인터랙션', label: 'GSAP 기반 구현' },
+      { value: '하이브리드', label: '앱 환경 대응' },
+      { value: '업무 프로세스', label: '최적화' },
     ],
-    stack: ['HTML5', 'CSS3', 'JavaScript', 'jQuery', 'SCSS'],
     featured: true,
   },
   {
@@ -155,7 +155,6 @@ const projectSeeds: ProjectSeed[] = [
     year: '2024 ~ 2025',
     client: 'Hyundai EZWEL',
     platform: 'Welfare Platform',
-    role: 'Web Publisher & UI Engineer',
     contribution: '100%',
     description: '현대이지웰 복지 플랫폼 UI 개발',
     thumbnail: buildProductThumbnailPath('hyundai-ezwel'),
@@ -173,12 +172,11 @@ const projectSeeds: ProjectSeed[] = [
       '웹접근성·크로스 디바이스 QA',
     ],
     achievements: [
-      { value: 'PL', label: 'Publishing Lead' },
-      { value: '30+', label: 'Core Screens Built' },
-      { value: 'Vue + TS', label: 'Component System' },
-      { value: 'Welfare', label: 'Platform UI' },
+      { value: '퍼블리싱 리드', label: '퍼블리싱 총괄' },
+      { value: '30+', label: '핵심 화면 구축' },
+      { value: 'Vue + TS', label: '컴포넌트 시스템' },
+      { value: '복지', label: '플랫폼 UI' },
     ],
-    stack: ['Vue', 'TypeScript', 'SCSS'],
     featured: true,
   },
   {
@@ -187,31 +185,30 @@ const projectSeeds: ProjectSeed[] = [
     title: 'W Concept\nUS',
     year: '2023',
     client: 'W Concept',
-    platform: 'Global E-commerce',
-    role: 'Web Publisher & UI Engineer',
+    platform: 'Global E-Commerce',
     contribution: '100%',
-    description: 'W Concept US 글로벌 패션 이커머스 UI',
+    description: 'W Concept US 영문 글로벌 이커머스 구축',
     thumbnail: buildProductThumbnailPath('wconcept-us'),
     homeHero: buildHomeHeroPath('wconcept-us'),
     images: buildProjectImages('wconcept-us'),
     heroImage: { objectPosition: '50% 40%' },
     overview:
-      'W Concept의 미국 시장 진출을 위한 글로벌 이커머스 플랫폼 UI를 개발했습니다. 다국어·다통화·글로벌 배송 정책 등 현지화 요구사항을 반영한 프론트엔드 아키텍처를 구축했습니다.',
+      'W Concept의 미국 시장 진출을 위해 영문 글로벌 이커머스 쇼핑몰 UI를 신규 구축했습니다. React + TypeScript 기반으로 상품 탐색, 주문, 결제 경험을 구현하고, 미국 사용자에 맞는 쇼핑 플로우를 설계했습니다.',
     objectives:
-      '글로벌 UX 표준에 맞는 쇼핑 경험 제공, i18n/l10n 인프라 구축, 북미 시장 브랜드 톤앤매너 반영.',
+      '영문 쇼핑몰 핵심 사용자 여정 구현, 글로벌 쇼핑 플로우 UI 설계, W Concept 브랜드 경험의 미국 시장 런칭.',
     responsibilities: [
-      '글로벌 PDP·Checkout·Account UI 개발',
-      'i18n 다국어 리소스 구조 설계',
-      'Styled Components 기반 테마 시스템 구현',
-      '글로벌 CDN·이미지 최적화 전략 적용',
+      '글로벌 이커머스 서비스 신규 구축 참여',
+      '상품 탐색부터 주문·결제까지 주요 쇼핑 화면 퍼블리싱',
+      '영문 사용자 환경을 고려한 반응형 UI 구현',
+      'React + TypeScript 기반 컴포넌트 구조 설계 및 퍼블리싱',
+      '크로스브라우저 대응 및 서비스 품질 개선',
     ],
     achievements: [
-      { value: 'Global', label: '글로벌 커머스 플랫폼 구축' },
-      { value: 'React + TS', label: 'TypeScript 기반 개발' },
+      { value: '글로벌', label: '이커머스 신규 구축' },
+      { value: 'React + TS', label: '타입 기반 개발' },
       { value: '90+', label: 'Lighthouse 성능 점수' },
-      { value: 'i18n', label: '다국어(영문·국문) 서비스 지원' },
+      { value: '영문', label: '미국 시장 쇼핑몰 런칭' },
     ],
-    stack: ['React', 'Next.js', 'TypeScript', 'Styled Components', 'i18n'],
   },
   {
     id: '5',
@@ -219,8 +216,7 @@ const projectSeeds: ProjectSeed[] = [
     title: 'Casamia',
     year: '2021',
     client: 'Casamia',
-    platform: 'Brand Website',
-    role: 'Web Publisher & UI Engineer',
+    platform: 'Commerce Platform',
     contribution: '100%',
     description: 'Casamia 홈퍼니싱 브랜드 웹사이트 리뉴얼',
     thumbnail: buildProductThumbnailPath('casamia'),
@@ -240,10 +236,9 @@ const projectSeeds: ProjectSeed[] = [
     achievements: [
       { value: '35%', label: '초기 로딩 속도 개선' },
       { value: '95+', label: 'Lighthouse SEO 점수' },
-      { value: 'Brand', label: '브랜드 쇼룸 경험 구축' },
-      { value: 'Semantic', label: '시맨틱 마크업 최적화' },
+      { value: '브랜드', label: '쇼룸 경험 구축' },
+      { value: '시맨틱', label: '마크업 최적화' },
     ],
-    stack: ['HTML', 'CSS', 'JavaScript', 'jQuery', 'SCSS'],
   },
   {
     id: '7',
@@ -252,8 +247,7 @@ const projectSeeds: ProjectSeed[] = [
     subtitle: '불스원',
     year: '2018',
     client: 'Bullsone',
-    platform: 'Brand Web',
-    role: 'Web Publisher & UI Engineer',
+    platform: 'Brand Website',
     contribution: '90%',
     description: '불스원 브랜드 웹사이트 UI 개발',
     thumbnail: buildProductThumbnailPath('bullsone'),
@@ -271,12 +265,11 @@ const projectSeeds: ProjectSeed[] = [
       '크로스브라우저·접근성 QA',
     ],
     achievements: [
-      { value: '30+', label: 'Product Pages Built' },
-      { value: 'Brand', label: 'Storytelling UI' },
-      { value: 'Category', label: 'Navigation System' },
-      { value: 'Auto Care', label: 'Brand Web Platform' },
+      { value: '30+', label: '제품 페이지 구축' },
+      { value: '브랜드', label: '스토리텔링 UI' },
+      { value: '카테고리', label: '탐색 구조 설계' },
+      { value: '자동차 관리', label: '브랜드 웹 플랫폼' },
     ],
-    stack: ['HTML', 'CSS', 'JavaScript', 'jQuery', 'SCSS'],
   },
   {
     id: '8',
@@ -285,8 +278,7 @@ const projectSeeds: ProjectSeed[] = [
     subtitle: '좋은사람들',
     year: '2019',
     client: 'Goodpeople',
-    platform: 'NGO Website',
-    role: 'Web Publisher',
+    platform: 'Commerce Platform',
     contribution: '100%',
     description: '좋은사람들 통합 플랫폼 웹사이트',
     thumbnail: buildProductThumbnailPath('goodpeople'),
@@ -302,19 +294,29 @@ const projectSeeds: ProjectSeed[] = [
       '모바일 성능 최적화',
     ],
     achievements: [
-      { value: '85+', label: 'Mobile Lighthouse Score' },
-      { value: '20%', label: 'Donation Conversion Up' },
-      { value: 'NGO', label: 'Commerce Platform' },
-      { value: 'Story', label: 'Campaign UX' },
+      { value: '85+', label: '모바일 Lighthouse 점수' },
+      { value: '20%', label: '후원 전환율 개선' },
+      { value: 'NGO', label: '커머스 플랫폼' },
+      { value: '캠페인', label: '스토리 UX' },
     ],
-    stack: ['HTML', 'CSS', 'JavaScript', 'PHP', 'jQuery'],
   },
 ];
 
-export const projects: Project[] = projectSeeds.map((project) => ({
-  ...project,
-  projectDetail: projectDetailsBySlug[project.slug],
-}));
+function attachProjectDetail(seed: ProjectSeed): Project {
+  const projectDetail = projectDetailsBySlug[seed.slug];
+  if (!projectDetail) {
+    throw new Error(`Missing projectDetails for slug: ${seed.slug}`);
+  }
+
+  return {
+    ...seed,
+    projectDetail,
+    role: projectDetail.role,
+    stack: projectDetail.techStack,
+  };
+}
+
+export const projects: Project[] = projectSeeds.map(attachProjectDetail);
 
 /** PROJECT INDEX — 동일 연도 내 우선순위 (Featured와 별도) */
 const WORKS_INDEX_SLUG_ORDER = [

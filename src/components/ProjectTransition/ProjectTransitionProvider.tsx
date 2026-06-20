@@ -29,7 +29,7 @@ import {
   lockProjectTransition,
   morphOverlayToHero,
   preloadImage,
-  readThumbnailRect,
+  readProjectSourceRect,
   resetPageTransitionVisibility,
   restoreHomeTransitionContext,
   hideTransitionMain,
@@ -91,6 +91,7 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
   const sourceRef = useRef<HTMLElement | null>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const pendingSlugRef = useRef<string | null>(null);
+  const originPathRef = useRef<string>('/');
 
   const [phase, setPhase] = useState<ProjectTransitionPhase>('idle');
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
@@ -142,12 +143,20 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
         return;
       }
 
+      const fromHome = originPathRef.current === '/';
+
       try {
         hideSourceThumbnail(sourceEl);
-        dimHomeTransitionContext(sourceEl);
+        if (fromHome) {
+          dimHomeTransitionContext(sourceEl);
+        }
 
         setPhase('navigating');
-        markPathnameScrollSkip();
+        if (fromHome) {
+          markPathnameScrollSkip();
+        } else {
+          markPathnameScrollTop();
+        }
         hideTransitionMain();
         router.push(`/work/${slug}`, { scroll: false });
         resetScrollToTop(lenis);
@@ -228,7 +237,8 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
     (slug: string, sourceEl: HTMLElement) => {
       if (runningRef.current) return;
 
-      const captured = readThumbnailRect(sourceEl);
+      originPathRef.current = pathname;
+      const captured = readProjectSourceRect(sourceEl, slug);
       if (!captured) {
         markPathnameScrollTop();
         router.push(`/work/${slug}`, { scroll: false });
@@ -241,15 +251,16 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
       const detailHeroSrc = project ? getProjectDetailHeroPrimarySrc(project) : null;
       setOverlayObjectPosition(project ? getProjectHeroObjectPosition(project) : 'center');
 
-      // rect는 클릭 DOM, src는 slug 기준 thumbnail 데이터 (DOM img와 분리)
-      const overlaySrc = thumbnailSrc
-        ? getImageCandidates(thumbnailSrc)[0]
-        : captured.imageSrc || null;
+      const overlaySrc =
+        captured.imageSrc ||
+        (thumbnailSrc ? getImageCandidates(thumbnailSrc)[0] : null);
 
-      saveHomeScrollSnapshot({
-        scrollY: lenis?.scroll ?? window.scrollY,
-        slug,
-      });
+      if (originPathRef.current === '/') {
+        saveHomeScrollSnapshot({
+          scrollY: lenis?.scroll ?? window.scrollY,
+          slug,
+        });
+      }
 
       runningRef.current = true;
       directionRef.current = 'forward';
@@ -269,7 +280,7 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
 
       router.prefetch(`/work/${slug}`);
     },
-    [lenis, router],
+    [lenis, pathname, router],
   );
 
   const closeProject = useCallback(

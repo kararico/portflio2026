@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Suspense, useRef, useLayoutEffect, useState, useCallback } from 'react';
+import { Suspense, useRef, useLayoutEffect, useState, useCallback, type MouseEvent } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { initAboutAnimation, bindProfileSectionReveal, bindBackgroundTypeParallax } from '@/animations/about';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
@@ -9,6 +9,7 @@ import { siteConfig } from '@/data/site';
 import { getHeroFeaturedProjects } from '@/data/projects';
 import type { Project } from '@/types/project';
 import { registerGsapPlugins } from '@/utils/gsap/registerGsap';
+import { useProjectTransition } from '@/components/ProjectTransition/ProjectTransitionProvider';
 import AboutBackground, { type AboutTypeLabelKey } from './AboutBackground';
 import AboutImage from './AboutImage';
 import AboutSelectedPreview from './AboutSelectedPreview';
@@ -39,6 +40,7 @@ function AboutContent({
   const typeLabel = about.background.typeLabels[typeLabelKey];
   const [hoveredProject, setHoveredProject] = useState<Project | null>(null);
   const [hoveredEntry, setHoveredEntry] = useState<HTMLElement | null>(null);
+  const { openProject, isTransitioning } = useProjectTransition();
 
   const handleProjectEnter = useCallback((project: Project, entry: HTMLElement) => {
     setHoveredProject(project);
@@ -49,6 +51,33 @@ function AboutContent({
     setHoveredProject(null);
     setHoveredEntry(null);
   }, []);
+
+  const handleProjectClick = useCallback(
+    (project: Project, event: MouseEvent<HTMLAnchorElement>) => {
+      if (isTransitioning) {
+        event.preventDefault();
+        return;
+      }
+
+      event.preventDefault();
+
+      let sourceEl: HTMLElement = event.currentTarget;
+      if (hoveredProject?.slug === project.slug) {
+        const previewLayer = document.querySelector<HTMLElement>(
+          '[data-about-selected-preview] [data-about-selected-preview-layer] img',
+        )?.closest<HTMLElement>('[data-about-selected-preview-layer]');
+        if (previewLayer) {
+          sourceEl = previewLayer;
+        } else {
+          const previewFrame = document.querySelector<HTMLElement>('[data-about-selected-preview]');
+          if (previewFrame) sourceEl = previewFrame;
+        }
+      }
+
+      openProject(project.slug, sourceEl);
+    },
+    [hoveredProject, isTransitioning, openProject],
+  );
 
   useLayoutEffect(() => {
     const root = sectionRef.current;
@@ -128,7 +157,9 @@ function AboutContent({
                   <Link
                     href={`/work/${project.slug}`}
                     className={styles.projectLink}
+                    data-project-slug={project.slug}
                     data-cursor-style="view"
+                    onClick={(event) => handleProjectClick(project, event)}
                   >
                     <h3 className={styles.projectTitle}>{project.title}</h3>
                     <p className={styles.projectRole}>{project.role}</p>

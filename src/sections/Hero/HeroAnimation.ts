@@ -151,19 +151,23 @@ export function initHeroIntroAnimation(refs: HeroIntroRefs): gsap.Context {
       }
     }
 
-    introTl.add(
-      gsap.from(metaItems, {
-        opacity: 0,
-        y: intro.meta.y,
+    introTl.to(
+      metaItems,
+      {
+        opacity: 1,
+        y: 0,
         duration: intro.meta.duration,
         stagger: intro.meta.stagger,
         ease: intro.meta.ease,
-      }),
+      },
       hasExpand ? `>-=${intro.meta.overlap * 0.35}` : `-=${intro.meta.overlap}`,
     );
 
     const introDelay = hasExpand ? intro.delayAfterRevealExpand : intro.delayAfterReveal;
-    const cancelWait = waitForPreloaderHandoff(() => introTl.play(), introDelay);
+    const cancelWait = waitForPreloaderHandoff(() => {
+      gsap.set(metaItems, { opacity: 0, y: intro.meta.y });
+      introTl.play(0);
+    }, introDelay);
 
     return () => {
       cancelWait();

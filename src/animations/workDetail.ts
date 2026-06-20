@@ -27,10 +27,10 @@ const SLOT_REVEAL: Record<EditorialSlotType, SlotRevealConfig> = {
   planLeft: { variant: 'fadeUp', y: 48 },
   tallRight: { variant: 'fadeScale', y: 32, scale: 1.08 },
   bannerOverlap: { variant: 'scaleIn', scale: 1.08 },
-  greenhouseLeft: { variant: 'none' },
-  ceilingRight: { variant: 'fadeUp', y: 24 },
-  duoLeft: { variant: 'slideLeft' },
-  duoRight: { variant: 'slideRight', delay: 0.12 },
+  gridTopLeft: { variant: 'fadeUp', y: 32 },
+  gridTopRight: { variant: 'fadeScale', y: 24, scale: 1.06 },
+  gridBottomLeft: { variant: 'slideLeft' },
+  gridBottomRight: { variant: 'slideRight', delay: 0.12 },
 };
 
 /** Editorial detail — visible band only, subtle depth */
@@ -44,10 +44,10 @@ const SLOT_PARALLAX: Record<EditorialSlotType, number | null> = {
   planLeft: PARALLAX_STRENGTH,
   tallRight: PARALLAX_STRENGTH,
   bannerOverlap: null,
-  greenhouseLeft: null,
-  ceilingRight: null,
-  duoLeft: null,
-  duoRight: null,
+  gridTopLeft: null,
+  gridTopRight: null,
+  gridBottomLeft: null,
+  gridBottomRight: null,
 };
 
 const STATIC_IMAGE_COUNT = 1;

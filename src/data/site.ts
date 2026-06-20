@@ -52,7 +52,7 @@ export const siteConfig = {
       assetPath('/images/products/home-main/mlb-main-bg.png'),
       assetPath('/images/products/home-main/st-main-bg.png'),
     ] as const,
-    location: 'Seoul, South Korea',
+    location: 'Incheon, South Korea',
     clientsLabel: 'Selected Clients',
     clients: [
       'STARBUCKS',
@@ -83,12 +83,11 @@ export const siteConfig = {
     selectedLabel: 'Selected Projects',
     viewAllLabel: 'View all projects',
     portraitImage: assetPath('/images/products/Profile-img.png'),
-    portraitAlt:
-      'Black and white workspace portrait of a web publisher reviewing a design layout',
+    portraitAlt: 'Black and white workspace portrait of a web publisher reviewing a design layout',
     portraitCaption: {
       label: 'Incheon',
-      year: '2026',
-      line: 'Digital Experience Workspace',
+      year: 'Web Publisher & UI Engineer',
+      line: 'Since 2013',
     },
     background: {
       /** 시안 비교: ?about-type=profile | ?about-type=since2013 */
@@ -113,8 +112,7 @@ export const siteConfig = {
     indexLabel: 'PROJECT INDEX',
     metaLabels: {
       client: 'Client',
-      year: 'Year',
-      role: 'Role',
+      type: 'TYPE',
       contribution: 'Contribution',
     },
     mobileInfoLabels: {
@@ -145,8 +143,7 @@ export const siteConfig = {
   experience: {
     sectionId: 'experience',
     sectionLabel: 'Experience',
-    sectionDesc:
-      '2013년부터 현재까지 구축 프로젝트에서는 메인과 핵심 사용자 경험 영역을,\n운영 프로젝트에서는 브랜드 서비스의 운영·고도화와 퍼블리싱 리드를 담당해 온 Web Publisher & UI Engineer 경력',
+    sectionDesc: `2013년부터 다양한 디지털 서비스의 구축과 운영을 경험하며, 핵심 UI 구현부터\n 서비스 고도화, 퍼블리싱 리드까지 수행해온 Web Publisher & UI Engineer입니다.`,
     projectsLabel: 'Projects',
     stackLabel: 'Stack',
   },
@@ -154,8 +151,7 @@ export const siteConfig = {
     sectionLabel: "Let's Talk",
     lead: 'Available for collaboration',
     headlineLines: ["Let's build something", 'together'] as const,
-    description:
-      '프로젝트 문의 및 협업 제안은 언제든 편하게 연락해주세요.',
+    description: '프로젝트 문의 및 협업 제안은 언제든 편하게 연락해주세요.',
     emailLabel: 'Email',
     linksLabel: 'Links',
     locationLabel: 'Location',

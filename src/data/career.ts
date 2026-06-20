@@ -3,33 +3,38 @@ import type { CareerEntry } from '@/types/career';
 export const careerEntries: CareerEntry[] = [
   {
     id: 'fullgrimm',
-    period: '2022 — Present',
+    period: '2022 — 현재',
     company: '플그림',
     role: 'Web Publisher & UI Engineer',
     projects: [
       {
         name: 'Starbucks Partner Hub',
-        description: '업무 모듈·공통 UI 설계',
+        description: '임직원 플랫폼·공통 UI 설계',
         slug: 'starbucks-employee-platform',
       },
       {
         name: 'Hyundai EZWEL',
-        description: '퍼블리싱 총괄·PL',
+        description: '복지 플랫폼 퍼블리싱 총괄·PL',
         slug: 'hyundai-ezwel',
       },
       {
+        name: 'W Concept US',
+        description: '영문 글로벌 이커머스 신규 구축',
+        slug: 'wconcept-us',
+      },
+      {
         name: 'Starbucks Siren119',
-        description: '모바일 UX·인터랙션 구현',
+        description: '모바일 업무 UX·인터랙션 구현',
         slug: 'starbucks-siren119',
       },
       {
         name: 'MLB Korea',
-        description: '퍼블리싱 리드·운영 고도화',
+        description: '커머스 운영·프로모션 퍼블리싱 리드',
         slug: 'mlb-korea',
       },
       {
         name: 'Discovery Expedition',
-        description: '커머스 UI 운영·고도화',
+        description: '커머스 경험 운영·UI 고도화',
         slug: 'discovery-expedition',
       },
     ],
@@ -42,14 +47,13 @@ export const careerEntries: CareerEntry[] = [
     role: 'Web Publisher & UI Engineer',
     projects: [
       {
-        name: 'W Concept US',
-        description: '글로벌 PDP·Checkout UI',
-        slug: 'wconcept-us',
+        name: 'Casamia',
+        description: '브랜드 쇼룸·커머스 UI 구축',
+        slug: 'casamia',
       },
       {
-        name: 'Casamia',
-        description: '브랜드·제품 페이지 UI',
-        slug: 'casamia',
+        name: 'Guud',
+        description: '리빙&라이프스타일 이커머스 플랫폼 퍼블리싱',
       },
     ],
     stack: ['Vue', 'JavaScript', 'SCSS'],
@@ -62,24 +66,24 @@ export const careerEntries: CareerEntry[] = [
     projects: [
       {
         name: '불스원',
-        description: '브랜드·제품 페이지 UI',
+        description: '브랜드 스토리텔링·제품 경험 구축',
         slug: 'bullsone',
       },
       {
         name: '좋은사람들',
-        description: '쇼핑몰 핵심 화면 UI',
+        description: '쇼핑몰 핵심 UX·상품 탐색 경험',
         slug: 'goodpeople',
       },
       {
         name: '호두 잉글리시',
-        description: '영어 학습 서비스 UI',
+        description: '에듀테크 서비스 UI 구축',
       },
       {
         name: '팸퍼스',
-        description: '캠페인·프로모션 페이지',
+        description: '캠페인·프로모션 페이지 구축',
       },
     ],
-    stack: ['HTML', 'CSS3', 'JavaScript', 'jQuery', 'Vue', 'SCSS'],
+    stack: ['HTML5', 'CSS3', 'JavaScript', 'jQuery', 'Vue', 'SCSS'],
   },
   {
     id: 'phishingtree',
@@ -89,15 +93,15 @@ export const careerEntries: CareerEntry[] = [
     projects: [
       {
         name: 'LG Signature',
-        description: '프리미엄 브랜드 사이트 UI',
+        description: '글로벌 브랜드 사이트 구축',
       },
       {
         name: 'Lineage M',
-        description: '프로모션·이벤트 페이지',
+        description: '게임 프로모션·이벤트 페이지 구축',
       },
       {
         name: 'CARBY',
-        description: '자동차 서비스 웹 UI',
+        description: '중고차 서비스 플랫폼 UI 구축',
       },
     ],
     stack: ['HTML5', 'CSS3', 'jQuery', 'JavaScript', 'Responsive Web'],
@@ -110,15 +114,15 @@ export const careerEntries: CareerEntry[] = [
     projects: [
       {
         name: '트레블 앤쿡',
-        description: '여행·레시피 콘텐츠 UI',
+        description: '음식 커머스 서비스 UI 구축',
       },
       {
         name: '삼육지',
-        description: '출판 브랜드 사이트 UI',
+        description: '프랜차이즈 브랜드 서비스 구축',
       },
       {
         name: '펀비어킹',
-        description: '프랜차이즈 브랜드 사이트 UI',
+        description: '프랜차이즈 브랜드 서비스 구축',
       },
     ],
     stack: ['HTML5', 'CSS3', 'jQuery', 'Photoshop'],

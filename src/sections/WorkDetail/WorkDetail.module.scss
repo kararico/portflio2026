@@ -345,15 +345,20 @@
   }
 }
 
-/* Row 3 — 좌 wide + 우 small tall (intro·duo와 동일 6|8 컬럼 gutter) */
-.slot_greenhouseLeft {
+/* Row 3 — 2×2 editorial grid (detail[3~6], intro와 동일 1/6 · 8/13 gutter) */
+.slot_gridTopLeft,
+.slot_gridBottomLeft {
   grid-column: 1 / 6;
   width: 100%;
 }
 
-.slot_ceilingRight {
+.slot_gridTopRight,
+.slot_gridBottomRight {
   grid-column: 8 / 13;
   width: 100%;
+}
+
+.slot_gridBottomRight {
   margin-top: clamp(1rem, 3vh, 2rem);
 }
 
@@ -653,19 +658,6 @@
   & + & {
     margin-top: 1.35em;
   }
-}
-
-/* Row 4 — duo side by side (1/7·7/13 인접 → intro와 동일 1/6·8/13 gutter) */
-.slot_duoLeft {
-  grid-column: 1 / 6;
-  width: 100%;
-  margin-bottom: clamp(1.25rem, 3vw, 2rem);
-}
-
-.slot_duoRight {
-  grid-column: 8 / 13;
-  width: 100%;
-  margin-bottom: clamp(1.25rem, 3vw, 2rem);
 }
 
 /* ── Footer: Next highlight project + Back to top (Septiembre .next-project) ── */
@@ -986,14 +978,26 @@
 
   .slot_planLeft,
   .slot_tallRight,
-  .slot_greenhouseLeft,
-  .slot_ceilingRight,
-  .slot_duoLeft,
-  .slot_duoRight,
+  .slot_gridTopLeft,
+  .slot_gridTopRight,
+  .slot_gridBottomLeft,
+  .slot_gridBottomRight,
   .storyRow_banner .slot_bannerOverlap {
     width: 100%;
     max-width: 100%;
     margin: 0;
+  }
+
+  .storyRow_grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--mobile-gallery-card-gap);
+    width: 100%;
+    min-width: 0;
+  }
+
+  .storyRow_grid .slot_gridBottomRight {
+    margin-top: 0;
   }
 
   .storyDetail {

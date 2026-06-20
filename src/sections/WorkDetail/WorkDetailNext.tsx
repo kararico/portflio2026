@@ -15,11 +15,20 @@ interface WorkDetailNextProps {
 
 export default function WorkDetailNext({ nextProject }: WorkDetailNextProps) {
   const lenis = useLenis();
-  const { isTransitioning } = useProjectTransition();
+  const { openProject, isTransitioning } = useProjectTransition();
   const { nextProjectLabel, backToTopLabel } = siteConfig.detail;
 
   const handleNavClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (isTransitioning) event.preventDefault();
+    if (isTransitioning) {
+      event.preventDefault();
+      return;
+    }
+
+    event.preventDefault();
+    const sourceEl =
+      event.currentTarget.querySelector<HTMLElement>('[data-detail-next-media]') ??
+      event.currentTarget;
+    openProject(nextProject.slug, sourceEl);
   };
 
   const handleBackToTop = (event: MouseEvent<HTMLButtonElement>) => {

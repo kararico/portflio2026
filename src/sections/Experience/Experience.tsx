@@ -50,8 +50,8 @@ export default function Experience() {
         </header>
 
         <div className={styles.timeline}>
-          {careerEntries.map((entry, index) => (
-            <TimelineItem key={entry.id} entry={entry} index={index} />
+          {careerEntries.map((entry) => (
+            <TimelineItem key={entry.id} entry={entry} />
           ))}
         </div>
       </div>

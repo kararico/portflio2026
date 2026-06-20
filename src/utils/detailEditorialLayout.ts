@@ -5,12 +5,12 @@ export type EditorialSlotType =
   | 'planLeft'
   | 'tallRight'
   | 'bannerOverlap'
-  | 'greenhouseLeft'
-  | 'ceilingRight'
-  | 'duoLeft'
-  | 'duoRight';
+  | 'gridTopLeft'
+  | 'gridTopRight'
+  | 'gridBottomLeft'
+  | 'gridBottomRight';
 
-export type EditorialRowId = 'intro' | 'banner' | 'mid' | 'duo';
+export type EditorialRowId = 'intro' | 'banner' | 'grid';
 
 export interface EditorialLayoutItem {
   slot: EditorialSlotType;
@@ -48,15 +48,18 @@ function pick(details: string[], ...indices: number[]): string {
   return details[0] ?? '';
 }
 
-/** Garden Pizza 스타일 비대칭 editorial row 구성 */
+/** Garden Pizza 스타일 editorial — Hero + detail[0~6] 각 1회 사용 */
 export function getEditorialStoryLayout(project: Project): EditorialStoryLayout {
   const details = getProjectGalleryImages(project);
-  const mobile = project.images.mobile;
   const title = project.title;
 
   const d0 = pick(details, 0);
   const d1 = pick(details, 1, 0);
   const d2 = pick(details, 2, 1, 0);
+  const d3 = pick(details, 3, 2, 0);
+  const d4 = pick(details, 4, 3, 0);
+  const d5 = pick(details, 5, 4, 0);
+  const d6 = pick(details, 6, 5, 0);
 
   return {
     rows: [
@@ -73,17 +76,12 @@ export function getEditorialStoryLayout(project: Project): EditorialStoryLayout 
         items: [layoutItem('bannerOverlap', [d2], title, 'feature')],
       },
       {
-        id: 'mid',
+        id: 'grid',
         items: [
-          layoutItem('greenhouseLeft', [d2], title, 'interior'),
-          layoutItem('ceilingRight', [d1], title, 'detail'),
-        ],
-      },
-      {
-        id: 'duo',
-        items: [
-          layoutItem('duoLeft', [d0], title, 'detail'),
-          layoutItem('duoRight', [mobile ?? d2], title, 'detail'),
+          layoutItem('gridTopLeft', [d3], title, 'grid'),
+          layoutItem('gridTopRight', [d4], title, 'grid'),
+          layoutItem('gridBottomLeft', [d5], title, 'grid'),
+          layoutItem('gridBottomRight', [d6], title, 'grid'),
         ],
       },
     ],
@@ -100,14 +98,14 @@ export type EditorialImageLayout = 'large' | 'wide' | 'small' | 'sketch' | 'tall
 export function slotToImageLayout(slot: EditorialSlotType): EditorialImageLayout {
   switch (slot) {
     case 'planLeft':
+    case 'gridTopLeft':
+    case 'gridTopRight':
+    case 'gridBottomLeft':
+    case 'gridBottomRight':
       return 'large';
     case 'tallRight':
-    case 'ceilingRight':
       return 'tall';
     case 'bannerOverlap':
-    case 'greenhouseLeft':
-    case 'duoLeft':
-    case 'duoRight':
       return 'wide';
     default:
       return 'large';

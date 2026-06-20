@@ -5,7 +5,6 @@ import styles from './Experience.module.scss';
 
 interface TimelineItemProps {
   entry: CareerEntry;
-  index: number;
 }
 
 function parseCareerPeriod(period: string): { start: string; end?: string } {
@@ -16,7 +15,7 @@ function parseCareerPeriod(period: string): { start: string; end?: string } {
   return { start: parts[0].trim(), end: parts.slice(1).join(' — ').trim() };
 }
 
-export default function TimelineItem({ entry, index }: TimelineItemProps) {
+export default function TimelineItem({ entry }: TimelineItemProps) {
   const { projectsLabel, stackLabel } = siteConfig.experience;
   const { start: periodStart, end: periodEnd } = parseCareerPeriod(entry.period);
 
@@ -38,9 +37,6 @@ export default function TimelineItem({ entry, index }: TimelineItemProps) {
             </>
           ) : null}
         </time>
-        <span className={styles.index} aria-hidden="true" data-reveal-item>
-          {String(index + 1).padStart(2, '0')}
-        </span>
       </div>
 
       <div

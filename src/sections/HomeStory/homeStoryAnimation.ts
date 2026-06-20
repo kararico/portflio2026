@@ -447,13 +447,22 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
 
     let targetProgress = 0;
     let currentProgress = 0;
+    let metaScrollFadeActive = false;
     const mobileTitleState: MobileHeroTitleState = { hidePeak: 0 };
 
     const applyScrollProgress = (progress: number) => {
       const metaT = phaseProgress(progress, phases.metaFade.start, phases.metaFade.end);
-      metaItems.forEach((el) => {
-        gsap.set(el, { opacity: 1 - metaT, y: lerpValue(0, -18, metaT) });
-      });
+      if (metaT > 0) {
+        metaScrollFadeActive = true;
+        metaItems.forEach((el) => {
+          gsap.set(el, { opacity: 1 - metaT, y: lerpValue(0, -18, metaT) });
+        });
+      } else if (metaScrollFadeActive) {
+        metaScrollFadeActive = false;
+        metaItems.forEach((el) => {
+          gsap.set(el, { opacity: 1, y: 0 });
+        });
+      }
 
       const centerT = phaseProgress(progress, phases.centerMove.start, phases.centerMove.end);
       const exitY = getCenterExitY();
@@ -692,7 +701,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
           onLeaveBack: () => root.removeAttribute('data-scene-pinned'),
         });
 
-    ScrollTrigger.create({
+    const progressTrigger = ScrollTrigger.create({
       trigger: heroSection,
       start: 'top top',
       end: scrollDistance,
@@ -745,6 +754,7 @@ export function initHomeStoryAnimation(refs: HomeStoryAnimationRefs): gsap.Conte
       ) {
         mobileTitleState.hidePeak = 0;
       }
+      targetProgress = progressTrigger.progress;
       currentProgress = targetProgress;
       applyScrollProgress(currentProgress);
     });

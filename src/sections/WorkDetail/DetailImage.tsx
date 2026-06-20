@@ -80,10 +80,10 @@ export default function DetailImage({
   const resolvedSrc = resolveImageSrc(src);
 
   const handleOpenViewer = useCallback(
-    (event: { stopPropagation: () => void }) => {
+    (event: { stopPropagation: () => void; currentTarget: HTMLDivElement }) => {
       if (!viewable || !resolvedSrc) return;
       event.stopPropagation();
-      openViewer({ src: resolvedSrc, alt });
+      openViewer({ src: resolvedSrc, alt }, event.currentTarget);
     },
     [viewable, resolvedSrc, alt, openViewer],
   );
@@ -93,7 +93,7 @@ export default function DetailImage({
       if (!viewable || !resolvedSrc) return;
       if (event.key !== 'Enter' && event.key !== ' ') return;
       event.preventDefault();
-      openViewer({ src: resolvedSrc, alt });
+      openViewer({ src: resolvedSrc, alt }, event.currentTarget);
     },
     [viewable, resolvedSrc, alt, openViewer],
   );

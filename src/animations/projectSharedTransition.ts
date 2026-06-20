@@ -1,4 +1,6 @@
 import gsap from 'gsap';
+import { getProjectBySlug } from '@/data/projects';
+import { getImageCandidates, getProjectThumbnail } from '@/utils/projectImage';
 import { registerGsapPlugins } from '@/utils/gsap/registerGsap';
 
 registerGsapPlugins();
@@ -10,21 +12,105 @@ export interface SourceRect {
   height: number;
 }
 
+function readBoundsRect(el: HTMLElement): SourceRect {
+  const bounds = el.getBoundingClientRect();
+  return {
+    left: bounds.left,
+    top: bounds.top,
+    width: bounds.width,
+    height: bounds.height,
+  };
+}
+
+function resolveImageSrcFromSource(sourceEl: HTMLElement, img: HTMLImageElement | null): string {
+  return (
+    img?.getAttribute('data-thumbnail-src') ||
+    img?.currentSrc ||
+    img?.src ||
+    sourceEl.getAttribute('data-detail-image-resolved-src') ||
+    sourceEl.closest<HTMLElement>('[data-detail-image-frame]')?.getAttribute('data-detail-image-resolved-src') ||
+    ''
+  );
+}
+
 export function readThumbnailRect(sourceEl: HTMLElement): { rect: SourceRect; imageSrc: string } | null {
   const img = sourceEl.querySelector('img');
-  if (!img?.src) return null;
+  const rectTarget =
+    sourceEl.querySelector<HTMLElement>('[data-detail-media-inner]') ??
+    sourceEl.querySelector<HTMLElement>('[data-hero-plate-media]') ??
+    sourceEl;
 
-  const bounds = img.getBoundingClientRect();
-  const dataSrc = img.getAttribute('data-thumbnail-src');
-  return {
-    imageSrc: dataSrc || img.currentSrc || img.src,
-    rect: {
-      left: bounds.left,
-      top: bounds.top,
-      width: bounds.width,
-      height: bounds.height,
-    },
-  };
+  const imageSrc = resolveImageSrcFromSource(sourceEl, img);
+  if (!imageSrc) return null;
+
+  let rect = img ? readBoundsRect(img) : readBoundsRect(rectTarget);
+  if (rect.width <= 0 || rect.height <= 0) {
+    rect = readBoundsRect(rectTarget);
+  }
+  if (rect.width <= 0 || rect.height <= 0) return null;
+
+  return { rect, imageSrc };
+}
+
+/** Detail hero / gallery frame → viewer morph용 */
+export function readDetailImageSourceRect(
+  sourceEl: HTMLElement,
+  imageSrc: string,
+): { rect: SourceRect; imageSrc: string } | null {
+  const captured = readThumbnailRect(sourceEl);
+  if (captured) {
+    return { rect: captured.rect, imageSrc: captured.imageSrc || imageSrc };
+  }
+
+  const frame =
+    sourceEl.closest<HTMLElement>('[data-detail-image-frame]') ??
+    sourceEl.querySelector<HTMLElement>('[data-detail-image-frame]') ??
+    sourceEl;
+  const rectTarget = frame.querySelector<HTMLElement>('[data-detail-media-inner]') ?? frame;
+  const rect = readBoundsRect(rectTarget);
+  if (rect.width <= 0 || rect.height <= 0) return null;
+
+  return { rect, imageSrc };
+}
+
+/** img 없는 링크·텍스트 소스 — slug 기준 thumbnail + 요소 rect */
+export function readProjectSourceRect(
+  sourceEl: HTMLElement,
+  slug?: string,
+): { rect: SourceRect; imageSrc: string } | null {
+  const fromImage = readThumbnailRect(sourceEl);
+  if (fromImage) return fromImage;
+
+  const resolvedSlug =
+    slug ??
+    sourceEl.getAttribute('data-project-slug') ??
+    sourceEl.closest<HTMLElement>('[data-project-slug]')?.getAttribute('data-project-slug') ??
+    undefined;
+
+  if (!resolvedSlug) return null;
+
+  const project = getProjectBySlug(resolvedSlug);
+  if (!project) return null;
+
+  const imageSrc = getImageCandidates(getProjectThumbnail(project))[0];
+  if (!imageSrc) return null;
+
+  const img = sourceEl.querySelector('img');
+  const rect = img
+    ? (() => {
+        const bounds = img.getBoundingClientRect();
+        return {
+          left: bounds.left,
+          top: bounds.top,
+          width: bounds.width,
+          height: bounds.height,
+        };
+      })()
+    : readElementRect(sourceEl);
+
+  if (rect.width <= 0 || rect.height <= 0) return null;
+
+  return { rect, imageSrc };
 }
 
 export function lockProjectTransition() {

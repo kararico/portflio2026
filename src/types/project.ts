@@ -4,9 +4,12 @@ export interface ProjectAchievement {
 }
 
 export interface ProjectDetailContent {
+  /** Detail 본문 overview — projects.overview(목록/SEO)와 역할 분리 */
   overview: string;
+  /** Works·Detail 공통 role (SSOT) */
   role: string;
   contributions: string[];
+  /** Works·Detail 공통 stack (SSOT) — projects.stack으로 주입 */
   techStack: string[];
   outcome: string;
   /** Outcome 아래 Key Features — 3~5개 권장 */
@@ -43,6 +46,7 @@ export interface Project {
   subtitle?: string;
   year: string;
   client: string;
+  /** projectDetails.role에서 주입 (SSOT) */
   role: string;
   /** Work Detail Hero — Client / Platform 메타 */
   platform?: string;
@@ -55,7 +59,7 @@ export interface Project {
   images: ProjectImages;
   /** Work Detail Hero crop — focal point (src는 images.hero 사용) */
   heroImage?: HeroImage;
-  /** CMS: 프로젝트 개요 */
+  /** SEO·카드·목록용 짧은 설명 — Detail 본문 overview는 projectDetail.overview */
   overview: string;
   /** CMS: 프로젝트 목표 */
   objectives: string;
@@ -71,7 +75,7 @@ export interface Project {
   responsibilities: string[];
   /** KPI 성과 지표 — Detail Achievements 섹션 */
   achievements: ProjectAchievement[];
-  /** CMS: 기술 스택 */
+  /** projectDetails.techStack에서 주입 (SSOT) */
   stack: string[];
   featured?: boolean;
 }

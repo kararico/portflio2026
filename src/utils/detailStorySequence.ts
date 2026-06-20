@@ -6,17 +6,16 @@ export type DetailStorySection =
   | { type: 'row'; row: EditorialStoryRow }
   | { type: 'detail' };
 
-/** Hero → case study detail → editorial image rows (varied rhythm) */
+/** Hero → case study detail → editorial image rows (intro → banner → grid) */
 export function getDetailStorySections(project: Project): DetailStorySection[] {
   const { rows } = getEditorialStoryLayout(project);
-  const [intro, banner, mid, duo] = rows;
+  const [intro, banner, grid] = rows;
 
   return [
     { type: 'hero' },
     { type: 'detail' },
     { type: 'row', row: intro },
     { type: 'row', row: banner },
-    { type: 'row', row: duo },
-    { type: 'row', row: mid },
+    { type: 'row', row: grid },
   ];
 }
