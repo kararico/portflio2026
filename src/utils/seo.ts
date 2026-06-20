@@ -6,8 +6,9 @@ import { getAbsoluteSiteUrl } from '@/utils/siteUrl';
 export function getDefaultOgImage() {
   const { ogImagePath, ogImageAlt, ogImageWidth, ogImageHeight } = siteConfig.seo;
 
+  // metadataBase already includes the site origin; avoid assetPath to prevent basePath doubling.
   return {
-    url: assetPath(ogImagePath),
+    url: ogImagePath,
     width: ogImageWidth,
     height: ogImageHeight,
     alt: ogImageAlt,

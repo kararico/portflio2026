@@ -2,6 +2,8 @@ import type { MetadataRoute } from 'next';
 import { siteConfig } from '@/data/site';
 import { assetPath } from '@/utils/assetPath';
 
+export const dynamic = 'force-static';
+
 export default function manifest(): MetadataRoute.Manifest {
   const icon = (file: string) => assetPath(`/favicon/${file}`);
 

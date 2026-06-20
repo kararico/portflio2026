@@ -3,6 +3,8 @@ import { projects } from '@/data/projects';
 import { siteConfig } from '@/data/site';
 import { getAbsoluteSiteUrl } from '@/utils/siteUrl';
 
+export const dynamic = 'force-static';
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 

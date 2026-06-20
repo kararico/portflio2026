@@ -289,7 +289,7 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
       setPhase('navigating');
       void runBackFadeTransition();
     },
-    [lenis, router, runBackFadeTransition],
+    [lenis, runBackFadeTransition],
   );
 
   useEffect(() => {
