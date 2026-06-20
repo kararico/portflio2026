@@ -32,7 +32,7 @@ const PROJECTS = [
   },
   { slug: 'hyundai-ezwel', detailCount: 3, source: 'hd-img.png' },
   { slug: 'wconcept-us', detailCount: 4, source: 'wc-img.png' },
-  { slug: 'casamia', detailCount: 2, source: 'casa-img.png' },
+  { slug: 'casamia', detailCount: 7, source: 'casa-img.png' },
   { slug: 'bullsone', detailCount: 6, source: 'bs-img.png', fallback: 'bullsone-detail-01.png' },
   { slug: 'goodpeople', detailCount: 7, source: 'gp-img.png' },
 ];

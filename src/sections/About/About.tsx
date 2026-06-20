@@ -1,15 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { Suspense, useRef, useLayoutEffect } from 'react';
+import { Suspense, useRef, useLayoutEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { initAboutAnimation, bindProfileSectionReveal, bindSelectedProjectsAnimation, bindBackgroundTypeParallax } from '@/animations/about';
+import { initAboutAnimation, bindProfileSectionReveal, bindBackgroundTypeParallax } from '@/animations/about';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
 import { siteConfig } from '@/data/site';
 import { getHeroFeaturedProjects } from '@/data/projects';
+import type { Project } from '@/types/project';
 import { registerGsapPlugins } from '@/utils/gsap/registerGsap';
 import AboutBackground, { type AboutTypeLabelKey } from './AboutBackground';
 import AboutImage from './AboutImage';
+import AboutSelectedPreview from './AboutSelectedPreview';
 import {
   PROFILE_DISTORTION_DEFAULTS,
   resolveProfileDistortionIntensity,
@@ -31,9 +33,22 @@ function AboutContent({
   forceHover?: boolean;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
+  const selectedBodyRef = useRef<HTMLDivElement>(null);
   const { about, works, hero } = siteConfig;
   const featuredProjects = getHeroFeaturedProjects();
   const typeLabel = about.background.typeLabels[typeLabelKey];
+  const [hoveredProject, setHoveredProject] = useState<Project | null>(null);
+  const [hoveredEntry, setHoveredEntry] = useState<HTMLElement | null>(null);
+
+  const handleProjectEnter = useCallback((project: Project, entry: HTMLElement) => {
+    setHoveredProject(project);
+    setHoveredEntry(entry);
+  }, []);
+
+  const handleProjectLeave = useCallback(() => {
+    setHoveredProject(null);
+    setHoveredEntry(null);
+  }, []);
 
   useLayoutEffect(() => {
     const root = sectionRef.current;
@@ -41,14 +56,12 @@ function AboutContent({
 
     registerGsapPlugins();
     const cleanupReveal = bindProfileSectionReveal(root);
-    const cleanupSelected = bindSelectedProjectsAnimation(root);
     const cleanupBackground = bindBackgroundTypeParallax(root);
     const ctx = initAboutAnimation(root);
     refreshScrollTrigger();
 
     return () => {
       cleanupReveal();
-      cleanupSelected();
       cleanupBackground();
       ctx.revert();
     };
@@ -100,24 +113,36 @@ function AboutContent({
         </div>
 
         <div className={styles.selectedBlock} data-about-selected>
-          <span className={styles.selectedLabel} data-about-selected-label>
-            {about.selectedLabel}
-          </span>
+          <span className={styles.selectedLabel}>{about.selectedLabel}</span>
 
-          <div className={styles.projectArchive}>
-            {featuredProjects.map((project) => (
-              <article key={project.id} className={styles.projectEntry} data-about-project-entry>
-                <Link
-                  href={`/work/${project.slug}`}
-                  className={styles.projectLink}
-                  data-cursor-style="view"
+          <div className={styles.selectedBody} ref={selectedBodyRef}>
+            <div className={styles.projectArchive}>
+              {featuredProjects.map((project) => (
+                <article
+                  key={project.id}
+                  className={styles.projectEntry}
+                  data-about-project-entry
+                  onMouseEnter={(event) => handleProjectEnter(project, event.currentTarget)}
+                  onMouseLeave={handleProjectLeave}
                 >
-                  <h3 className={styles.projectTitle}>{project.title}</h3>
-                  <p className={styles.projectRole}>{project.role}</p>
-                  <span className={styles.projectYear}>{project.year}</span>
-                </Link>
-              </article>
-            ))}
+                  <Link
+                    href={`/work/${project.slug}`}
+                    className={styles.projectLink}
+                    data-cursor-style="view"
+                  >
+                    <h3 className={styles.projectTitle}>{project.title}</h3>
+                    <p className={styles.projectRole}>{project.role}</p>
+                    <span className={styles.projectYear}>{project.year}</span>
+                  </Link>
+                </article>
+              ))}
+            </div>
+
+            <AboutSelectedPreview
+              project={hoveredProject}
+              anchorEntry={hoveredEntry}
+              containerRef={selectedBodyRef}
+            />
           </div>
 
           <Link

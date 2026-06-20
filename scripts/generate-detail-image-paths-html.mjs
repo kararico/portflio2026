@@ -15,7 +15,6 @@ const VISUAL_MAIN = {
   casamia: 'casa-main-bg.png',
   'discovery-expedition': 'dc-main-bg.png',
   goodpeople: 'gp-img.png',
-  guud: 'guud-main-bg.png',
   'hyundai-ezwel': 'hd-main-bg.png',
   'hodoo-english': 'hodoo-main-bg.png',
   'mlb-korea': 'mlb-main-bg.png',

@@ -47,11 +47,6 @@ export const careerEntries: CareerEntry[] = [
         slug: 'wconcept-us',
       },
       {
-        name: 'GUUD',
-        description: '핵심 UX 영역 UI 설계',
-        slug: 'guud',
-      },
-      {
         name: 'Casamia',
         description: '브랜드·제품 페이지 UI',
         slug: 'casamia',
@@ -65,11 +60,6 @@ export const careerEntries: CareerEntry[] = [
     company: '애드쿠아인터렉티브',
     role: 'Web Publisher',
     projects: [
-      {
-        name: '삼성화재 프로포즈',
-        description: '보험 가입·추천 UI',
-        slug: 'samsung-proposal',
-      },
       {
         name: '불스원',
         description: '브랜드·제품 페이지 UI',

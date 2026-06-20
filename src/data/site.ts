@@ -24,6 +24,7 @@ export const siteConfig = {
   contact: {
     email: 'jungwon11082015@gmail.com',
     github: 'https://github.com/kararico',
+    linkedin: 'https://www.linkedin.com/in/kararico',
     location: 'Incheon, South Korea',
     social: [
       {
@@ -74,9 +75,10 @@ export const siteConfig = {
   about: {
     sectionLabel: 'Profile',
     introParagraphs: [
-      '12년 이상 Web Publisher & UI Engineer로 활동하며, 스타벅스 임직원 플랫폼·현대이지웰 복지 플랫폼·W Concept US 영문 커머스·신세계까사 브랜드 사이트 등 서비스 구축에서는 메인 페이지와 핵심 사용자 경험 영역을 직접 설계·구현했습니다. F&F MLB Korea·Discovery Expedition 등 운영·고도화 프로젝트에서는 Publishing Lead로 메인·프로모션·핵심 커머스 UI를 담당했습니다.',
-      '프로젝트에서는 메인 페이지와 핵심 사용자 경험 영역을 주로 담당했습니다. Starbucks Partner Hub의 공통 UI 구조와 업무 핵심 모듈, Siren119의 모바일 업무 화면, MLB Korea 메인·프로모션 영역 등 서비스의 첫인상과 핵심 플로우에 해당하는 UI를 직접 구축·리드했습니다.',
-      '디자인·기획·개발·운영과 화면 단위 산출물(마크업 구조, 컴포넌트 명세, QA 기준)을 기준으로 협업합니다. 구축 단계에서는 메인·핵심 화면 우선으로 UI 구조를 잡고, 운영 단계에서는 템플릿·컴포넌트 표준으로 반복 제작과 품질을 맞춥니다.',
+      '12년 이상 Web Publisher & UI Engineer로 활동하며 브랜드 사이트, 커머스 플랫폼, 임직원 서비스 등 다양한 디지털 서비스를 구축해왔습니다.',
+      '스타벅스 Partner Hub·Siren119, 현대이지웰 복지 플랫폼, W Concept US, 신세계까사 등 구축 프로젝트에서는 메인 페이지와 핵심 사용자 경험 영역의 UI 설계 및 퍼블리싱을 담당했으며, F&F MLB Korea·Discovery Expedition 운영 프로젝트에서는 Publishing Lead로서 메인·프로모션·커머스 UI 고도화를 주도했습니다.',
+      '사용자가 가장 먼저 경험하는 화면과 핵심 플로우를 중요하게 생각합니다. 서비스의 목적과 사용성을 고려해 UI 구조를 설계하고, 디자인·기획·개발 조직과 긴밀하게 협업하며 완성도 높은 결과물을 만드는 데 집중해왔습니다.',
+      '또한 컴포넌트 기반 설계와 퍼블리싱 표준화를 통해 운영 효율과 유지보수성을 높이고, 일관된 사용자 경험을 제공할 수 있는 UI 시스템 구축에 강점을 가지고 있습니다.',
     ] as const,
     selectedLabel: 'Selected Projects',
     viewAllLabel: 'View all projects',
@@ -104,7 +106,6 @@ export const siteConfig = {
     'mlb-korea',
     'discovery-expedition',
     'wconcept-us',
-    'guud',
     'casamia',
   ] as const,
   works: {
@@ -137,7 +138,7 @@ export const siteConfig = {
     stackLabel: 'Tech Stack',
     outcomeLabel: 'Outcome',
     keyFeaturesLabel: 'Key Features',
-    achievementsLabel: 'Key Achievements',
+    achievementsLabel: 'Achievements',
     galleryLabel: 'Gallery',
     nextLabel: 'Next Project',
   },

@@ -183,10 +183,10 @@ export const projectDetailsBySlug: Record<string, ProjectDetailContent> = {
   },
   goodpeople: {
     overview:
-      '좋은사람들 통합 플랫폼 웹사이트 UI 개발 프로젝트입니다.   페이지를 구현했습니다.',
+      '좋은사람들 통합 플랫폼 웹사이트 UI를 개발했습니다. 상품 상세·목록 페이지를 통합 플랫폼에 맞게 구현하고, 모바일·데스크톱 환경에서 동일한 브랜드 경험을 제공할 수 있도록 퍼블리싱했습니다.',
     role: 'Web Publisher',
     contributions: [
-      '메인·상품상세·상품목록· 페이지 마크업 및 인터랙션',
+      '메인·상품상세·상품목록 페이지 마크업 및 인터랙션 구현',
       '상품 폼 UX 및 유효성 검증 UI',
       '모바일 성능 최적화',
       '크로스브라우저 대응',

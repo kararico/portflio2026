@@ -20,7 +20,6 @@ const SLUG_VISUAL_MAIN: Record<string, string> = {
   casamia: 'casa-main-bg.png',
   'discovery-expedition': 'dc-main-bg.png',
   goodpeople: 'gp-img.png',
-  guud: 'guud-main-bg.png',
   'hyundai-ezwel': 'hd-main-bg.png',
   'hodoo-english': 'hodoo-main-bg.png',
   'mlb-korea': 'mlb-main-bg.png',
@@ -45,7 +44,7 @@ const SLUG_DETAIL_PREFIX: Record<string, string> = {
 /** detail-main/{slug}/ 내 Gallery 이미지 수 — 에셋 폴더와 동기화 */
 const SLUG_DETAIL_COUNT: Record<string, number> = {
   bullsone: 6,
-  casamia: 2,
+  casamia: 7,
   'discovery-expedition': 7,
   goodpeople: 7,
   'hyundai-ezwel': 7,
@@ -78,7 +77,6 @@ const HOME_HERO_FILES: Record<string, string> = {
   casamia: 'casa-main-bg.png',
   'discovery-expedition': 'dc-main-bg.png',
   goodpeople: 'gp-main-bg.png',
-  guud: 'guud-main-bg.png',
   'hyundai-ezwel': 'hd-main-bg.png',
   'hodoo-english': 'hodoo-main-bg.png',
   'mlb-korea': 'mlb-main-bg.png',

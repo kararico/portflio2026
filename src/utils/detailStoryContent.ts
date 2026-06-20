@@ -12,17 +12,18 @@ export function getProjectDetail(project: Project): ProjectDetailContent {
     role: project.role,
     contributions: project.responsibilities,
     techStack: project.stack,
-    outcome: project.achievements[0] ?? project.objectives,
-    keyFeatures: project.achievements.slice(0, 4),
+    outcome: project.objectives,
+    keyFeatures: [],
   };
 }
 
 export function getProjectKeyFeatures(project: Project): string[] {
   const detail = getProjectDetail(project);
-  if (detail.keyFeatures && detail.keyFeatures.length > 0) {
-    return detail.keyFeatures;
-  }
-  return project.achievements.slice(0, 4);
+  return detail.keyFeatures ?? [];
+}
+
+export function getProjectAchievements(project: Project): Project['achievements'] {
+  return project.achievements;
 }
 
 /** Hero 좌측 짧은 intro */

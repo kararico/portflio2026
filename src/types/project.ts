@@ -1,3 +1,8 @@
+export interface ProjectAchievement {
+  value: string;
+  label: string;
+}
+
 export interface ProjectDetailContent {
   overview: string;
   role: string;
@@ -64,8 +69,8 @@ export interface Project {
   projectDetail: ProjectDetailContent;
   /** CMS: 담당 업무 */
   responsibilities: string[];
-  /** CMS: 주요 성과 */
-  achievements: string[];
+  /** KPI 성과 지표 — Detail Achievements 섹션 */
+  achievements: ProjectAchievement[];
   /** CMS: 기술 스택 */
   stack: string[];
   featured?: boolean;

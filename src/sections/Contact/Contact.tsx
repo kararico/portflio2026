@@ -28,10 +28,21 @@ export default function Contact() {
               <li>
                 <a
                   href={`mailto:${contact.email}`}
-                  className={styles.contactLink}
+                  className={`${styles.contactLink} ${styles.emailLink}`}
                   data-cursor-style="small"
                 >
-                  Email
+                  {contact.email}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={contact.linkedin}
+                  className={styles.contactLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-cursor-style="small"
+                >
+                  LinkedIn
                 </a>
               </li>
               <li>

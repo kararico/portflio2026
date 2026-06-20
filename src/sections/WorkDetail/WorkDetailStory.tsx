@@ -3,7 +3,7 @@ import {
   getDetailStorySections,
   type DetailStorySection,
 } from '@/utils/detailStorySequence';
-import { getProjectDetail, getProjectKeyFeatures } from '@/utils/detailStoryContent';
+import { getProjectDetail, getProjectAchievements, getProjectKeyFeatures } from '@/utils/detailStoryContent';
 import { hasKoreanText } from '@/utils/projectTitle';
 import { siteConfig } from '@/data/site';
 import {
@@ -82,6 +82,7 @@ function StoryRow({
 function StoryDetailContent({ project }: { project: Project }) {
   const detail = getProjectDetail(project);
   const keyFeatures = getProjectKeyFeatures(project);
+  const achievements = getProjectAchievements(project);
   const labels = siteConfig.detail;
 
   return (
@@ -106,33 +107,18 @@ function StoryDetailContent({ project }: { project: Project }) {
           </p>
         </section>
 
-        <div className={styles.detailMetaGrid}>
-          <section className={styles.detailBlock}>
-            <h3 className={styles.detailLabel} data-reveal-item>
-              {labels.roleLabel}
-            </h3>
-            <p
-              className={styles.detailRole}
-              data-reveal-item
-              lang={hasKoreanText(detail.role) ? 'ko' : undefined}
-            >
-              {detail.role}
-            </p>
-          </section>
-
-          <section className={styles.detailBlock}>
-            <h3 className={styles.detailLabel} data-reveal-item>
-              {labels.stackLabel}
-            </h3>
-            <ul className={styles.detailStackList}>
-              {detail.techStack.map((tech) => (
-                <li key={tech} className={styles.detailStackTag} data-reveal-item>
-                  {tech}
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
+        <section className={styles.detailBlock}>
+          <h3 className={styles.detailLabel} data-reveal-item>
+            {labels.roleLabel}
+          </h3>
+          <p
+            className={styles.detailRole}
+            data-reveal-item
+            lang={hasKoreanText(detail.role) ? 'ko' : undefined}
+          >
+            {detail.role}
+          </p>
+        </section>
 
         <section className={styles.detailBlock}>
           <h3 className={styles.detailLabel} data-reveal-item>
@@ -152,17 +138,17 @@ function StoryDetailContent({ project }: { project: Project }) {
           </ul>
         </section>
 
-        <section className={`${styles.detailBlock} ${styles.detailOutcome}`}>
+        <section className={styles.detailBlock}>
           <h3 className={styles.detailLabel} data-reveal-item>
-            {labels.outcomeLabel}
+            {labels.stackLabel}
           </h3>
-          <blockquote
-            className={styles.outcomeStatement}
-            data-reveal-item
-            lang={hasKoreanText(detail.outcome) ? 'ko' : undefined}
-          >
-            {detail.outcome}
-          </blockquote>
+          <ul className={styles.detailStackList}>
+            {detail.techStack.map((tech) => (
+              <li key={tech} className={styles.detailStackTag} data-reveal-item>
+                {tech}
+              </li>
+            ))}
+          </ul>
         </section>
 
         {keyFeatures.length > 0 ? (
@@ -179,6 +165,37 @@ function StoryDetailContent({ project }: { project: Project }) {
             </ul>
           </section>
         ) : null}
+
+        {achievements.length > 0 ? (
+          <section className={`${styles.detailBlock} ${styles.detailAchievements}`}>
+            <h3 className={styles.detailLabel} data-reveal-item>
+              {labels.achievementsLabel}
+            </h3>
+            <ul className={styles.achievementGrid}>
+              {achievements.map((item) => (
+                <li key={`${item.value}-${item.label}`} className={styles.achievementCard} data-reveal-item>
+                  <span className={styles.achievementValue}>{item.value}</span>
+                  <span className={styles.achievementLabel} lang={hasKoreanText(item.label) ? 'ko' : undefined}>
+                    {item.label}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        <section className={`${styles.detailBlock} ${styles.detailOutcome}`}>
+          <h3 className={styles.detailLabel} data-reveal-item>
+            {labels.outcomeLabel}
+          </h3>
+          <blockquote
+            className={styles.outcomeStatement}
+            data-reveal-item
+            lang={hasKoreanText(detail.outcome) ? 'ko' : undefined}
+          >
+            {detail.outcome}
+          </blockquote>
+        </section>
 
         <div className={styles.galleryDivider} data-reveal-item>
           <span className={styles.detailLabel}>{labels.galleryLabel}</span>
@@ -210,12 +227,23 @@ function renderSection(section: DetailStorySection, project: Project, index: num
 
 export default function WorkDetailStory({ project }: WorkDetailStoryProps) {
   const sections = getDetailStorySections(project).filter((section) => section.type !== 'hero');
+  const galleryRows = sections.filter((section) => section.type === 'row');
 
   return (
     <div className={styles.story} data-detail-story>
       <WorkDetailHero project={project} />
       <div className={styles.storyCanvas}>
-        {sections.map((section, index) => renderSection(section, project, index + 1))}
+        {sections.map((section, index) => {
+          if (section.type === 'row') return null;
+          return renderSection(section, project, index + 1);
+        })}
+        {galleryRows.length > 0 ? (
+          <div className={styles.gallerySection} data-gallery-section>
+            {galleryRows.map((section, index) =>
+              renderSection(section, project, index + 1),
+            )}
+          </div>
+        ) : null}
       </div>
     </div>
   );

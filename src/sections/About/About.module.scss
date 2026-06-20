@@ -128,6 +128,10 @@
   padding-top: var(--space-xl);
 }
 
+.selectedBody {
+  position: relative;
+}
+
 .projectArchive {
   display: flex;
   flex-direction: column;
@@ -135,7 +139,7 @@
 }
 
 .projectEntry {
-  will-change: transform, opacity;
+  position: relative;
 }
 
 .projectLink {
@@ -145,10 +149,20 @@
   gap: var(--space-sm);
   transition: opacity var(--transition-fast);
 
-  @media (hover: hover) {
+  @media (hover: hover) and (max-width: 1023px) {
     &:hover {
       opacity: 0.5;
     }
+  }
+}
+
+@media (min-width: 1024px) {
+  .selectedBlock {
+    max-width: none;
+  }
+
+  .projectArchive {
+    max-width: 40rem;
   }
 }
 
