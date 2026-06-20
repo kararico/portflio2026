@@ -24,7 +24,7 @@ const SLUG_VISUAL_MAIN: Record<string, string> = {
   'hodoo-english': 'hodoo-main-bg.png',
   'mlb-korea': 'mlb-main-bg.png',
   'starbucks-employee-platform': 'st-main-bg.png',
-  'starbucks-siren119': 'st-main-bg.png',
+  'starbucks-siren119': 'starbuck119-img.png',
   'wconcept-us': 'wc-main-bg.png',
 };
 
@@ -76,12 +76,12 @@ const HOME_HERO_FILES: Record<string, string> = {
   bullsone: 'bs-main-bg.png',
   casamia: 'casa-main-bg.png',
   'discovery-expedition': 'dc-main-bg.png',
-  goodpeople: 'gp-main-bg.png',
+  goodpeople: 'gp-img.png',
   'hyundai-ezwel': 'hd-main-bg.png',
   'hodoo-english': 'hodoo-main-bg.png',
   'mlb-korea': 'mlb-main-bg.png',
   'starbucks-employee-platform': 'st-main-bg.png',
-  'starbucks-siren119': 'st-main-bg.png',
+  'starbucks-siren119': 'starbuck119-img.png',
   'wconcept-us': 'wc-main-bg.png',
 };
 
