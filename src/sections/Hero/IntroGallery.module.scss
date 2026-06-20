@@ -1,7 +1,7 @@
 @use '@/styles/breakpoints' as *;
 
 /**
- * Septiembre .intro-gallery / .project-item-wrapper 패턴
+ * Editorial intro gallery — floating card stack pattern
  * - galleryWrapper: absolute full viewport
  * - projectItem: absolute full viewport (좌표 컨텍스트)
  * - plateAnchor: top/right + --img-w / --img-ratio
@@ -105,7 +105,7 @@
   .galleryWrapper {
     --hero-plate-center-w: clamp(10rem, 44vw, 13rem);
     --hero-plate-center-ratio: 1.25;
-    /* Septiembre 모바일 ref 169×101px @ 16px — rem 기준 */
+    /* Mobile plate size — 169×101px @ 16px rem 기준 */
     --hero-plate-landscape-w: 10.5625rem;
     --hero-plate-landscape-ratio: #{101 / 169};
     --hero-plate-portrait-w: #{10.5625rem * 14 / 21.6};

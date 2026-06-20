@@ -5,7 +5,9 @@ import type { EditorialSlotType } from '@/utils/detailEditorialLayout';
 import { shouldUseNativeScroll } from '@/utils/scroll/scrollEnvironment';
 
 /** WorkDetail.module.scss mobile gallery breakpoint */
-const MOBILE_GALLERY_MQL = '(max-width: 767px)';/** Septiembre garden.html — ease-out-cubic 근사 */
+const MOBILE_GALLERY_MQL = '(max-width: 767px)';
+
+/** Editorial reveal — ease-out-cubic 근사 */
 const EASE_OUT = 'power2.out';
 const EASE_POWER3 = 'power3.out';
 

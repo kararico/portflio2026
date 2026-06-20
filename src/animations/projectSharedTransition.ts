@@ -148,7 +148,7 @@ function getHeaderEl(): HTMLElement | null {
   return document.querySelector<HTMLElement>('#header');
 }
 
-/** Septiembre page-leave: detail → home (fadeOut 0.3s) */
+/** Page leave: detail → home (fadeOut 0.3s) */
 export function fadeOutPageTransition(duration = 0.3): Promise<void> {
   const el = getMainTransitionEl();
   const header = getHeaderEl();
@@ -165,7 +165,7 @@ export function fadeOutPageTransition(duration = 0.3): Promise<void> {
   });
 }
 
-/** Septiembre page-enter: home fadeIn 0.6s */
+/** Page enter: home fadeIn 0.6s */
 export function fadeInPageTransition(duration = 0.6): Promise<void> {
   const el = getMainTransitionEl();
   const header = getHeaderEl();
@@ -290,7 +290,7 @@ export async function waitForNextFrame(count = 2): Promise<void> {
   }
 }
 
-/** Gallery → Detail: 나머지 이미지·타이포 ghost fade (원본 Septiembre) */
+/** Gallery → Detail: 나머지 이미지·타이포 ghost fade */
 export function dimHomeTransitionContext(sourceEl: HTMLElement): void {
   const galleryItems = document.querySelectorAll<HTMLElement>(
     '[data-intro-gallery] [data-gallery-item]',

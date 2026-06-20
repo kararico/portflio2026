@@ -260,7 +260,7 @@
   @include detail-prose-wrap;
 }
 
-/* ── Story canvas: Garden Pizza 12-col editorial grid ── */
+/* ── Story canvas: 12-col editorial grid ── */
 .storyCanvas {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -660,7 +660,7 @@
   }
 }
 
-/* ── Footer: Next highlight project + Back to top (Septiembre .next-project) ── */
+/* ── Footer: Next highlight project + Back to top ── */
 .nextProject {
   position: relative;
   padding-top: clamp(3.5rem, 10vw, 8rem);

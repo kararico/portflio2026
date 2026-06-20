@@ -48,7 +48,7 @@ function pick(details: string[], ...indices: number[]): string {
   return details[0] ?? '';
 }
 
-/** Garden Pizza 스타일 editorial — Hero + detail[0~6] 각 1회 사용 */
+/** Editorial story layout — Hero + detail[0~6] 각 1회 사용 */
 export function getEditorialStoryLayout(project: Project): EditorialStoryLayout {
   const details = getProjectGalleryImages(project);
   const title = project.title;

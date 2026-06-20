@@ -1,4 +1,4 @@
-/** Septiembre .home-intro — 단일 Editorial Composition */
+/** Home intro — 단일 Editorial Composition */
 export const heroStoryConfig = {
   /** Home Hero 중앙 카드 — 시안 기준 MLB 고정 */
   centerMediaSlug: 'mlb-korea' as const,
@@ -111,7 +111,7 @@ export const heroStoryConfig = {
     meta: { stagger: 0.04, y: 8, duration: 0.95, ease: 'power2.out' as const, overlap: 0.52 },
   },
   /**
-   * Editorial gallery — Septiembre project-item-wrapper 패턴
+   * Editorial gallery — floating card stack pattern
    * 각 플레이트: position:absolute + top + left/right + --img-w + --img-ratio
    *
    * | id | 위치   | pt (중앙 카드 기준)              | 좌/우             | img-w  | ratio |
