@@ -34,28 +34,6 @@ export default function Contact() {
                   {contact.email}
                 </a>
               </li>
-              <li>
-                <a
-                  href={contact.linkedin}
-                  className={styles.contactLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-cursor-style="small"
-                >
-                  LinkedIn
-                </a>
-              </li>
-              <li>
-                <a
-                  href={contact.github}
-                  className={styles.contactLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-cursor-style="small"
-                >
-                  Github
-                </a>
-              </li>
             </ul>
           </div>
 
