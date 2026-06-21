@@ -60,8 +60,8 @@ export interface Project {
   description: string;
   /** Home floating 카드 썸네일 — /images/products/* 또는 projects/{slug}/mobile */
   thumbnail: string;
-  /** Home 쇼케이스 슬라이드 — /images/products/home-main/* */
-  homeHero: string;
+  /** Home 쇼케이스 슬라이드 — home-main 폴더에 파일이 있을 때만 */
+  homeHero?: string;
   images: ProjectImages;
   /** Work Detail Hero crop — focal point (src는 images.hero 사용) */
   heroImage?: HeroImage;

@@ -13,9 +13,9 @@ import {
   buildProjectImages,
   buildHomeHeroPath,
   buildProductThumbnailPath,
-  HOME_SHOWCASE_FILES,
-  HOME_MAIN_FILE_SLUG,
   buildHomeMainPath,
+  HOME_SHOWCASE_FILES,
+  resolveHomeMainFileSlug,
 } from '@/utils/projectImage';
 
 type ProjectSeed = Omit<Project, 'projectDetail' | 'role' | 'stack'>;
@@ -129,7 +129,6 @@ const projectSeeds: ProjectSeed[] = [
     contribution: '100%',
     description: '스타벅스 Siren119 내부 업무 플랫폼 UI 개발',
     thumbnail: buildProductThumbnailPath('starbucks-siren119'),
-    homeHero: buildHomeHeroPath('starbucks-siren119'),
     images: buildProjectImages('starbucks-siren119'),
     heroImage: { position: 'top' },
     overview:
@@ -192,7 +191,6 @@ const projectSeeds: ProjectSeed[] = [
     contribution: '100%',
     description: 'W Concept US 영문 글로벌 이커머스 구축',
     thumbnail: buildProductThumbnailPath('wconcept-us'),
-    homeHero: buildHomeHeroPath('wconcept-us'),
     images: buildProjectImages('wconcept-us'),
     heroImage: { objectPosition: '50% 40%' },
     overview:
@@ -254,7 +252,6 @@ const projectSeeds: ProjectSeed[] = [
     contribution: '90%',
     description: '불스원 브랜드 웹사이트 UI 개발',
     thumbnail: buildProductThumbnailPath('bullsone'),
-    homeHero: buildHomeHeroPath('bullsone'),
     images: buildProjectImages('bullsone'),
     heroImage: { position: 'center' },
     overview:
@@ -321,10 +318,10 @@ function attachProjectDetail(seed: ProjectSeed): Project {
 
 export const projects: Project[] = projectSeeds.map(attachProjectDetail);
 
-/** Home Hero 쇼케이스 — home-main 폴더 파일명 기준 */
+/** Home Hero 쇼케이스 — public/images/products/home-main/ 폴더 파일만 */
 export function getHomeShowcaseSlides(): HomeShowcaseSlide[] {
   return HOME_SHOWCASE_FILES.map((file) => {
-    const slug = HOME_MAIN_FILE_SLUG[file] ?? file.replace(/\.png$/, '');
+    const slug = resolveHomeMainFileSlug(file);
     const project = getProjectBySlug(slug);
 
     return {

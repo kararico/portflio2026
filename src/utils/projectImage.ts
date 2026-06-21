@@ -70,20 +70,7 @@ const SLUG_THUMBNAIL: Record<string, string> = {
   'wconcept-us': 'wc-img.png',
 };
 
-/** projects.ts seed — home-main 파일명 */
-const SLUG_HOME_MAIN: Record<string, string> = {
-  bullsone: 'bs-main-bg.png',
-  casamia: 'casa-main-bg.png',
-  'discovery-expedition': 'dc-main-bg.png',
-  goodpeople: 'gp-main-bg.png',
-  'hyundai-ezwel': 'hd-main-bg.png',
-  'mlb-korea': 'mlb-main-bg.png',
-  'starbucks-employee-platform': 'st-main-bg.png',
-  'starbucks-siren119': 'starbuck119-img.png',
-  'wconcept-us': 'wc-main-bg.png',
-};
-
-/** Home Hero 쇼케이스 — home-main 파일명 SSOT (폴더 기준) */
+/** home-main 폴더 실제 파일 SSOT — Hero 쇼케이스 전용 */
 export const HOME_SHOWCASE_FILES = [
   'casa-main-bg.png',
   'dc-main-bg.png',
@@ -94,7 +81,7 @@ export const HOME_SHOWCASE_FILES = [
   'st-main-bg.png',
 ] as const;
 
-export const HOME_MAIN_FILE_SLUG: Partial<Record<(typeof HOME_SHOWCASE_FILES)[number], string>> = {
+const HOME_MAIN_FILE_SLUG: Partial<Record<(typeof HOME_SHOWCASE_FILES)[number], string>> = {
   'casa-main-bg.png': 'casamia',
   'dc-main-bg.png': 'discovery-expedition',
   'gp-main-bg.png': 'goodpeople',
@@ -104,8 +91,26 @@ export const HOME_MAIN_FILE_SLUG: Partial<Record<(typeof HOME_SHOWCASE_FILES)[nu
   'st-main-bg.png': 'starbucks-employee-platform',
 };
 
+/** projects.ts seed — home-main (폴더에 존재하는 파일만) */
+const SLUG_HOME_MAIN: Record<string, string> = {
+  casamia: 'casa-main-bg.png',
+  'discovery-expedition': 'dc-main-bg.png',
+  goodpeople: 'gp-main-bg.png',
+  'hyundai-ezwel': 'hd-main-bg.png',
+  'mlb-korea': 'mlb-main-bg.png',
+  'starbucks-employee-platform': 'st-main-bg.png',
+};
+
 export function buildHomeMainPath(file: string): string {
   return assetPath(`${HOME_HERO_BASE}/${file}`);
+}
+
+export function getHomeMainShowcaseFiles(): readonly string[] {
+  return HOME_SHOWCASE_FILES;
+}
+
+export function resolveHomeMainFileSlug(file: string): string {
+  return HOME_MAIN_FILE_SLUG[file as (typeof HOME_SHOWCASE_FILES)[number]] ?? file.replace(/\.png$/, '');
 }
 
 export function getVisualMainHeroPath(slug: string): string | null {
@@ -157,7 +162,7 @@ export function getVisualMainHeroCandidates(slug: string): string[] {
   return path ? [path] : [];
 }
 
-export function getProjectHomeHero(project: Project): string {
+export function getProjectHomeHero(project: Project): string | undefined {
   return project.homeHero;
 }
 

@@ -38,7 +38,7 @@ export default function IntroMedia() {
   }, [slides]);
 
   useEffect(() => {
-    if (slides.length <= 1 || prefersReducedMotion) return undefined;
+    if (slides.length <= 1) return undefined;
 
     const intervalId = window.setInterval(() => {
       const currentLayer = activeLayerRef.current;
@@ -59,7 +59,7 @@ export default function IntroMedia() {
     }, intervalMs);
 
     return () => window.clearInterval(intervalId);
-  }, [slides.length, intervalMs, prefersReducedMotion]);
+  }, [slides.length, intervalMs]);
 
   if (!slides.length) return null;
 
@@ -83,7 +83,7 @@ export default function IntroMedia() {
             src={resolveImageSrc(slide.src)}
             alt={isActive ? slide.title : ''}
             aria-hidden={!isActive}
-            className={`${styles.image} ${styles.imageLayer} ${isActive ? styles.imageLayerActive : ''}`}
+            className={`${styles.image} ${styles.imageLayer} ${isActive ? styles.imageLayerActive : ''} ${prefersReducedMotion ? styles.imageLayerInstant : ''}`}
             decoding="async"
             loading={layer === 0 ? 'eager' : 'lazy'}
           />
