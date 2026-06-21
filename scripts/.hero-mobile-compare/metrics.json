@@ -1,0 +1,18 @@
+{
+  "before": {
+    "width": 172,
+    "height": 215,
+    "ratio": 1.25,
+    "cssWidth": "clamp(10rem, 44vw, 13rem)",
+    "cssHeight": "calc(clamp(10rem, 44vw, 13rem) * 5 / 4)",
+    "mediaVisible": true
+  },
+  "after": {
+    "width": 273,
+    "height": 341,
+    "ratio": 1.25,
+    "cssWidth": "clamp(11.5rem, 70vw, 20rem)",
+    "cssHeight": "calc(clamp(11.5rem, 70vw, 20rem) * 5 / 4)",
+    "mediaVisible": true
+  }
+}

@@ -8,11 +8,14 @@
 
 import { siteConfig } from '@/data/site';
 import { projectDetailsBySlug } from '@/data/projectDetails';
-import type { Project } from '@/types/project';
+import type { HomeShowcaseSlide, Project } from '@/types/project';
 import {
   buildProjectImages,
   buildHomeHeroPath,
   buildProductThumbnailPath,
+  HOME_SHOWCASE_FILES,
+  HOME_MAIN_FILE_SLUG,
+  buildHomeMainPath,
 } from '@/utils/projectImage';
 
 type ProjectSeed = Omit<Project, 'projectDetail' | 'role' | 'stack'>;
@@ -317,6 +320,20 @@ function attachProjectDetail(seed: ProjectSeed): Project {
 }
 
 export const projects: Project[] = projectSeeds.map(attachProjectDetail);
+
+/** Home Hero 쇼케이스 — home-main 폴더 파일명 기준 */
+export function getHomeShowcaseSlides(): HomeShowcaseSlide[] {
+  return HOME_SHOWCASE_FILES.map((file) => {
+    const slug = HOME_MAIN_FILE_SLUG[file] ?? file.replace(/\.png$/, '');
+    const project = getProjectBySlug(slug);
+
+    return {
+      slug,
+      title: project?.title.replace(/\n/g, ' ') ?? 'Hodoo English',
+      src: buildHomeMainPath(file),
+    };
+  });
+}
 
 /** PROJECT INDEX — 동일 연도 내 우선순위 (Featured와 별도) */
 const WORKS_INDEX_SLUG_ORDER = [

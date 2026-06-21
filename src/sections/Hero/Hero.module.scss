@@ -353,7 +353,7 @@
     min-height: 0;
     overflow-x: visible;
     overflow-y: visible;
-    --hero-image-width: clamp(10rem, 44vw, 13rem);
+    --hero-image-width: clamp(11.5rem, 70vw, 20rem);
     --hero-image-height: calc(var(--hero-image-width) * 5 / 4);
   }
 
@@ -388,11 +388,19 @@
   }
 
   .heroTitle {
-    width: max-content;
-    max-width: calc(100vw - 2 * var(--padding-fluid, 1.5rem));
+    width: var(--viewport-width, 100vw);
+    max-width: var(--viewport-width, 100vw);
     overflow-x: visible;
     overflow-y: visible;
-    font-size: clamp(2.4rem, 10vw, 3.6rem);
+    font-size: clamp(3rem, 14vw, 4.75rem);
+  }
+
+  .heroExpandTrack {
+    letter-spacing: -0.07em;
+
+    &.is-expanded {
+      letter-spacing: -0.02em;
+    }
   }
 
   :global([data-home-story][data-gallery-active]) .heroTitle {
@@ -441,14 +449,22 @@
   }
 
   .composition {
-    --hero-image-width: clamp(10rem, 44vw, 13rem);
-    --hero-image-height: calc(var(--hero-image-width) * 1.47);
+    --hero-image-width: clamp(11.5rem, 70vw, 20rem);
+    --hero-image-height: calc(var(--hero-image-width) * 5 / 4);
     gap: var(--space-xs);
   }
 
   .heroTitle {
-    font-size: clamp(2.4rem, 10vw, 3.6rem);
-    letter-spacing: -0.03em;
+    font-size: clamp(3rem, 14vw, 4.75rem);
+    letter-spacing: -0.02em;
+  }
+
+  .heroExpandTrack {
+    letter-spacing: -0.06em;
+
+    &.is-expanded {
+      letter-spacing: -0.015em;
+    }
   }
 
   .heroWordTrackRepeat {

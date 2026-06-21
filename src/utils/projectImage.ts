@@ -70,18 +70,43 @@ const SLUG_THUMBNAIL: Record<string, string> = {
   'wconcept-us': 'wc-img.png',
 };
 
-/** Home 중앙 Hero — home-main */
-const HOME_HERO_FILES: Record<string, string> = {
+/** projects.ts seed — home-main 파일명 */
+const SLUG_HOME_MAIN: Record<string, string> = {
   bullsone: 'bs-main-bg.png',
   casamia: 'casa-main-bg.png',
   'discovery-expedition': 'dc-main-bg.png',
-  goodpeople: 'gp-img.png',
+  goodpeople: 'gp-main-bg.png',
   'hyundai-ezwel': 'hd-main-bg.png',
   'mlb-korea': 'mlb-main-bg.png',
   'starbucks-employee-platform': 'st-main-bg.png',
   'starbucks-siren119': 'starbuck119-img.png',
   'wconcept-us': 'wc-main-bg.png',
 };
+
+/** Home Hero 쇼케이스 — home-main 파일명 SSOT (폴더 기준) */
+export const HOME_SHOWCASE_FILES = [
+  'casa-main-bg.png',
+  'dc-main-bg.png',
+  'gp-main-bg.png',
+  'hd-main-bg.png',
+  'hodoo-main-bg.png',
+  'mlb-main-bg.png',
+  'st-main-bg.png',
+] as const;
+
+export const HOME_MAIN_FILE_SLUG: Partial<Record<(typeof HOME_SHOWCASE_FILES)[number], string>> = {
+  'casa-main-bg.png': 'casamia',
+  'dc-main-bg.png': 'discovery-expedition',
+  'gp-main-bg.png': 'goodpeople',
+  'hd-main-bg.png': 'hyundai-ezwel',
+  'hodoo-main-bg.png': 'hodoo-english',
+  'mlb-main-bg.png': 'mlb-korea',
+  'st-main-bg.png': 'starbucks-employee-platform',
+};
+
+export function buildHomeMainPath(file: string): string {
+  return assetPath(`${HOME_HERO_BASE}/${file}`);
+}
 
 export function getVisualMainHeroPath(slug: string): string | null {
   const file = SLUG_VISUAL_MAIN[slug];
@@ -120,11 +145,11 @@ export function buildProjectImages(slug: string, detailCount = getDetailMainCoun
 }
 
 export function buildHomeHeroPath(slug: string): string {
-  const file = HOME_HERO_FILES[slug];
-  if (file) {
-    return assetPath(`${HOME_HERO_BASE}/${file}`);
+  const file = SLUG_HOME_MAIN[slug];
+  if (!file) {
+    throw new Error(`Missing home-main mapping for slug: ${slug}`);
   }
-  return getVisualMainHeroPath(slug) ?? assetPath(`${VISUAL_MAIN_BASE}/mlb-main-bg.png`);
+  return assetPath(`${HOME_HERO_BASE}/${file}`);
 }
 
 export function getVisualMainHeroCandidates(slug: string): string[] {
@@ -134,10 +159,6 @@ export function getVisualMainHeroCandidates(slug: string): string[] {
 
 export function getProjectHomeHero(project: Project): string {
   return project.homeHero;
-}
-
-export function getProjectHomeHeroCandidates(project: Project): string[] {
-  return [assetPath(getProjectHomeHero(project))];
 }
 
 export function getProjectHeroObjectPosition(project: Project): string {

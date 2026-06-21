@@ -12,7 +12,6 @@ import { getProjectBySlug } from '@/data/projects';
 import type { Project } from '@/types/project';
 import {
   getImageCandidates,
-  getProjectHomeHero,
   getProjectThumbnail,
 } from '@/utils/projectImage';
 import { useProjectTransition } from '@/components/ProjectTransition/ProjectTransitionProvider';
@@ -60,9 +59,6 @@ function usePreloadedSrc(src: string): string | null {
 }
 
 function getPlateImageSrc(project: Project): string {
-  if (project.slug === heroStoryConfig.centerMediaSlug) {
-    return getProjectHomeHero(project);
-  }
   return getProjectThumbnail(project);
 }
 

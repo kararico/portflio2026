@@ -1,3 +1,9 @@
+export interface HomeShowcaseSlide {
+  slug: string;
+  title: string;
+  src: string;
+}
+
 export interface ProjectAchievement {
   value: string;
   label: string;
@@ -54,7 +60,7 @@ export interface Project {
   description: string;
   /** Home floating 카드 썸네일 — /images/products/* 또는 projects/{slug}/mobile */
   thumbnail: string;
-  /** Home 중앙 Hero 슬라이더 — /images/products/home-main/* 또는 projects/{slug} 전용 */
+  /** Home 쇼케이스 슬라이드 — /images/products/home-main/* */
   homeHero: string;
   images: ProjectImages;
   /** Work Detail Hero crop — focal point (src는 images.hero 사용) */

@@ -1,7 +1,10 @@
 /** Home intro — 단일 Editorial Composition */
 export const heroStoryConfig = {
-  /** Home Hero 중앙 카드 — 시안 기준 MLB 고정 */
-  centerMediaSlug: 'mlb-korea' as const,
+  /** Home Hero 중앙 쇼케이스 — 프로젝트 home hero 순환 */
+  showcaseSlider: {
+    intervalMs: 3000,
+    fadeDurationMs: 800,
+  },
   pinScrollVh: {
     desktop: 360,
     mobile: 220,
