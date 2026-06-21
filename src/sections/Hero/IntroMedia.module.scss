@@ -14,17 +14,7 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
-  visibility: visible;
-}
-
-.imageLayerInstant {
-  .image {
-    transition: none;
-  }
-}
-
-.imageLayerActive {
-  z-index: 1;
+  visibility: hidden;
 }
 
 .image {
