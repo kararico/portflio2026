@@ -3,7 +3,7 @@ export const heroStoryConfig = {
   /** Home Hero 중앙 쇼케이스 — 프로젝트 home hero 순환 */
   showcaseSlider: {
     intervalMs: 3000,
-    fadeDurationMs: 800,
+    fadeDurationMs: 900,
   },
   pinScrollVh: {
     desktop: 360,

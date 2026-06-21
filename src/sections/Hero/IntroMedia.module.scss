@@ -5,24 +5,25 @@
   overflow: hidden;
   background: #0a0a0a;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.14);
-  will-change: transform;
+  isolation: isolate;
 }
 
 .imageLayer {
   position: absolute;
   inset: 0;
-  opacity: 0;
-  transition: opacity var(--fade-duration, 800ms) ease;
+  overflow: hidden;
   pointer-events: none;
-}
-
-.imageLayerActive {
-  opacity: 1;
-  z-index: 1;
+  z-index: 0;
 }
 
 .imageLayerInstant {
-  transition: none;
+  .image {
+    transition: none;
+  }
+}
+
+.imageLayerActive {
+  z-index: 1;
 }
 
 .image {
@@ -31,4 +32,6 @@
   object-fit: cover;
   object-position: center 35%;
   display: block;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
