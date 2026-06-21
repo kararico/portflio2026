@@ -24,21 +24,25 @@ export function runShowcaseTransition(
   incomingImg: HTMLElement,
   outgoingLayer: HTMLElement,
   incomingLayer: HTMLElement,
+  onComplete: () => void,
 ): gsap.core.Timeline {
   gsap.killTweensOf([outgoingImg, incomingImg]);
   setImageOrigin(outgoingImg);
   setImageOrigin(incomingImg);
 
-  gsap.set(incomingImg, { opacity: 0, scale: INCOMING_SCALE_FROM });
+  gsap.set(outgoingLayer, { zIndex: 1, visibility: 'visible' });
+  gsap.set(incomingLayer, { zIndex: 2, visibility: 'visible' });
   gsap.set(outgoingImg, { opacity: 1, scale: 1 });
-  gsap.set(incomingLayer, { zIndex: 2 });
-  gsap.set(outgoingLayer, { zIndex: 1 });
+  gsap.set(incomingImg, { opacity: 0, scale: INCOMING_SCALE_FROM });
 
   return gsap
     .timeline({
       onComplete: () => {
         gsap.set(outgoingImg, { opacity: 0, scale: INCOMING_SCALE_FROM });
         gsap.set(outgoingLayer, { zIndex: 0 });
+        gsap.set(incomingImg, { opacity: 1, scale: 1 });
+        gsap.set(incomingLayer, { zIndex: 1 });
+        onComplete();
       },
     })
     .to(
@@ -71,7 +75,7 @@ export function startKenBurnsDrift(
 
   gsap.killTweensOf(img);
   setImageOrigin(img);
-  gsap.set(img, { scale: 1 });
+  gsap.set(img, { opacity: 1, scale: 1 });
 
   return gsap.to(img, {
     scale: KEN_BURNS_SCALE_TO,
@@ -82,4 +86,36 @@ export function startKenBurnsDrift(
 
 export function killShowcaseAnimations(elements: HTMLElement[]) {
   gsap.killTweensOf(elements);
+}
+
+export function preloadShowcaseImage(src: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    img.onload = () => resolve();
+    img.onerror = () => reject(new Error(`Failed to preload: ${src}`));
+    img.src = src;
+  });
+}
+
+export function waitForImageElement(img: HTMLImageElement): Promise<void> {
+  if (img.complete && img.naturalWidth > 0) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve, reject) => {
+    const onLoad = () => {
+      cleanup();
+      resolve();
+    };
+    const onError = () => {
+      cleanup();
+      reject(new Error(`Failed to load image: ${img.src}`));
+    };
+    const cleanup = () => {
+      img.removeEventListener('load', onLoad);
+      img.removeEventListener('error', onError);
+    };
+    img.addEventListener('load', onLoad);
+    img.addEventListener('error', onError);
+  });
 }
