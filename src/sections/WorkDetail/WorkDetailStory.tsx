@@ -94,19 +94,6 @@ function StoryDetailContent({ project }: { project: Project }) {
           </h2>
         </header>
 
-        <section className={`${styles.detailBlock} ${styles.detailLead}`}>
-          <h3 className={styles.detailLabel} data-reveal-item>
-            {labels.overviewLabel}
-          </h3>
-          <p
-            className={styles.detailLeadProse}
-            data-reveal-item
-            lang={hasKoreanText(detail.overview) ? 'ko' : undefined}
-          >
-            {detail.overview}
-          </p>
-        </section>
-
         <section className={styles.detailBlock}>
           <h3 className={styles.detailLabel} data-reveal-item>
             {labels.roleLabel}

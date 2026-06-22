@@ -1,6 +1,10 @@
 import { gsap } from '@/utils/gsap/registerGsap';
 import { heroStoryConfig } from '@/data/heroStory';
-import { initHeroTitleExpandIntro } from './heroTitleExpandAnimation';
+import { isHomeIntroSessionComplete, markHomeIntroSessionComplete } from '@/utils/homeSessionState';
+import {
+  applyHeroTitleExpandFinalState,
+  initHeroTitleExpandIntro,
+} from './heroTitleExpandAnimation';
 
 export interface HeroIntroRefs {
   section: HTMLElement;
@@ -75,11 +79,47 @@ function waitForPreloaderHandoff(onReady: () => void, delay: number): () => void
   };
 }
 
+function applyHeroIntroFinalState(
+  stage: HTMLElement,
+  composition: HTMLElement,
+  hasExpand: Element | null,
+): void {
+  const metaItems = stage.querySelectorAll('[data-hero-meta]');
+  const titleFront = composition.querySelector('[data-hero-title-front]');
+  const heroImageLayer = composition.querySelector<HTMLElement>('[data-hero-image-layer]');
+  const floatPlates = composition.querySelectorAll<HTMLElement>('[data-hero-float]');
+
+  if (hasExpand) {
+    gsap.set(composition, { opacity: 1, y: 0 });
+    gsap.set(composition.querySelectorAll('[data-hero-expand-root]'), { opacity: 1, y: 0 });
+    applyHeroTitleExpandFinalState(composition);
+    if (titleFront instanceof HTMLElement) {
+      gsap.set(titleFront, { opacity: 1 });
+    }
+    if (heroImageLayer) {
+      gsap.set(heroImageLayer, { opacity: 1, y: 0 });
+    }
+    floatPlates.forEach((plate) => {
+      gsap.set(plate, { opacity: 1 });
+    });
+  } else {
+    const titleLines = composition.querySelectorAll('[data-reveal-line]');
+    gsap.set(composition, { opacity: 1, y: 0 });
+    gsap.set(titleLines, { opacity: 1, y: 0 });
+    if (titleFront instanceof HTMLElement) {
+      gsap.set(titleFront, { opacity: 1 });
+    }
+  }
+
+  gsap.set(metaItems, { opacity: 1, y: 0 });
+}
+
 /** Load-time intro — composition (typography + image) enters as one unit */
 export function initHeroIntroAnimation(refs: HeroIntroRefs): gsap.Context {
   const { section, stage, composition, useExpandTitle = false } = refs;
   const intro = heroStoryConfig.heroIntro;
-  const hasExpand = useExpandTitle && composition.querySelector('[data-hero-expand-track]');
+  const expandTrack = useExpandTitle ? composition.querySelector('[data-hero-expand-track]') : null;
+  const skipIntro = isHomeIntroSessionComplete();
 
   return gsap.context(() => {
     const metaItems = stage.querySelectorAll('[data-hero-meta]');
@@ -87,9 +127,14 @@ export function initHeroIntroAnimation(refs: HeroIntroRefs): gsap.Context {
     const heroImageLayer = composition.querySelector<HTMLElement>('[data-hero-image-layer]');
     const floatPlates = composition.querySelectorAll<HTMLElement>('[data-hero-float]');
 
+    if (skipIntro) {
+      applyHeroIntroFinalState(stage, composition, expandTrack);
+      return () => undefined;
+    }
+
     gsap.set(metaItems, { opacity: 0, y: intro.meta.y });
 
-    if (hasExpand) {
+    if (expandTrack) {
       gsap.set(composition, { opacity: 1, y: 0 });
       gsap.set(composition.querySelectorAll('[data-hero-expand-root]'), { opacity: 1, y: 0 });
       if (titleFront instanceof HTMLElement) {
@@ -113,9 +158,10 @@ export function initHeroIntroAnimation(refs: HeroIntroRefs): gsap.Context {
     const introTl = gsap.timeline({
       paused: true,
       defaults: { ease: intro.composition.ease },
+      onComplete: markHomeIntroSessionComplete,
     });
 
-    if (hasExpand) {
+    if (expandTrack) {
       initHeroTitleExpandIntro(introTl, composition, 0);
     } else {
       introTl.to(composition, {
@@ -160,10 +206,10 @@ export function initHeroIntroAnimation(refs: HeroIntroRefs): gsap.Context {
         stagger: intro.meta.stagger,
         ease: intro.meta.ease,
       },
-      hasExpand ? `>-=${intro.meta.overlap * 0.35}` : `-=${intro.meta.overlap}`,
+      expandTrack ? `>-=${intro.meta.overlap * 0.35}` : `-=${intro.meta.overlap}`,
     );
 
-    const introDelay = hasExpand ? intro.delayAfterRevealExpand : intro.delayAfterReveal;
+    const introDelay = expandTrack ? intro.delayAfterRevealExpand : intro.delayAfterReveal;
     const cancelWait = waitForPreloaderHandoff(() => {
       gsap.set(metaItems, { opacity: 0, y: intro.meta.y });
       introTl.play(0);

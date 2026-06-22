@@ -47,6 +47,7 @@ import {
   saveHomeScrollSnapshot,
 } from '@/utils/scrollRestoration';
 import { resetScrollToTop } from '@/utils/scrollReset';
+import { markHomeIntroSessionComplete } from '@/utils/homeSessionState';
 import ProjectTransitionOverlay from './ProjectTransitionOverlay';
 
 export type ProjectTransitionPhase =
@@ -137,6 +138,7 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
     async (slug: string, sourceEl: HTMLElement) => {
       const imageEl = imageRef.current;
       if (!imageEl) {
+        if (originPathRef.current === '/') markHomeIntroSessionComplete();
         markPathnameScrollTop();
         router.push(`/work/${slug}`, { scroll: false });
         finishTransition();
@@ -148,6 +150,7 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
       try {
         hideSourceThumbnail(sourceEl);
         if (fromHome) {
+          markHomeIntroSessionComplete();
           dimHomeTransitionContext(sourceEl);
         }
 
@@ -240,6 +243,7 @@ export default function ProjectTransitionProvider({ children }: ProjectTransitio
       originPathRef.current = pathname;
       const captured = readProjectSourceRect(sourceEl, slug);
       if (!captured) {
+        if (pathname === '/') markHomeIntroSessionComplete();
         markPathnameScrollTop();
         router.push(`/work/${slug}`, { scroll: false });
         resetScrollToTop(lenis);

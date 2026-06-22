@@ -3,6 +3,7 @@ import { registerGsapPlugins, ScrollTrigger } from '@/utils/gsap/registerGsap';
 import { refreshScrollTrigger } from '@/animations/scrollTriggerRefresh';
 import { dispatchAboutProfileReveal } from '@/animations/aboutProfileReveal';
 import { initProfileImageReveal } from '@/animations/profileImage';
+import { isHomeIntroSessionComplete } from '@/utils/homeSessionState';
 import type { ProfileInteractionMode } from '@/utils/profileImageConfig';
 
 const PROFILE_REVEAL_START = 'top 82%';
@@ -29,6 +30,22 @@ function setProfileRevealInitialState(root: HTMLElement): void {
   if (imageReveal) gsap.set(imageReveal, { opacity: 0, y: REVEAL_Y });
   if (imageMedia) gsap.set(imageMedia, { scale: IMAGE_SCALE_FROM, transformOrigin: 'center center' });
   if (meta.length) gsap.set(meta, { opacity: 0, y: META_REVEAL_Y });
+}
+
+function applyProfileRevealFinalState(root: HTMLElement): void {
+  const title = root.querySelector('[data-about-reveal="title"]');
+  const descriptions = root.querySelectorAll('[data-about-reveal="description"]');
+  const imageReveal = root.querySelector('[data-about-image-reveal]');
+  const imageMedia = root.querySelector('[data-about-image-media]');
+  const meta = root.querySelectorAll('[data-about-reveal="meta"]');
+
+  if (title) gsap.set(title, { opacity: 1, y: 0 });
+  if (descriptions.length) gsap.set(descriptions, { opacity: 1, y: 0 });
+  if (imageReveal) gsap.set(imageReveal, { opacity: 1, y: 0 });
+  if (imageMedia) gsap.set(imageMedia, { scale: 1, transformOrigin: 'center center' });
+  if (meta.length) gsap.set(meta, { opacity: 1, y: 0 });
+
+  dispatchAboutProfileReveal();
 }
 
 function playProfileRevealSequence(root: HTMLElement): gsap.core.Timeline {
@@ -113,6 +130,11 @@ export function bindProfileSectionReveal(root: HTMLElement): () => void {
 
   const profileRow = root.querySelector('[data-about-profile-row]');
   if (!profileRow) return () => undefined;
+
+  if (isHomeIntroSessionComplete()) {
+    applyProfileRevealFinalState(root);
+    return () => undefined;
+  }
 
   setProfileRevealInitialState(root);
 

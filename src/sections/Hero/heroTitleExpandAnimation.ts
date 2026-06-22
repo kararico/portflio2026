@@ -86,6 +86,25 @@ function buildTrackExpandTimeline(track: HTMLElement, config: ExpandConfig): gsa
   return tl;
 }
 
+/** SPA 복귀 등 — expand 타이틀 최종 상태 즉시 적용 */
+export function applyHeroTitleExpandFinalState(composition: HTMLElement): void {
+  const config = heroStoryConfig.heroIntro.titleExpand;
+  const tracks = composition.querySelectorAll<HTMLElement>('[data-hero-expand-track]');
+
+  tracks.forEach((track) => {
+    const w = track.querySelector<HTMLElement>('[data-hero-expand-w]');
+    const charMasks = track.querySelectorAll<HTMLElement>('[data-hero-expand-char]');
+
+    gsap.set(track, { letterSpacing: `${config.finalLetterSpacingEm}em` });
+    charMasks.forEach((mask) => {
+      mask.style.width = `${measureCharWidth(mask)}px`;
+      mask.style.overflow = 'visible';
+    });
+    if (w) gsap.set(w, { clearProps: 'x' });
+    track.classList.add('is-expanded');
+  });
+}
+
 export function initHeroTitleExpandIntro(
   introTimeline: gsap.core.Timeline,
   composition: HTMLElement,
