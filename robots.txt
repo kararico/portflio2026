@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+
+Sitemap: https://kararico.github.io/portflio2026/sitemap.xml
